@@ -915,5 +915,112 @@
             }
         }
     </script>
+// ============ LOAD YOUTUBE VIDEOS & LIVE CLASSES ============
+function loadYouTubeContent(courseId) {
+    // Load recorded YouTube videos for this course
+    fetch('/api/youtube-videos?courseId=' + courseId)
+    .then(r => r.json())
+    .then(d => {
+        if (d.success && d.videos && d.videos.length > 0) {
+            let html = `
+            <div class="section-card open" data-aos="fade-up">
+                <button class="section-header" onclick="toggleSection(this)">
+                    <div class="section-header-left">
+                        <div class="section-number" style="background:#ff0000;">▶</div>
+                        <div class="section-title-group">
+                            <h3>Recorded Lectures (YouTube)</h3>
+                            <p>${d.videos.length} Videos Available</p>
+                        </div>
+                    </div>
+                    <div class="section-header-right">
+                        <span class="section-progress">Watch Now</span>
+                        <i class="fas fa-chevron-down section-chevron"></i>
+                    </div>
+                </button>
+                <ul class="lesson-list">`;
+            
+            d.videos.forEach((v, i) => {
+                html += `
+                <li class="lesson-item" onclick="window.open('watch-youtube.html?video=${v.youtubeId}', '_blank')">
+                    <div class="lesson-type-icon type-video" style="background:#ffe0e0;color:#ff0000;">
+                        <i class="fab fa-youtube"></i>
+                    </div>
+                    <div class="lesson-content">
+                        <h4>${v.lectureNumber ? 'Lecture ' + v.lectureNumber + ': ' : ''}${v.title}</h4>
+                        <p class="lesson-meta">YouTube Video • ${v.description || 'Click to watch'}</p>
+                    </div>
+                    <div class="lesson-actions">
+                        <button class="btn-lesson-action btn-join-live" style="background:#ff0000;">▶ Watch</button>
+                    </div>
+                </li>`;
+            });
+            
+            html += `</ul></div>`;
+            
+            // Insert after existing sections
+            const mainContent = document.querySelector('.content-main') || document.querySelector('.main-layout > div:first-child');
+            if (mainContent) {
+                mainContent.insertAdjacentHTML('beforeend', html);
+            }
+        }
+    });
+    
+    // Load upcoming live classes for this course
+    fetch('/api/youtube-live?courseId=' + courseId)
+    .then(r => r.json())
+    .then(d => {
+        const liveClasses = (d.classes || []).filter(c => c.status === 'scheduled' || c.status === 'live');
+        
+        if (liveClasses.length > 0) {
+            let html = `
+            <div class="section-card open" data-aos="fade-up">
+                <button class="section-header" onclick="toggleSection(this)">
+                    <div class="section-header-left">
+                        <div class="section-number" style="background:#ef4444;">🔴</div>
+                        <div class="section-title-group">
+                            <h3>Upcoming Live Classes</h3>
+                            <p>${liveClasses.length} Scheduled</p>
+                        </div>
+                    </div>
+                    <div class="section-header-right">
+                        <span class="section-progress" style="color:#ef4444;">Join Live</span>
+                        <i class="fas fa-chevron-down section-chevron"></i>
+                    </div>
+                </button>
+                <ul class="lesson-list">`;
+            
+            liveClasses.forEach(l => {
+                const isLive = l.status === 'live';
+                html += `
+                <li class="lesson-item" onclick="window.open('youtube-live.html?id=${l.id}', '_blank')">
+                    <div class="lesson-type-icon type-live">
+                        <i class="fas fa-broadcast-tower"></i>
+                    </div>
+                    <div class="lesson-content">
+                        <h4>${isLive ? '🔴 LIVE NOW: ' : '📅 '}${l.title}</h4>
+                        <p class="lesson-meta">${l.faculty} • ${l.date} at ${l.time}</p>
+                    </div>
+                    <div class="lesson-actions">
+                        <button class="btn-lesson-action ${isLive ? 'btn-join-live' : ''}" 
+                                style="${isLive ? '' : 'background:#1a237e;color:white;'}">
+                            ${isLive ? '🔴 Join Now' : 'Set Reminder'}
+                        </button>
+                    </div>
+                </li>`;
+            });
+            
+            html += `</ul></div>`;
+            
+            const mainContent = document.querySelector('.content-main') || document.querySelector('.main-layout > div:first-child');
+            if (mainContent) {
+                mainContent.insertAdjacentHTML('beforeend', html);
+            }
+        }
+    });
+}
+
+// Load content for CG PSC Foundation course
+// Change this ID to match your course
+loadYouTubeContent('cgpsc-foundation');
 </body>
 </html>
