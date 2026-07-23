@@ -6,24 +6,24 @@ const fs = require('fs');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const mainDir = path.join(__dirname, '..');
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(mainDir));
+app.use('/css', express.static(path.join(mainDir, 'css')));
+app.use('/js', express.static(path.join(mainDir, 'js')));
+app.use('/admin', express.static(path.join(mainDir, 'admin')));
+app.use('/pages', express.static(path.join(mainDir, 'pages')));
+app.use('/student', express.static(path.join(mainDir, 'student')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// ============ SERVE STATIC FILES PROPERLY ============
-// This serves all HTML, CSS, JS files from the main folder
-const mainDir = path.join(__dirname, '..');
-app.use(express.static(mainDir));
-
-// Create required directories
 ['uploads/videos', 'uploads/thumbnails', 'uploads/pdfs', 'data'].forEach(dir => {
     const p = path.join(__dirname, dir);
     if (!fs.existsSync(p)) fs.mkdirSync(p, { recursive: true });
 });
 
-// Simple database
 const getDB = (name) => {
     const file = path.join(__dirname, 'data', name + '.json');
     if (!fs.existsSync(file)) fs.writeFileSync(file, '[]');
@@ -33,31 +33,25 @@ const saveDB = (name, data) => {
     fs.writeFileSync(path.join(__dirname, 'data', name + '.json'), JSON.stringify(data, null, 2));
 };
 
-// Create default admin
+// Default admin
 (function() {
     const users = getDB('users');
     if (!users.find(u => u.role === 'admin')) {
         const bcrypt = require('bcryptjs');
         bcrypt.hash('admin123', 10).then(hash => {
-            users.push({
-                id: 'admin-001', fullName: 'Admin User', mobile: '9999999999',
-                email: 'admin@apexhub.in', password: hash, role: 'admin',
-                createdAt: new Date().toISOString()
-            });
+            users.push({ id: 'admin-001', fullName: 'Admin User', mobile: '9999999999', email: 'admin@apexhub.in', password: hash, role: 'admin', createdAt: new Date().toISOString() });
             saveDB('users', users);
-            console.log('✅ Admin created: admin@apexhub.in / admin123');
+            console.log('✅ Admin: admin@apexhub.in / admin123');
         });
     }
 })();
 
-// ============ AUTH ROUTES ============
+// ============ AUTH ============
 app.post('/api/auth/register', async (req, res) => {
     try {
         const { fullName, mobile, email, password, role } = req.body;
         const users = getDB('users');
-        if (users.find(u => u.email === email || u.mobile === mobile)) {
-            return res.status(400).json({ success: false, message: 'User already exists' });
-        }
+        if (users.find(u => u.email === email || u.mobile === mobile)) return res.status(400).json({ success: false, message: 'User exists' });
         const bcrypt = require('bcryptjs');
         const hash = await bcrypt.hash(password, 10);
         const user = { id: Date.now().toString(36), fullName, mobile, email, password: hash, role: role || 'student', createdAt: new Date().toISOString() };
@@ -74,19 +68,12 @@ app.post('/api/auth/login', async (req, res) => {
         const user = users.find(u => u.email === identifier || u.mobile === identifier);
         if (!user) return res.status(401).json({ success: false, message: 'Invalid credentials' });
         const bcrypt = require('bcryptjs');
-        const valid = await bcrypt.compare(password, user.password);
-        if (!valid) return res.status(401).json({ success: false, message: 'Invalid credentials' });
+        if (!await bcrypt.compare(password, user.password)) return res.status(401).json({ success: false, message: 'Invalid credentials' });
         const jwt = require('jsonwebtoken');
         const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET || 'secret', { expiresIn: '7d' });
         const { password: _, ...u } = user;
         res.json({ success: true, token, user: u });
     } catch (e) { res.status(500).json({ success: false, message: e.message }); }
-});
-
-app.post('/api/auth/send-otp', (req, res) => {
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    console.log('OTP:', otp);
-    res.json({ success: true, otp });
 });
 
 // ============ COURSES ============
@@ -118,19 +105,12 @@ const upload = multer({
     }),
     limits: { fileSize: 500 * 1024 * 1024 }
 });
-
 app.post('/api/videos/upload', upload.single('video'), (req, res) => {
     if (!req.file) return res.status(400).json({ success: false, message: 'No file' });
     const videos = getDB('videos');
-    const video = {
-        id: Date.now().toString(36), title: req.body.title || 'Untitled',
-        courseId: req.body.courseId || '', filename: req.file.filename,
-        originalName: req.file.originalname, fileSize: req.file.size,
-        videoUrl: '/uploads/videos/' + req.file.filename,
-        status: 'ready', views: 0, createdAt: new Date().toISOString()
-    };
+    const video = { id: Date.now().toString(36), title: req.body.title || 'Untitled', courseId: req.body.courseId || '', filename: req.file.filename, originalName: req.file.originalname, fileSize: req.file.size, videoUrl: '/uploads/videos/' + req.file.filename, status: 'ready', views: 0, createdAt: new Date().toISOString() };
     videos.push(video); saveDB('videos', videos);
-    res.status(201).json({ success: true, message: 'Uploaded!', video });
+    res.status(201).json({ success: true, video });
 });
 app.get('/api/videos', (req, res) => res.json({ success: true, videos: getDB('videos') }));
 app.delete('/api/videos/:id', (req, res) => {
@@ -141,15 +121,52 @@ app.delete('/api/videos/:id', (req, res) => {
     res.json({ success: true, message: 'Deleted' });
 });
 
-// ============ LIVE & TEST SERIES ============
-app.post('/api/live/schedule', (req, res) => {
-    const live = getDB('liveClasses');
-    const c = { id: Date.now().toString(36), ...req.body, status: 'scheduled', attendees: 0, createdAt: new Date().toISOString() };
-    live.push(c); saveDB('liveClasses', live);
-    res.status(201).json({ success: true, liveClass: c });
+// ============ YOUTUBE VIDEOS ============
+app.get('/api/youtube-videos', (req, res) => {
+    const videos = getDB('youtubeVideos');
+    const { courseId } = req.query;
+    res.json({ success: true, videos: courseId ? videos.filter(v => v.courseId === courseId) : videos });
 });
-app.get('/api/live', (req, res) => res.json({ success: true, classes: getDB('liveClasses') }));
+app.post('/api/youtube-videos', (req, res) => {
+    const videos = getDB('youtubeVideos');
+    const video = { id: 'yt_' + Date.now(), youtubeId: req.body.youtubeId, title: req.body.title, courseId: req.body.courseId, lectureNumber: req.body.lectureNumber || '', description: req.body.description || '', embedUrl: 'https://www.youtube.com/embed/' + req.body.youtubeId, thumbnailUrl: 'https://img.youtube.com/vi/' + req.body.youtubeId + '/hqdefault.jpg', status: 'active', views: 0, createdAt: new Date().toISOString() };
+    videos.push(video); saveDB('youtubeVideos', videos);
+    res.status(201).json({ success: true, message: 'Video added to course!', video });
+});
+app.delete('/api/youtube-videos/:id', (req, res) => {
+    saveDB('youtubeVideos', getDB('youtubeVideos').filter(v => v.id !== req.params.id));
+    res.json({ success: true, message: 'Video removed' });
+});
 
+// ============ YOUTUBE LIVE ============
+app.get('/api/youtube-live', (req, res) => {
+    const classes = getDB('youtubeLive');
+    const { courseId, status } = req.query;
+    let filtered = classes;
+    if (courseId) filtered = filtered.filter(c => c.courseId === courseId);
+    if (status) filtered = filtered.filter(c => c.status === status);
+    res.json({ success: true, classes: filtered });
+});
+app.post('/api/youtube-live', (req, res) => {
+    const classes = getDB('youtubeLive');
+    const live = { id: 'live_' + Date.now(), youtubeId: req.body.youtubeId, title: req.body.title, courseId: req.body.courseId, faculty: req.body.faculty || '', date: req.body.date, time: req.body.time, description: req.body.description || '', embedUrl: 'https://www.youtube.com/embed/' + req.body.youtubeId, liveChatUrl: 'https://www.youtube.com/live_chat?v=' + req.body.youtubeId + '&embed_domain=' + (req.headers.host || ''), status: 'scheduled', attendees: 0, createdAt: new Date().toISOString() };
+    classes.push(live); saveDB('youtubeLive', classes);
+    res.status(201).json({ success: true, message: 'Live scheduled!', liveClass: live });
+});
+app.put('/api/youtube-live/:id', (req, res) => {
+    const classes = getDB('youtubeLive');
+    const i = classes.findIndex(c => c.id === req.params.id);
+    if (i === -1) return res.status(404).json({ success: false, message: 'Not found' });
+    classes[i] = { ...classes[i], ...req.body, updatedAt: new Date().toISOString() };
+    saveDB('youtubeLive', classes);
+    res.json({ success: true, liveClass: classes[i] });
+});
+app.delete('/api/youtube-live/:id', (req, res) => {
+    saveDB('youtubeLive', getDB('youtubeLive').filter(c => c.id !== req.params.id));
+    res.json({ success: true, message: 'Deleted' });
+});
+
+// ============ TEST SERIES ============
 app.get('/api/test-series', (req, res) => res.json({ success: true, tests: getDB('testSeries') }));
 app.post('/api/test-series', (req, res) => {
     const tests = getDB('testSeries');
@@ -158,22 +175,18 @@ app.post('/api/test-series', (req, res) => {
     res.status(201).json({ success: true, test: t });
 });
 
-// ============ HEALTH CHECK ============
-app.get('/api/health', (req, res) => {
-    res.json({ status: 'ok', message: 'Apex Hub API is running', timestamp: new Date().toISOString() });
+// ============ LIVE CLASSES ============
+app.post('/api/live/schedule', (req, res) => {
+    const live = getDB('liveClasses');
+    const c = { id: Date.now().toString(36), ...req.body, status: 'scheduled', createdAt: new Date().toISOString() };
+    live.push(c); saveDB('liveClasses', live);
+    res.status(201).json({ success: true, liveClass: c });
 });
+app.get('/api/live', (req, res) => res.json({ success: true, classes: getDB('liveClasses') }));
 
-// ============ CATCH-ALL FOR SPA ============
-// This serves index.html for any unmatched route
-app.get('*', (req, res) => {
-    res.sendFile(path.join(mainDir, 'index.html'));
-});
+// ============ HEALTH ============
+app.get('/api/health', (req, res) => res.json({ status: 'ok', message: 'Apex Hub API running', timestamp: new Date().toISOString() }));
 
-// ============ START SERVER ============
-app.listen(PORT, '0.0.0.0', () => {
-    console.log('═══════════════════════════════');
-    console.log('🚀 Apex Hub Server Running');
-    console.log('📡 Port: ' + PORT);
-    console.log('🌐 http://localhost:' + PORT);
-    console.log('═══════════════════════════════');
-});
+app.get('*', (req, res) => res.sendFile(path.join(mainDir, 'index.html')));
+
+app.listen(PORT, '0.0.0.0', () => console.log('🚀 Apex Hub running on port ' + PORT));

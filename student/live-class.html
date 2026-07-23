@@ -6,61 +6,127 @@
     <title>Live Class - Apex Hub</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="../js/auth.js"></script>
-    <script>if(!requireAuth()){}</script>
     <style>
-        *{margin:0;padding:0;box-sizing:border-box;}
-        body{font-family:'Poppins',sans-serif;background:#0a0e27;color:white;height:100vh;display:flex;flex-direction:column;}
-        .live-header{background:#1a1a2e;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;}
-        .live-dot{width:12px;height:12px;background:#ef4444;border-radius:50%;animation:pulse 2s infinite;display:inline-block;margin-right:8px;}
-        @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
-        .live-main{flex:1;display:flex;}
-        .stream-area{flex:1;display:flex;align-items:center;justify-content:center;background:#000;}
-        .chat-sidebar{width:350px;background:#1a1a2e;display:flex;flex-direction:column;border-left:1px solid #333;}
-        .chat-messages{flex:1;overflow-y:auto;padding:15px;}
-        .chat-input-area{padding:15px;border-top:1px solid #333;display:flex;gap:10px;}
-        .chat-input-area input{flex:1;padding:10px;border-radius:20px;border:none;background:#2a2a3e;color:white;font-family:'Poppins',sans-serif;}
-        .chat-input-area button{padding:10px 20px;border-radius:20px;border:none;background:#f5a623;color:#1a1a2e;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;}
-        @media(max-width:768px){.chat-sidebar{width:100%;max-height:40vh;}.live-main{flex-direction:column;}}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Poppins',sans-serif;background:#0a0e27;color:#fff;height:100vh;display:flex;flex-direction:column}
+        .header{background:#1a1a2e;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #333}
+        .header .live-dot{width:12px;height:12px;background:#ef4444;border-radius:50%;display:inline-block;margin-right:8px;animation:pulse 2s infinite}
+        @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+        .header .badge{background:#ef4444;color:#fff;padding:4px 12px;border-radius:4px;font-size:.75rem;font-weight:600}
+        .main{flex:1;display:flex;overflow:hidden}
+        .player-area{flex:1;display:flex;align-items:center;justify-content:center;position:relative}
+        .player-area iframe{width:100%;height:100%;border:none}
+        .player-area .protect{position:absolute;top:0;left:0;width:100%;height:100%;z-index:2;background:transparent}
+        .chat-sidebar{width:350px;background:#1a1a2e;display:flex;flex-direction:column;border-left:1px solid #333}
+        .chat-header{padding:15px;border-bottom:1px solid #333}
+        .chat-messages{flex:1;overflow-y:auto;padding:15px}
+        .chat-msg{margin-bottom:12px;display:flex;gap:8px}
+        .chat-avatar{width:32px;height:32px;border-radius:50%;background:#333;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:600;flex-shrink:0}
+        .chat-bubble{background:#2a2a3e;padding:10px 14px;border-radius:12px;font-size:.85rem}
+        .chat-bubble .sender{font-weight:600;color:#f5a623;font-size:.75rem}
+        .chat-input-area{padding:15px;border-top:1px solid #333;display:flex;gap:10px}
+        .chat-input-area input{flex:1;padding:10px 15px;border-radius:25px;border:none;background:#2a2a3e;color:#fff;font-family:'Poppins',sans-serif;font-size:.85rem}
+        .chat-input-area input::placeholder{color:#888}
+        .chat-input-area button{padding:10px 20px;border-radius:25px;border:none;background:#f5a623;color:#1a1a2e;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif}
+        .info-bar{background:#1a1a2e;padding:10px 20px;border-top:1px solid #333;display:flex;justify-content:space-between;align-items:center;font-size:.85rem}
+        @media(max-width:768px){.main{flex-direction:column}.chat-sidebar{width:100%;max-height:40vh}.player-area{min-height:40vh}}
     </style>
 </head>
 <body>
-    <div class="live-header">
-        <div><span class="live-dot"></span><strong>LIVE</strong> • Fundamental Rights Doubt Session</div>
-        <div><span>👥 245 watching</span> • Dr. Rajesh Sharma</div>
-    </div>
-    <div class="live-main">
-        <div class="stream-area">
-            <div style="text-align:center;">
-                <i class="fas fa-broadcast-tower" style="font-size:4rem;color:#ef4444;"></i>
-                <h2 style="margin-top:15px;">Live Stream</h2>
-                <p style="color:#888;">Class is in progress...</p>
-            </div>
+
+    <div class="header">
+        <div>
+            <span class="live-dot"></span>
+            <span class="badge">LIVE</span>
+            <span id="liveTitle" style="margin-left:10px;font-weight:500">Loading...</span>
         </div>
+        <div>
+            <span id="viewerCount">👥 0 watching</span>
+            <span id="liveFaculty" style="margin-left:15px;font-size:.85rem;color:#aaa"></span>
+        </div>
+    </div>
+
+    <div class="main">
+        <div class="player-area">
+            <div class="protect" oncontextmenu="return false"></div>
+            <iframe id="livePlayer" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+
         <div class="chat-sidebar">
+            <div class="chat-header"><h4>💬 Live Chat</h4></div>
             <div class="chat-messages" id="chatMessages">
-                <div style="margin-bottom:12px;"><strong style="color:#f5a623;">Dr. Rajesh:</strong> Welcome! Today we'll discuss FRs.</div>
-                <div style="margin-bottom:12px;"><strong>Rahul:</strong> Sir, ready!</div>
+                <div class="chat-msg">
+                    <div class="chat-avatar" style="background:#f5a623;color:#1a1a2e">AP</div>
+                    <div class="chat-bubble">
+                        <span class="sender">Apex Hub</span>
+                        <p>Welcome to the live class! Type your questions below.</p>
+                    </div>
+                </div>
             </div>
             <div class="chat-input-area">
-                <input type="text" placeholder="Type message..." id="chatInput" onkeypress="if(event.key==='Enter')sendMsg()">
-                <button onclick="sendMsg()">Send</button>
+                <input type="text" id="chatInput" placeholder="Type your message..." onkeypress="if(event.key==='Enter')sendMsg()">
+                <button onclick="sendMsg()"><i class="fas fa-paper-plane"></i></button>
             </div>
         </div>
     </div>
+
+    <div class="info-bar">
+        <span><a href="course-content.html" style="color:#f5a623;text-decoration:none"><i class="fas fa-arrow-left"></i> Back to Course</a></span>
+        <span id="liveDuration">Duration: Live</span>
+        <button onclick="logout()" style="background:#ef4444;color:#fff;border:none;padding:6px 14px;border-radius:8px;cursor:pointer;font-family:'Poppins',sans-serif;font-size:.8rem">Logout</button>
+    </div>
+
     <script>
-        function sendMsg(){
-            const input=document.getElementById('chatInput');
-            const msg=input.value.trim();
-            if(msg){
-                const div=document.createElement('div');
-                div.style.marginBottom='12px';
-                div.innerHTML='<strong>You:</strong> '+msg;
-                document.getElementById('chatMessages').appendChild(div);
-                input.value='';
-                document.getElementById('chatMessages').scrollTop=document.getElementById('chatMessages').scrollHeight;
+        // Get YouTube Live ID from URL
+        const params = new URLSearchParams(window.location.search);
+        const youtubeId = params.get('id') || 'dQw4w9WgXcQ';
+
+        // Load live stream
+        function loadLiveStream() {
+            const embedUrl = `https://www.youtube.com/embed/${youtubeId}?rel=0&modestbranding=1&autoplay=1&controls=1&disablekb=1&fs=0&iv_load_policy=3&origin=${window.location.origin}`;
+            document.getElementById('livePlayer').src = embedUrl;
+            
+            // Load live data from localStorage
+            const videos = JSON.parse(localStorage.getItem('apexVideos') || '[]');
+            const liveData = videos.find(v => v.youtubeId === youtubeId);
+            if (liveData) {
+                document.getElementById('liveTitle').textContent = liveData.title;
+                document.getElementById('liveFaculty').textContent = liveData.faculty || '';
+                document.getElementById('liveDuration').textContent = 'Duration: ' + (liveData.duration || 'Live') + ' mins';
             }
         }
+
+        // Security
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('keydown', e => {
+            if (e.ctrlKey && (e.key === 's' || e.key === 'u' || e.key === 'S' || e.key === 'U')) e.preventDefault();
+            if (e.key === 'F12') e.preventDefault();
+        });
+
+        // Chat
+        function sendMsg() {
+            const input = document.getElementById('chatInput');
+            const msg = input.value.trim();
+            if (!msg) return;
+            const div = document.createElement('div');
+            div.className = 'chat-msg';
+            div.innerHTML = `<div class="chat-avatar">YO</div><div class="chat-bubble"><span class="sender">You</span><p>${msg}</p></div>`;
+            document.getElementById('chatMessages').appendChild(div);
+            document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
+            input.value = '';
+        }
+
+        // Simulate viewers
+        setInterval(() => {
+            document.getElementById('viewerCount').textContent = '👥 ' + (100 + Math.floor(Math.random() * 200)) + ' watching';
+        }, 5000);
+
+        function logout() {
+            localStorage.removeItem('apexHubCurrentUser');
+            window.location.href = '../pages/login.html';
+        }
+
+        loadLiveStream();
     </script>
 </body>
 </html>
