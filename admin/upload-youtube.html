@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Videos - Apex Hub Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Poppins',sans-serif;background:#f4f6f9;display:flex}
+        .sidebar{width:250px;height:100vh;background:#0a0e27;color:#fff;position:fixed;padding:20px 0}
+        .sidebar h2{padding:20px;text-align:center;font-size:1.3rem;letter-spacing:2px}
+        .sidebar h2 span{color:#f5a623}
+        .sidebar a{display:flex;align-items:center;gap:10px;padding:12px 20px;color:#aaa;text-decoration:none;font-size:.9rem;transition:.3s}
+        .sidebar a:hover,.sidebar a.active{background:rgba(245,166,35,.15);color:#f5a623}
+        .main{margin-left:250px;padding:30px;flex:1}
+        .card{background:#fff;border-radius:16px;padding:30px;box-shadow:0 2px 10px rgba(0,0,0,.05);margin-bottom:20px}
+        h1{font-size:1.5rem;margin-bottom:10px}
+        .form-group{margin-bottom:18px}
+        .form-group label{display:block;font-weight:600;margin-bottom:6px;font-size:.85rem}
+        .form-group input,.form-group select,.form-group textarea{width:100%;padding:12px;border:2px solid #e5e7eb;border-radius:10px;font-family:'Poppins',sans-serif;font-size:.9rem}
+        .form-group input:focus,.form-group select:focus{border-color:#1a237e;outline:none}
+        .row{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+        .btn{padding:12px 30px;background:#ff0000;color:#fff;border:none;border-radius:10px;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;font-size:.9rem}
+        .btn:hover{background:#cc0000}
+        .video-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:15px}
+        .video-card{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+        .video-card iframe{width:100%;height:180px}
+        .video-info{padding:15px}
+        .video-info h4{font-size:.9rem;margin-bottom:5px}
+        .video-info p{font-size:.75rem;color:#888}
+        .status{display:inline-block;padding:4px 10px;border-radius:12px;font-size:.7rem;font-weight:600;background:#d1fae5;color:#065f46}
+        .toast{display:none;position:fixed;top:20px;right:20px;background:#10b981;color:#fff;padding:14px 20px;border-radius:10px;z-index:9999}
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <h2>APEX<span>HUB</span></h2>
+        <a href="dashboard.html"><i class="fas fa-th-large"></i> Dashboard</a>
+        <a href="upload-youtube.html" class="active"><i class="fab fa-youtube"></i> YouTube Videos</a>
+        <a href="schedule-youtube-live.html"><i class="fas fa-broadcast-tower"></i> YouTube Live</a>
+        <a href="manage-courses.html"><i class="fas fa-book"></i> Courses</a>
+        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </aside>
+
+    <main class="main">
+        <div id="toast" class="toast"></div>
+        
+        <div class="card">
+            <h1>🎬 Add YouTube Video to Course</h1>
+            <p style="color:#888;margin-bottom:20px">Paste a YouTube link to add it permanently to a course</p>
+            
+            <form onsubmit="addVideo(event)">
+                <div class="form-group">
+                    <label>YouTube Video URL *</label>
+                    <input type="url" id="youtubeUrl" placeholder="https://www.youtube.com/watch?v=XXXXXXXXXXX" required>
+                </div>
+                <div class="form-group">
+                    <label>Video Title *</label>
+                    <input type="text" id="videoTitle" placeholder="e.g., Fundamental Rights Part 1" required>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <label>Course *</label>
+                        <select id="courseSelect" required>
+                            <option value="">Select Course</option>
+                            <option value="cgpsc-foundation">CG PSC Foundation</option>
+                            <option value="cgpsc-mains">CG PSC Mains</option>
+                            <option value="vyapam-combo">CG Vyapam Combo</option>
+                            <option value="neet-dropper">NEET Dropper Batch</option>
+                            <option value="jee-main-adv">JEE Main + Advanced</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Lecture Number</label>
+                        <input type="number" id="lectureNumber" placeholder="e.g., 12">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="description" rows="2" placeholder="Brief description..."></textarea>
+                </div>
+                <button type="submit" class="btn"><i class="fab fa-youtube"></i> Add to Course</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>📚 Course Videos</h2>
+            <div class="video-grid" id="videoGrid"><p style="color:#888">No videos added</p></div>
+        </div>
+    </main>
+
+    <script>
+        if(localStorage.getItem('apexAdminLoggedIn')!=='true')location.href='index.html';
+        function logout(){localStorage.removeItem('apexAdminLoggedIn');location.href='index.html';}
+
+        function extractID(url){
+            const patterns=[/(?:youtube\.com\/watch\?v=)([^&]+)/,/(?:youtu\.be\/)([^?]+)/,/(?:youtube\.com\/embed\/)([^?]+)/,/(?:youtube\.com\/shorts\/)([^?]+)/];
+            for(let p of patterns){let m=url.match(p);if(m)return m[1];}
+            return null;
+        }
+
+        function addVideo(e){
+            e.preventDefault();
+            const url=document.getElementById('youtubeUrl').value;
+            const videoId=extractID(url);
+            if(!videoId){alert('Invalid YouTube URL');return;}
+            
+            fetch('/api/youtube-videos',{
+                method:'POST',
+                headers:{'Content-Type':'application/json'},
+                body:JSON.stringify({
+                    youtubeId:videoId,
+                    title:document.getElementById('videoTitle').value,
+                    courseId:document.getElementById('courseSelect').value,
+                    lectureNumber:document.getElementById('lectureNumber').value,
+                    description:document.getElementById('description').value
+                })
+            })
+            .then(r=>r.json())
+            .then(d=>{
+                if(d.success){showToast('✅ Video added! Students can watch it now.');document.querySelector('form').reset();loadVideos();}
+                else alert(d.message);
+            })
+            .catch(()=>alert('Error saving'));
+        }
+
+        function loadVideos(){
+            fetch('/api/youtube-videos')
+            .then(r=>r.json())
+            .then(d=>{
+                let grid=document.getElementById('videoGrid');
+                if(d.videos.length===0){grid.innerHTML='<p style="color:#888">No videos added</p>';return;}
+                grid.innerHTML=d.videos.map(v=>`
+                    <div class="video-card">
+                        <iframe src="${v.embedUrl}" frameborder="0" allowfullscreen></iframe>
+                        <div class="video-info">
+                            <h4>${v.title}</h4>
+                            <p>📁 ${v.courseId} | 🎬 #${v.lectureNumber||'N/A'}</p>
+                            <span class="status">Active</span>
+                            <button onclick="deleteVideo('${v.id}')" style="float:right;background:#fee2e2;color:#991b1b;border:none;padding:5px 12px;border-radius:8px;cursor:pointer;font-size:.75rem">🗑</button>
+                        </div>
+                    </div>
+                `).join('');
+            });
+        }
+
+        function deleteVideo(id){
+            if(confirm('Remove this video from course?')){
+                fetch('/api/youtube-videos/'+id,{method:'DELETE'})
+                .then(r=>r.json())
+                .then(d=>{if(d.success){loadVideos();showToast('🗑️ Removed');}});
+            }
+        }
+
+        function showToast(msg){
+            let t=document.getElementById('toast');
+            t.textContent=msg;t.style.display='block';
+            setTimeout(()=>t.style.display='none',3000);
+        }
+
+        loadVideos();
+    </script>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Live - Apex Hub Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Poppins',sans-serif;background:#f4f6f9;display:flex}
+        .sidebar{width:250px;height:100vh;background:#0a0e27;color:#fff;position:fixed;padding:20px 0}
+        .sidebar h2{padding:20px;text-align:center;font-size:1.3rem;letter-spacing:2px}
+        .sidebar h2 span{color:#f5a623}
+        .sidebar a{display:flex;align-items:center;gap:10px;padding:12px 20px;color:#aaa;text-decoration:none;font-size:.9rem;transition:.3s}
+        .sidebar a:hover,.sidebar a.active{background:rgba(245,166,35,.15);color:#f5a623}
+        .main{margin-left:250px;padding:30px;flex:1}
+        .card{background:#fff;border-radius:16px;padding:30px;box-shadow:0 2px 10px rgba(0,0,0,.05);margin-bottom:20px}
+        h1{font-size:1.5rem;margin-bottom:10px}
+        .form-group{margin-bottom:18px}
+        .form-group label{display:block;font-weight:600;margin-bottom:6px;font-size:.85rem}
+        .form-group input,.form-group select,.form-group textarea{width:100%;padding:12px;border:2px solid #e5e7eb;border-radius:10px;font-family:'Poppins',sans-serif;font-size:.9rem}
+        .form-group input:focus{border-color:#1a237e;outline:none}
+        .row{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+        .btn{padding:12px 30px;background:#ef4444;color:#fff;border:none;border-radius:10px;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;font-size:.9rem}
+        .btn:hover{background:#dc2626}
+        .live-card{background:#fff;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+        .live-dot{width:12px;height:12px;background:#ef4444;border-radius:50%;animation:pulse 2s infinite;display:inline-block;margin-right:8px}
+        @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+        .btn-sm{padding:6px 14px;border:none;border-radius:8px;cursor:pointer;font-family:'Poppins',sans-serif;font-size:.8rem;margin-left:5px}
+        .btn-start{background:#10b981;color:#fff}.btn-end{background:#ef4444;color:#fff}
+        .toast{display:none;position:fixed;top:20px;right:20px;background:#10b981;color:#fff;padding:14px 20px;border-radius:10px;z-index:9999}
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <h2>APEX<span>HUB</span></h2>
+        <a href="dashboard.html"><i class="fas fa-th-large"></i> Dashboard</a>
+        <a href="upload-youtube.html"><i class="fab fa-youtube"></i> YouTube Videos</a>
+        <a href="schedule-youtube-live.html" class="active"><i class="fas fa-broadcast-tower"></i> YouTube Live</a>
+        <a href="manage-courses.html"><i class="fas fa-book"></i> Courses</a>
+        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </aside>
+
+    <main class="main">
+        <div id="toast" class="toast"></div>
+        
+        <div class="card">
+            <h1>🔴 Schedule YouTube Live Class</h1>
+            <p style="color:#888;margin-bottom:20px">Live class will appear in student's course automatically</p>
+            
+            <form onsubmit="scheduleLive(event)">
+                <div class="form-group">
+                    <label>Live Stream Title *</label>
+                    <input type="text" id="liveTitle" placeholder="e.g., Fundamental Rights - Live Doubt Session" required>
+                </div>
+                <div class="form-group">
+                    <label>YouTube Live Video ID *</label>
+                    <input type="text" id="liveUrl" placeholder="Paste YouTube live URL or Video ID" required>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <label>Course *</label>
+                        <select id="liveCourse" required>
+                            <option value="">Select Course</option>
+                            <option value="cgpsc-foundation">CG PSC Foundation</option>
+                            <option value="vyapam-combo">CG Vyapam Combo</option>
+                            <option value="neet-dropper">NEET Dropper Batch</option>
+                            <option value="jee-main-adv">JEE Main + Advanced</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Faculty</label>
+                        <input type="text" id="liveFaculty" placeholder="Dr. Rajesh Sharma">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group"><label>Date *</label><input type="date" id="liveDate" required></div>
+                    <div class="form-group"><label>Time *</label><input type="time" id="liveTime" required></div>
+                </div>
+                <div class="form-group"><label>Description</label><textarea id="liveDescription" rows="2"></textarea></div>
+                <button type="submit" class="btn"><i class="fas fa-calendar-plus"></i> Schedule Live</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>📅 Scheduled Live Classes</h2>
+            <div id="liveList"><p style="color:#888">No live classes</p></div>
+        </div>
+    </main>
+
+    <script>
+        if(localStorage.getItem('apexAdminLoggedIn')!=='true')location.href='index.html';
+        function logout(){localStorage.removeItem('apexAdminLoggedIn');location.href='index.html';}
+
+        function extractID(url){
+            const patterns=[/(?:youtube\.com\/live\/([^?&]+))/,/(?:youtube\.com\/watch\?v=)([^&]+)/,/(?:youtu\.be\/)([^?]+)/];
+            for(let p of patterns){let m=url.match(p);if(m)return m[1];}
+            if(/^[A-Za-z0-9_-]{11}$/.test(url))return url;
+            return null;
+        }
+
+        function scheduleLive(e){
+            e.preventDefault();
+            const videoId=extractID(document.getElementById('liveUrl').value);
+            if(!videoId){alert('Invalid YouTube URL or Video ID');return;}
+            
+            fetch('/api/youtube-live',{
+                method:'POST',
+                headers:{'Content-Type':'application/json'},
+                body:JSON.stringify({
+                    youtubeId:videoId,
+                    title:document.getElementById('liveTitle').value,
+                    courseId:document.getElementById('liveCourse').value,
+                    faculty:document.getElementById('liveFaculty').value,
+                    date:document.getElementById('liveDate').value,
+                    time:document.getElementById('liveTime').value,
+                    description:document.getElementById('liveDescription').value
+                })
+            })
+            .then(r=>r.json())
+            .then(d=>{if(d.success){showToast('✅ Live scheduled!');document.querySelector('form').reset();loadLive();}})
+            .catch(()=>alert('Error'));
+        }
+
+        function loadLive(){
+            fetch('/api/youtube-live')
+            .then(r=>r.json())
+            .then(d=>{
+                let list=document.getElementById('liveList');
+                if(d.classes.length===0){list.innerHTML='<p style="color:#888">No live classes</p>';return;}
+                list.innerHTML=d.classes.map(c=>`
+                    <div class="live-card">
+                        <div><strong>${c.status==='live'?'<span class="live-dot"></span>':''}${c.title}</strong><p style="font-size:.8rem;color:#888">📅 ${c.date} ${c.time} | 👨‍🏫 ${c.faculty} | 📁 ${c.courseId}</p></div>
+                        <div>
+                            ${c.status==='scheduled'?`<button class="btn-sm btn-start" onclick="updateLive('${c.id}','live')">▶ Start</button>`:''}
+                            ${c.status==='live'?`<button class="btn-sm btn-end" onclick="updateLive('${c.id}','ended')">⏹ End</button>`:''}
+                            <button class="btn-sm" onclick="navigator.clipboard.writeText('${c.embedUrl}');showToast('📋 Copied!')">📋</button>
+                            <button class="btn-sm" style="background:#fee2e2;color:#991b1b" onclick="deleteLive('${c.id}')">🗑</button>
+                        </div>
+                    </div>
+                `).join('');
+            });
+        }
+
+        function updateLive(id,status){
+            fetch('/api/youtube-live/'+id,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({status})})
+            .then(r=>r.json()).then(d=>{if(d.success){loadLive();showToast(status==='live'?'🔴 Live started!':'⏹ Ended');}});
+        }
+
+        function deleteLive(id){
+            if(confirm('Delete?')){fetch('/api/youtube-live/'+id,{method:'DELETE'}).then(r=>r.json()).then(d=>{if(d.success){loadLive();showToast('🗑️ Deleted');}});}
+        }
+
+        function showToast(msg){let t=document.getElementById('toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',3000);}
+
+        loadLive();
+    </script>
+</body>
+</html>

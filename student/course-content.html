@@ -7,298 +7,149 @@
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    
+    <!-- Auth Protection -->
+    <script src="../js/auth.js"></script>
+    <script>
+        if (!requireAuth()) {
+            // Redirects to login if not authenticated
+        }
+    </script>
     
     <style>
-        :root {
-            --primary: #1a237e;
-            --primary-light: #283593;
-            --gold: #f5a623;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --bg: #f0f2f7;
-            --card: #ffffff;
-            --text: #1e293b;
-            --text-light: #64748b;
-            --border: #e2e8f0;
-            --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-            --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06);
-            --shadow-lg: 0 10px 15px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.05);
-            --radius: 16px;
-            --radius-sm: 10px;
-        }
-
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
+        
         body {
             font-family: 'Poppins', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-            min-height: 100vh;
+            background: #f4f6f9;
         }
-
-        /* ============ TOP NAVIGATION ============ */
-        .top-nav {
+        
+        .course-top-nav {
             background: white;
-            padding: 0 30px;
-            height: 64px;
+            padding: 12px 20px;
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            box-shadow: var(--shadow);
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
             position: sticky;
             top: 0;
             z-index: 100;
-            backdrop-filter: blur(10px);
         }
-
-        .nav-brand {
-            font-size: 1.4rem;
+        
+        .course-top-nav .logo {
+            font-size: 1.3rem;
             font-weight: 800;
-            color: var(--primary);
+            color: #1a237e;
             text-decoration: none;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
         }
-
-        .nav-brand span { color: var(--gold); }
-
-        .nav-actions {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .btn-back {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
-            border-radius: 25px;
-            background: #f1f5f9;
-            color: var(--text);
+        
+        .course-top-nav .logo span { color: #f5a623; }
+        
+        .course-top-nav .back-btn {
+            color: #1a237e;
             text-decoration: none;
-            font-size: 0.85rem;
             font-weight: 500;
-            transition: all 0.3s;
+            font-size: 0.9rem;
         }
-
-        .btn-back:hover { background: #e2e8f0; }
-
-        .btn-logout {
-            padding: 8px 18px;
-            border-radius: 25px;
-            background: #fee2e2;
-            color: #991b1b;
-            border: none;
-            cursor: pointer;
-            font-family: 'Poppins', sans-serif;
-            font-size: 0.85rem;
-            font-weight: 500;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .btn-logout:hover { background: #fecaca; }
-
-        .user-avatar-sm {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: var(--primary);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            font-size: 0.85rem;
-        }
-
-        /* ============ MAIN LAYOUT ============ */
-        .main-layout {
+        
+        .course-top-nav .back-btn:hover { text-decoration: underline; }
+        
+        .course-content-layout {
             display: grid;
             grid-template-columns: 1fr 380px;
-            gap: 24px;
+            gap: 25px;
             max-width: 1400px;
             margin: 0 auto;
-            padding: 24px;
+            padding: 25px;
         }
-
-        /* ============ COURSE BANNER ============ */
-        .course-banner {
-            background: linear-gradient(135deg, #1a237e 0%, #283593 50%, #3949ab 100%);
+        
+        .content-main {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .course-header-banner {
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
-            padding: 35px 30px;
-            border-radius: var(--radius);
-            margin-bottom: 24px;
-            position: relative;
-            overflow: hidden;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 25px;
         }
-
-        .course-banner::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -20%;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(245,166,35,0.15), transparent);
-            border-radius: 50%;
+        
+        .course-header-banner h1 {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
         }
-
-        .course-banner::after {
-            content: '';
-            position: absolute;
-            bottom: -30%;
-            left: -10%;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(255,255,255,0.05), transparent);
-            border-radius: 50%;
-        }
-
-        .course-banner * { position: relative; z-index: 1; }
-
-        .course-banner .badge {
-            display: inline-block;
-            background: rgba(245,166,35,0.2);
-            border: 1px solid rgba(245,166,35,0.4);
-            padding: 6px 16px;
-            border-radius: 25px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            margin-bottom: 12px;
-        }
-
-        .course-banner h1 {
-            font-size: 1.6rem;
-            font-weight: 700;
-            margin-bottom: 12px;
-            line-height: 1.3;
-        }
-
-        .course-banner .banner-stats {
+        
+        .course-header-banner .banner-meta {
             display: flex;
-            gap: 25px;
+            gap: 20px;
             flex-wrap: wrap;
             font-size: 0.85rem;
             opacity: 0.9;
         }
-
-        .course-banner .banner-stats span {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        /* ============ SECTION CARD ============ */
-        .section-card {
-            background: var(--card);
-            border-radius: var(--radius);
-            margin-bottom: 16px;
-            box-shadow: var(--shadow);
+        
+        .section-block {
+            margin-bottom: 25px;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
             overflow: hidden;
-            border: 1px solid var(--border);
         }
-
-        .section-header {
-            padding: 18px 22px;
+        
+        .section-header-bar {
+            background: #f9fafb;
+            padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             cursor: pointer;
             transition: all 0.3s;
-            background: #fafbfc;
             border: none;
             width: 100%;
             font-family: 'Poppins', sans-serif;
-            font-size: 0.95rem;
-            text-align: left;
+            font-size: 1rem;
         }
-
-        .section-header:hover { background: #f0f4ff; }
-
-        .section-header-left {
+        
+        .section-header-bar:hover {
+            background: #f0f0ff;
+        }
+        
+        .section-header-bar h3 {
+            font-size: 1rem;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
-
-        .section-number {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            background: var(--primary);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 0.85rem;
-        }
-
-        .section-title-group h3 {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: var(--text);
-        }
-
-        .section-title-group p {
-            font-size: 0.75rem;
-            color: var(--text-light);
-            margin-top: 2px;
-        }
-
-        .section-header-right {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .section-progress {
+        
+        .section-header-bar .section-meta {
             font-size: 0.8rem;
-            font-weight: 500;
-            color: var(--success);
+            color: #6b7280;
         }
-
-        .section-chevron {
-            color: var(--text-light);
-            transition: transform 0.3s;
-            font-size: 0.8rem;
-        }
-
-        .section-card.open .section-chevron {
-            transform: rotate(180deg);
-        }
-
-        /* ============ LESSON LIST ============ */
+        
         .lesson-list {
             list-style: none;
-            border-top: 1px solid var(--border);
         }
-
+        
         .lesson-item {
             display: flex;
             align-items: center;
             gap: 15px;
-            padding: 16px 22px;
-            border-bottom: 1px solid #f8fafc;
+            padding: 14px 20px;
+            border-bottom: 1px solid #f3f4f6;
+            transition: all 0.3s;
             cursor: pointer;
-            transition: all 0.2s;
         }
-
-        .lesson-item:hover {
-            background: #f8faff;
-        }
-
+        
+        .lesson-item:hover { background: #f8f9fd; }
         .lesson-item:last-child { border-bottom: none; }
-
-        .lesson-type-icon {
-            width: 42px;
-            height: 42px;
+        
+        .lesson-icon {
+            width: 40px;
+            height: 40px;
             border-radius: 10px;
             display: flex;
             align-items: center;
@@ -306,607 +157,363 @@
             font-size: 1rem;
             flex-shrink: 0;
         }
-
-        .type-video { background: #eef2ff; color: #4f46e5; }
-        .type-pdf { background: #fef2f2; color: #dc2626; }
-        .type-quiz { background: #fffbeb; color: #d97706; }
-        .type-live { background: #fef2f2; color: #ef4444; animation: livePulse 2s infinite; }
-
-        @keyframes livePulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(239,68,68,0.4); }
-            50% { box-shadow: 0 0 0 8px rgba(239,68,68,0); }
-        }
-
-        .lesson-content { flex: 1; min-width: 0; }
-
-        .lesson-content h4 {
-            font-size: 0.88rem;
+        
+        .lesson-icon.video { background: #e0e7ff; color: #3730a3; }
+        .lesson-icon.pdf { background: #fee2e2; color: #991b1b; }
+        .lesson-icon.quiz { background: #fef3c7; color: #92400e; }
+        .lesson-icon.live { background: #fee2e2; color: #ef4444; }
+        
+        .lesson-info { flex: 1; }
+        
+        .lesson-info h4 {
+            font-size: 0.9rem;
             font-weight: 500;
-            color: var(--text);
-            margin-bottom: 3px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            margin-bottom: 2px;
         }
-
-        .lesson-content .lesson-meta {
+        
+        .lesson-info .lesson-meta {
             font-size: 0.75rem;
-            color: var(--text-light);
+            color: #6b7280;
         }
-
-        .lesson-actions {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-shrink: 0;
-        }
-
+        
         .lesson-duration {
             font-size: 0.8rem;
-            color: var(--text-light);
+            color: #6b7280;
             white-space: nowrap;
         }
-
-        .lesson-status-icon {
-            font-size: 0.85rem;
-        }
-
-        .status-done { color: var(--success); }
-        .status-progress { color: var(--warning); }
-        .status-locked { color: #cbd5e1; }
-
-        .btn-lesson-action {
-            padding: 6px 14px;
-            border-radius: 20px;
+        
+        .lesson-status {
             font-size: 0.75rem;
-            font-weight: 500;
-            cursor: pointer;
-            border: none;
-            font-family: 'Poppins', sans-serif;
-            transition: all 0.3s;
             white-space: nowrap;
         }
-
-        .btn-download { background: #d1fae5; color: #065f46; }
-        .btn-download:hover { background: #a7f3d0; }
-        .btn-start-quiz { background: var(--success); color: white; }
-        .btn-start-quiz:hover { background: #059669; }
-        .btn-join-live { background: var(--danger); color: white; animation: livePulse 2s infinite; }
-        .btn-join-live:hover { background: #dc2626; }
-
-        /* ============ SIDEBAR ============ */
-        .sidebar-col {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
+        
+        .lesson-status.completed { color: #10b981; }
+        .lesson-status.in-progress { color: #f59e0b; }
+        .lesson-status.locked { color: #ccc; }
+        
         .sidebar-card {
-            background: var(--card);
-            border-radius: var(--radius);
-            padding: 24px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
         }
-
+        
         .sidebar-card h3 {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 18px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            margin-bottom: 15px;
+            font-size: 1.05rem;
         }
-
-        /* Progress Circle */
-        .progress-circle-wrap {
+        
+        .progress-circle-container {
             text-align: center;
-            padding: 15px 0;
+            padding: 20px 0;
         }
-
+        
         .progress-circle {
-            width: 130px;
-            height: 130px;
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
-            background: conic-gradient(var(--success) 65%, #e5e7eb 0);
+            background: conic-gradient(#10b981 65%, #e5e7eb 0);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 12px;
+            margin: 0 auto 15px;
             position: relative;
         }
-
+        
         .progress-circle::before {
             content: '';
             position: absolute;
-            width: 98px;
-            height: 98px;
+            width: 90px;
+            height: 90px;
             background: white;
             border-radius: 50%;
         }
-
-        .progress-inner {
+        
+        .progress-value {
             position: relative;
-            text-align: center;
-        }
-
-        .progress-percent {
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             font-weight: 700;
-            color: var(--success);
-            display: block;
+            color: #10b981;
         }
-
-        .progress-label {
-            font-size: 0.7rem;
-            color: var(--text-light);
-        }
-
-        .progress-detail {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.8rem;
-            margin-top: 8px;
-            padding: 8px 0;
-            border-top: 1px solid #f1f5f9;
-        }
-
-        /* Faculty Card */
-        .faculty-mini {
+        
+        .faculty-card {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 15px;
+            padding: 15px;
+            background: #f9fafb;
+            border-radius: 12px;
         }
-
+        
         .faculty-avatar {
-            width: 55px;
-            height: 55px;
-            border-radius: 14px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
-            font-weight: 700;
+            font-size: 1.3rem;
+            font-weight: 600;
             flex-shrink: 0;
         }
-
-        .faculty-details h4 {
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-
-        .faculty-details p {
-            font-size: 0.75rem;
-            color: var(--text-light);
-            margin-top: 2px;
-        }
-
-        .btn-message {
+        
+        .faculty-info h4 { margin-bottom: 3px; }
+        .faculty-info p { font-size: 0.8rem; color: #6b7280; }
+        
+        .btn-sm-block {
+            display: block;
             width: 100%;
             padding: 10px;
-            margin-top: 12px;
             border-radius: 8px;
-            background: #f1f5f9;
-            border: 1px solid var(--border);
-            cursor: pointer;
             font-family: 'Poppins', sans-serif;
             font-size: 0.85rem;
-            transition: all 0.3s;
-        }
-
-        .btn-message:hover { background: #e2e8f0; }
-
-        /* Quick Links */
-        .quick-links {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .quick-link {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 14px;
-            border-radius: var(--radius-sm);
-            background: #f8fafc;
-            text-decoration: none;
-            color: var(--text);
-            font-size: 0.85rem;
-            font-weight: 500;
-            transition: all 0.3s;
-            border: 1px solid transparent;
-        }
-
-        .quick-link:hover {
-            background: #eef2ff;
-            border-color: #c7d2fe;
-        }
-
-        .quick-link i {
-            color: var(--primary);
-            width: 18px;
+            cursor: pointer;
             text-align: center;
+            text-decoration: none;
+            margin-bottom: 8px;
+            border: 2px solid #e5e7eb;
+            background: white;
+            color: #333;
+            transition: all 0.3s;
         }
-
-        /* ============ RESPONSIVE ============ */
-        @media (max-width: 1100px) {
-            .main-layout {
+        
+        .btn-sm-block:hover { border-color: #1a237e; color: #1a237e; }
+        
+        @media (max-width: 968px) {
+            .course-content-layout {
                 grid-template-columns: 1fr;
-            }
-            .sidebar-col {
-                order: -1;
-            }
-            .course-banner h1 {
-                font-size: 1.3rem;
-            }
-        }
-
-        @media (max-width: 600px) {
-            .top-nav {
-                padding: 0 15px;
-            }
-            .main-layout {
-                padding: 15px;
-                gap: 15px;
-            }
-            .course-banner {
-                padding: 20px;
-            }
-            .course-banner h1 {
-                font-size: 1.1rem;
-            }
-            .banner-stats {
-                gap: 12px;
-                font-size: 0.75rem;
-            }
-            .lesson-item {
-                padding: 12px 15px;
-                gap: 10px;
-            }
-            .lesson-type-icon {
-                width: 35px;
-                height: 35px;
-                font-size: 0.85rem;
-            }
-            .btn-back span, .btn-logout span {
-                display: none;
             }
         }
     </style>
 </head>
 <body>
     
-    <!-- ============ TOP NAVIGATION ============ -->
-    <nav class="top-nav">
-        <a href="../index.html" class="nav-brand">APEX<span>HUB</span></a>
-        <div class="nav-actions">
-            <a href="dashboard.html" class="btn-back">
-                <i class="fas fa-arrow-left"></i> <span>Dashboard</span>
+    <!-- Top Navigation -->
+    <nav class="course-top-nav">
+        <a href="../index.html" class="logo">APEX<span>HUB</span></a>
+        <div>
+            <a href="dashboard.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
             </a>
-            <div class="user-avatar-sm" id="navAvatar">ST</div>
-            <button class="btn-logout" onclick="handleLogout()">
-                <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
+            <button onclick="handleLogout()" style="margin-left:15px;padding:8px 16px;background:#ef4444;color:white;border:none;border-radius:8px;cursor:pointer;font-family:'Poppins',sans-serif;font-size:0.85rem;">
+                <i class="fas fa-sign-out-alt"></i> Logout
             </button>
         </div>
     </nav>
-
-    <!-- ============ MAIN CONTENT ============ -->
-    <div class="main-layout">
+    
+    <div class="course-content-layout">
         
-        <!-- ============ LEFT COLUMN ============ -->
+        <!-- Main Content -->
         <div>
             
             <!-- Course Banner -->
-            <div class="course-banner" data-aos="fade-up">
-                <span class="badge">🏆 CG PSC</span>
+            <div class="course-header-banner">
                 <h1>CG PSC Foundation Batch 2025</h1>
-                <div class="banner-stats">
-                    <span><i class="fas fa-user"></i> Dr. Rajesh Sharma</span>
-                    <span><i class="fas fa-video"></i> 86 Lectures</span>
+                <div class="banner-meta">
+                    <span><i class="fas fa-user"></i> Dr. Rajesh Sharma & Team</span>
                     <span><i class="fas fa-clock"></i> 300+ Hours</span>
-                    <span><i class="fas fa-calendar-alt"></i> 10 Months</span>
+                    <span><i class="fas fa-calendar"></i> 10 Months</span>
+                    <span><i class="fas fa-video"></i> 86 Lectures</span>
                     <span><i class="fas fa-file-pdf"></i> 50+ Notes</span>
                 </div>
             </div>
-
+            
+            <!-- Course Overview -->
+            <div class="content-main">
+                <h2>📖 Course Overview</h2>
+                <p style="color:#6b7280;margin:15px 0;line-height:1.8;">
+                    This comprehensive course covers the complete CG PSC syllabus including General Studies, 
+                    Chhattisgarh Special Knowledge, Aptitude, and Essay Writing. Designed by former CGPSC 
+                    officers and experienced faculty, this course includes live classes, recorded lectures, 
+                    detailed notes, test series, and one-on-one mentorship.
+                </p>
+            </div>
+            
             <!-- Section 1 -->
-            <div class="section-card open" data-aos="fade-up">
-                <button class="section-header" onclick="toggleSection(this)">
-                    <div class="section-header-left">
-                        <div class="section-number">1</div>
-                        <div class="section-title-group">
-                            <h3>Indian Polity & Governance</h3>
-                            <p>12 Lectures • 18 Hours</p>
-                        </div>
-                    </div>
-                    <div class="section-header-right">
-                        <span class="section-progress">75% Complete</span>
-                        <i class="fas fa-chevron-down section-chevron"></i>
-                    </div>
+            <div class="section-block">
+                <button class="section-header-bar" onclick="toggleSection(this)">
+                    <h3><i class="fas fa-chevron-down" id="sec1icon"></i> Section 1: Indian Polity & Governance</h3>
+                    <span class="section-meta">12 Lectures • 18 Hours</span>
                 </button>
-                <ul class="lesson-list">
-                    
+                <ul class="lesson-list" id="sec1list">
                     <li class="lesson-item" onclick="window.location.href='watch.html'">
-                        <div class="lesson-type-icon type-video"><i class="fas fa-play"></i></div>
-                        <div class="lesson-content">
+                        <div class="lesson-icon video"><i class="fas fa-play"></i></div>
+                        <div class="lesson-info">
                             <h4>1.1 Constitutional Framework - Historical Background</h4>
                             <p class="lesson-meta">Dr. Rajesh Sharma</p>
                         </div>
-                        <div class="lesson-actions">
-                            <span class="lesson-duration">1:25:30</span>
-                            <span class="lesson-status-icon status-done"><i class="fas fa-check-circle"></i></span>
-                        </div>
+                        <span class="lesson-duration">1:25:30</span>
+                        <span class="lesson-status completed">✅ Done</span>
                     </li>
-
+                    
                     <li class="lesson-item" onclick="window.location.href='watch.html'">
-                        <div class="lesson-type-icon type-video"><i class="fas fa-play"></i></div>
-                        <div class="lesson-content">
+                        <div class="lesson-icon video"><i class="fas fa-play"></i></div>
+                        <div class="lesson-info">
                             <h4>1.2 Fundamental Rights - Article 12 to 18</h4>
                             <p class="lesson-meta">Dr. Rajesh Sharma</p>
                         </div>
-                        <div class="lesson-actions">
-                            <span class="lesson-duration">1:30:15</span>
-                            <span class="lesson-status-icon status-done"><i class="fas fa-check-circle"></i></span>
-                        </div>
+                        <span class="lesson-duration">1:30:15</span>
+                        <span class="lesson-status completed">✅ Done</span>
                     </li>
-
+                    
                     <li class="lesson-item" onclick="window.location.href='watch.html'">
-                        <div class="lesson-type-icon type-video"><i class="fas fa-play"></i></div>
-                        <div class="lesson-content">
+                        <div class="lesson-icon video"><i class="fas fa-play"></i></div>
+                        <div class="lesson-info">
                             <h4>1.3 Fundamental Rights - Article 19 to 22</h4>
                             <p class="lesson-meta">Dr. Rajesh Sharma</p>
                         </div>
-                        <div class="lesson-actions">
-                            <span class="lesson-duration">1:20:00</span>
-                            <span class="lesson-status-icon status-progress"><i class="fas fa-spinner"></i></span>
-                        </div>
+                        <span class="lesson-duration">1:20:00</span>
+                        <span class="lesson-status in-progress">▶ In Progress</span>
                     </li>
-
+                    
                     <li class="lesson-item">
-                        <div class="lesson-type-icon type-pdf"><i class="fas fa-file-pdf"></i></div>
-                        <div class="lesson-content">
-                            <h4>📄 Fundamental Rights - Complete Notes</h4>
-                            <p class="lesson-meta">Downloadable PDF Resource</p>
+                        <div class="lesson-icon pdf"><i class="fas fa-file-pdf"></i></div>
+                        <div class="lesson-info">
+                            <h4>📄 Fundamental Rights - Complete Notes PDF</h4>
+                            <p class="lesson-meta">Downloadable Resource</p>
                         </div>
-                        <div class="lesson-actions">
-                            <button class="btn-lesson-action btn-download">Download</button>
-                        </div>
+                        <span class="lesson-duration">PDF</span>
+                        <span class="lesson-status"><button style="padding:6px 14px;background:#d1fae5;color:#065f46;border:none;border-radius:6px;cursor:pointer;font-size:0.75rem;font-family:'Poppins',sans-serif;">Download</button></span>
                     </li>
-
+                    
                     <li class="lesson-item">
-                        <div class="lesson-type-icon type-quiz"><i class="fas fa-question-circle"></i></div>
-                        <div class="lesson-content">
+                        <div class="lesson-icon quiz"><i class="fas fa-question-circle"></i></div>
+                        <div class="lesson-info">
                             <h4>📝 Quiz: Fundamental Rights (50 MCQs)</h4>
-                            <p class="lesson-meta">Test Your Knowledge • 30 mins</p>
+                            <p class="lesson-meta">Test Your Knowledge</p>
                         </div>
-                        <div class="lesson-actions">
-                            <button class="btn-lesson-action btn-start-quiz">Start Quiz</button>
-                        </div>
+                        <span class="lesson-duration">30 min</span>
+                        <span class="lesson-status"><button style="padding:6px 14px;background:#10b981;color:white;border:none;border-radius:6px;cursor:pointer;font-size:0.75rem;font-family:'Poppins',sans-serif;">Start Quiz</button></span>
                     </li>
-
+                    
                     <li class="lesson-item">
-                        <div class="lesson-type-icon type-video"><i class="fas fa-play"></i></div>
-                        <div class="lesson-content">
+                        <div class="lesson-icon video"><i class="fas fa-play"></i></div>
+                        <div class="lesson-info">
                             <h4>1.4 DPSP - Directive Principles of State Policy</h4>
                             <p class="lesson-meta">Dr. Rajesh Sharma</p>
                         </div>
-                        <div class="lesson-actions">
-                            <span class="lesson-duration">1:15:00</span>
-                            <span class="lesson-status-icon status-locked"><i class="fas fa-lock"></i></span>
-                        </div>
+                        <span class="lesson-duration">1:15:00</span>
+                        <span class="lesson-status locked">🔒 Locked</span>
                     </li>
-
+                    
                     <li class="lesson-item" onclick="window.location.href='live-class.html'">
-                        <div class="lesson-type-icon type-live"><i class="fas fa-broadcast-tower"></i></div>
-                        <div class="lesson-content">
+                        <div class="lesson-icon live"><i class="fas fa-broadcast-tower"></i></div>
+                        <div class="lesson-info">
                             <h4>🔴 LIVE: Fundamental Rights Doubt Session</h4>
-                            <p class="lesson-meta">Today at 6:00 PM • Dr. Rajesh Sharma</p>
+                            <p class="lesson-meta">Dr. Rajesh Sharma • Today 6:00 PM</p>
                         </div>
-                        <div class="lesson-actions">
-                            <button class="btn-lesson-action btn-join-live">Join Live</button>
-                        </div>
+                        <span class="lesson-duration">Live</span>
+                        <span class="lesson-status"><button style="padding:6px 14px;background:#ef4444;color:white;border:none;border-radius:6px;cursor:pointer;font-size:0.75rem;font-family:'Poppins',sans-serif;animation:pulse 2s infinite;">Join Now</button></span>
                     </li>
-
                 </ul>
             </div>
-
+            
             <!-- Section 2 -->
-            <div class="section-card" data-aos="fade-up">
-                <button class="section-header" onclick="toggleSection(this)">
-                    <div class="section-header-left">
-                        <div class="section-number">2</div>
-                        <div class="section-title-group">
-                            <h3>Chhattisgarh Special Knowledge</h3>
-                            <p>10 Lectures • 15 Hours</p>
-                        </div>
-                    </div>
-                    <div class="section-header-right">
-                        <span class="section-progress" style="color:#cbd5e1;">Not Started</span>
-                        <i class="fas fa-chevron-down section-chevron"></i>
-                    </div>
+            <div class="section-block">
+                <button class="section-header-bar" onclick="toggleSection(this)">
+                    <h3><i class="fas fa-chevron-right" id="sec2icon"></i> Section 2: Chhattisgarh Special Knowledge</h3>
+                    <span class="section-meta">10 Lectures • 15 Hours</span>
                 </button>
-                <ul class="lesson-list" style="display:none;">
+                <ul class="lesson-list" id="sec2list" style="display:none;">
                     <li class="lesson-item">
-                        <div class="lesson-type-icon type-video"><i class="fas fa-play"></i></div>
-                        <div class="lesson-content">
+                        <div class="lesson-icon video"><i class="fas fa-play"></i></div>
+                        <div class="lesson-info">
                             <h4>2.1 History of Chhattisgarh - Ancient Period</h4>
                             <p class="lesson-meta">Mrs. Anjali Sahu</p>
                         </div>
-                        <div class="lesson-actions">
-                            <span class="lesson-duration">1:10:00</span>
-                            <span class="lesson-status-icon status-locked"><i class="fas fa-lock"></i></span>
-                        </div>
+                        <span class="lesson-duration">1:10:00</span>
+                        <span class="lesson-status locked">🔒 Locked</span>
                     </li>
                     <li class="lesson-item">
-                        <div class="lesson-type-icon type-video"><i class="fas fa-play"></i></div>
-                        <div class="lesson-content">
-                            <h4>2.2 Geography of Chhattisgarh - Physical Features</h4>
+                        <div class="lesson-icon video"><i class="fas fa-play"></i></div>
+                        <div class="lesson-info">
+                            <h4>2.2 Geography of Chhattisgarh</h4>
                             <p class="lesson-meta">Mrs. Anjali Sahu</p>
                         </div>
-                        <div class="lesson-actions">
-                            <span class="lesson-duration">1:20:00</span>
-                            <span class="lesson-status-icon status-locked"><i class="fas fa-lock"></i></span>
-                        </div>
-                    </li>
-                    <li class="lesson-item">
-                        <div class="lesson-type-icon type-video"><i class="fas fa-play"></i></div>
-                        <div class="lesson-content">
-                            <h4>2.3 Tribes of Chhattisgarh</h4>
-                            <p class="lesson-meta">Mrs. Anjali Sahu</p>
-                        </div>
-                        <div class="lesson-actions">
-                            <span class="lesson-duration">45:00</span>
-                            <span class="lesson-status-icon status-locked"><i class="fas fa-lock"></i></span>
-                        </div>
+                        <span class="lesson-duration">1:20:00</span>
+                        <span class="lesson-status locked">🔒 Locked</span>
                     </li>
                 </ul>
             </div>
-
+            
             <!-- Section 3 -->
-            <div class="section-card" data-aos="fade-up">
-                <button class="section-header" onclick="toggleSection(this)">
-                    <div class="section-header-left">
-                        <div class="section-number">3</div>
-                        <div class="section-title-group">
-                            <h3>General Science & Technology</h3>
-                            <p>8 Lectures • 12 Hours</p>
-                        </div>
-                    </div>
-                    <div class="section-header-right">
-                        <span class="section-progress" style="color:#cbd5e1;">Not Started</span>
-                        <i class="fas fa-chevron-down section-chevron"></i>
-                    </div>
+            <div class="section-block">
+                <button class="section-header-bar" onclick="toggleSection(this)">
+                    <h3><i class="fas fa-chevron-right" id="sec3icon"></i> Section 3: General Science</h3>
+                    <span class="section-meta">8 Lectures • 12 Hours</span>
                 </button>
-                <ul class="lesson-list" style="display:none;">
+                <ul class="lesson-list" id="sec3list" style="display:none;">
                     <li class="lesson-item">
-                        <div class="lesson-type-icon type-video"><i class="fas fa-play"></i></div>
-                        <div class="lesson-content">
+                        <div class="lesson-icon video"><i class="fas fa-play"></i></div>
+                        <div class="lesson-info">
                             <h4>3.1 Physics - Mechanics & Motion</h4>
                             <p class="lesson-meta">Dr. Vikram Singh</p>
                         </div>
-                        <div class="lesson-actions">
-                            <span class="lesson-duration">1:30:00</span>
-                            <span class="lesson-status-icon status-locked"><i class="fas fa-lock"></i></span>
-                        </div>
-                    </li>
-                    <li class="lesson-item">
-                        <div class="lesson-type-icon type-video"><i class="fas fa-play"></i></div>
-                        <div class="lesson-content">
-                            <h4>3.2 Chemistry - Periodic Table & Bonding</h4>
-                            <p class="lesson-meta">Prof. Amit Verma</p>
-                        </div>
-                        <div class="lesson-actions">
-                            <span class="lesson-duration">1:15:00</span>
-                            <span class="lesson-status-icon status-locked"><i class="fas fa-lock"></i></span>
-                        </div>
+                        <span class="lesson-duration">1:30:00</span>
+                        <span class="lesson-status locked">🔒 Locked</span>
                     </li>
                 </ul>
             </div>
-
-        </div>
-
-        <!-- ============ SIDEBAR ============ -->
-        <div class="sidebar-col">
             
-            <!-- Progress Card -->
-            <div class="sidebar-card" data-aos="fade-left">
-                <h3><i class="fas fa-chart-pie" style="color:#10b981;"></i> Your Progress</h3>
-                <div class="progress-circle-wrap">
+        </div>
+        
+        <!-- Sidebar -->
+        <div>
+            
+            <!-- Progress -->
+            <div class="sidebar-card">
+                <h3>📊 Your Progress</h3>
+                <div class="progress-circle-container">
                     <div class="progress-circle">
-                        <div class="progress-inner">
-                            <span class="progress-percent">65%</span>
-                            <span class="progress-label">Complete</span>
-                        </div>
+                        <span class="progress-value">65%</span>
                     </div>
-                    <p style="font-weight:600;margin-top:5px;">18 of 86 Lectures Done</p>
-                </div>
-                <div class="progress-detail">
-                    <span>Videos Watched</span>
-                    <span style="font-weight:600;">18/86</span>
-                </div>
-                <div style="height:4px;background:#e5e7eb;border-radius:2px;margin:5px 0;">
-                    <div style="width:21%;height:100%;background:var(--success);border-radius:2px;"></div>
+                    <p style="font-weight:600;">Overall Completion</p>
+                    <p style="font-size:0.8rem;color:#6b7280;">18/86 Lectures Completed</p>
                 </div>
             </div>
-
-            <!-- Faculty Card -->
-            <div class="sidebar-card" data-aos="fade-left" data-aos-delay="100">
-                <h3><i class="fas fa-chalkboard-teacher"></i> Your Faculty</h3>
-                <div class="faculty-mini">
+            
+            <!-- Faculty -->
+            <div class="sidebar-card">
+                <h3>👨‍🏫 Course Faculty</h3>
+                <div class="faculty-card">
                     <div class="faculty-avatar">DR</div>
-                    <div class="faculty-details">
+                    <div class="faculty-info">
                         <h4>Dr. Rajesh Sharma</h4>
                         <p>Ex-CGPSC Officer • 15+ Years</p>
-                        <p style="font-size:0.7rem;color:var(--primary);">📧 rajesh@apexhub.in</p>
                     </div>
                 </div>
-                <button class="btn-message"><i class="fas fa-comment-dots"></i> Send Message</button>
             </div>
-
+            
             <!-- Quick Links -->
-            <div class="sidebar-card" data-aos="fade-left" data-aos-delay="200">
-                <h3><i class="fas fa-link"></i> Quick Actions</h3>
-                <div class="quick-links">
-                    <a href="#" class="quick-link">
-                        <i class="fas fa-download"></i> Download All Notes
-                    </a>
-                    <a href="#" class="quick-link">
-                        <i class="fas fa-question-circle"></i> Ask a Doubt
-                    </a>
-                    <a href="#" class="quick-link">
-                        <i class="fas fa-certificate"></i> View Certificate
-                    </a>
-                    <a href="test-series.html" class="quick-link">
-                        <i class="fas fa-file-alt"></i> My Test Series
-                    </a>
-                </div>
+            <div class="sidebar-card">
+                <h3>🔗 Quick Actions</h3>
+                <a href="#" class="btn-sm-block"><i class="fas fa-download"></i> Download All Notes</a>
+                <a href="#" class="btn-sm-block"><i class="fas fa-question-circle"></i> Ask a Doubt</a>
+                <a href="#" class="btn-sm-block"><i class="fas fa-certificate"></i> View Certificate</a>
             </div>
-
+            
         </div>
-
+        
     </div>
 
-    <!-- ============ SCRIPTS ============ -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="../js/auth.js"></script>
     <script>
-        // Initialize AOS animations
-        AOS.init({ duration: 600, once: true });
-
-        // Auth check
-        if (!requireAuth()) {
-            // Redirects to login if not authenticated
-        }
-
-        // Display user info
-        document.addEventListener('DOMContentLoaded', function() {
-            const user = getCurrentUser();
-            if (user) {
-                const initials = user.fullName 
-                    ? user.fullName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() 
-                    : 'ST';
-                document.getElementById('navAvatar').textContent = initials;
-            }
-        });
-
         // Toggle section expand/collapse
         function toggleSection(button) {
-            const card = button.closest('.section-card');
-            const lessonList = card.querySelector('.lesson-list');
-            const chevron = card.querySelector('.section-chevron');
+            const lessonList = button.nextElementSibling;
+            const icon = button.querySelector('i');
             
-            if (lessonList.style.display === 'none') {
+            if (lessonList.style.display === 'none' || lessonList.style.display === '') {
                 lessonList.style.display = 'block';
-                card.classList.add('open');
+                icon.className = 'fas fa-chevron-down';
             } else {
                 lessonList.style.display = 'none';
-                card.classList.remove('open');
+                icon.className = 'fas fa-chevron-right';
             }
         }
-
+        
         // Logout function
         function handleLogout() {
             if (confirm('Are you sure you want to logout?')) {
@@ -915,112 +522,5 @@
             }
         }
     </script>
-// ============ LOAD YOUTUBE VIDEOS & LIVE CLASSES ============
-function loadYouTubeContent(courseId) {
-    // Load recorded YouTube videos for this course
-    fetch('/api/youtube-videos?courseId=' + courseId)
-    .then(r => r.json())
-    .then(d => {
-        if (d.success && d.videos && d.videos.length > 0) {
-            let html = `
-            <div class="section-card open" data-aos="fade-up">
-                <button class="section-header" onclick="toggleSection(this)">
-                    <div class="section-header-left">
-                        <div class="section-number" style="background:#ff0000;">▶</div>
-                        <div class="section-title-group">
-                            <h3>Recorded Lectures (YouTube)</h3>
-                            <p>${d.videos.length} Videos Available</p>
-                        </div>
-                    </div>
-                    <div class="section-header-right">
-                        <span class="section-progress">Watch Now</span>
-                        <i class="fas fa-chevron-down section-chevron"></i>
-                    </div>
-                </button>
-                <ul class="lesson-list">`;
-            
-            d.videos.forEach((v, i) => {
-                html += `
-                <li class="lesson-item" onclick="window.open('watch-youtube.html?video=${v.youtubeId}', '_blank')">
-                    <div class="lesson-type-icon type-video" style="background:#ffe0e0;color:#ff0000;">
-                        <i class="fab fa-youtube"></i>
-                    </div>
-                    <div class="lesson-content">
-                        <h4>${v.lectureNumber ? 'Lecture ' + v.lectureNumber + ': ' : ''}${v.title}</h4>
-                        <p class="lesson-meta">YouTube Video • ${v.description || 'Click to watch'}</p>
-                    </div>
-                    <div class="lesson-actions">
-                        <button class="btn-lesson-action btn-join-live" style="background:#ff0000;">▶ Watch</button>
-                    </div>
-                </li>`;
-            });
-            
-            html += `</ul></div>`;
-            
-            // Insert after existing sections
-            const mainContent = document.querySelector('.content-main') || document.querySelector('.main-layout > div:first-child');
-            if (mainContent) {
-                mainContent.insertAdjacentHTML('beforeend', html);
-            }
-        }
-    });
-    
-    // Load upcoming live classes for this course
-    fetch('/api/youtube-live?courseId=' + courseId)
-    .then(r => r.json())
-    .then(d => {
-        const liveClasses = (d.classes || []).filter(c => c.status === 'scheduled' || c.status === 'live');
-        
-        if (liveClasses.length > 0) {
-            let html = `
-            <div class="section-card open" data-aos="fade-up">
-                <button class="section-header" onclick="toggleSection(this)">
-                    <div class="section-header-left">
-                        <div class="section-number" style="background:#ef4444;">🔴</div>
-                        <div class="section-title-group">
-                            <h3>Upcoming Live Classes</h3>
-                            <p>${liveClasses.length} Scheduled</p>
-                        </div>
-                    </div>
-                    <div class="section-header-right">
-                        <span class="section-progress" style="color:#ef4444;">Join Live</span>
-                        <i class="fas fa-chevron-down section-chevron"></i>
-                    </div>
-                </button>
-                <ul class="lesson-list">`;
-            
-            liveClasses.forEach(l => {
-                const isLive = l.status === 'live';
-                html += `
-                <li class="lesson-item" onclick="window.open('youtube-live.html?id=${l.id}', '_blank')">
-                    <div class="lesson-type-icon type-live">
-                        <i class="fas fa-broadcast-tower"></i>
-                    </div>
-                    <div class="lesson-content">
-                        <h4>${isLive ? '🔴 LIVE NOW: ' : '📅 '}${l.title}</h4>
-                        <p class="lesson-meta">${l.faculty} • ${l.date} at ${l.time}</p>
-                    </div>
-                    <div class="lesson-actions">
-                        <button class="btn-lesson-action ${isLive ? 'btn-join-live' : ''}" 
-                                style="${isLive ? '' : 'background:#1a237e;color:white;'}">
-                            ${isLive ? '🔴 Join Now' : 'Set Reminder'}
-                        </button>
-                    </div>
-                </li>`;
-            });
-            
-            html += `</ul></div>`;
-            
-            const mainContent = document.querySelector('.content-main') || document.querySelector('.main-layout > div:first-child');
-            if (mainContent) {
-                mainContent.insertAdjacentHTML('beforeend', html);
-            }
-        }
-    });
-}
-
-// Load content for CG PSC Foundation course
-// Change this ID to match your course
-loadYouTubeContent('cgpsc-foundation');
 </body>
 </html>

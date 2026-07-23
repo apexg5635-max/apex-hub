@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Watch Video - Apex Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Poppins',sans-serif;background:#0a0e27;color:#fff;min-height:100vh}
+        
+        /* Top Navigation */
+        .top-nav{background:#1a1a2e;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #333;position:sticky;top:0;z-index:100}
+        .top-nav .logo{font-size:1.2rem;font-weight:800;color:#fff;text-decoration:none;letter-spacing:2px}
+        .top-nav .logo span{color:#f5a623}
+        .top-nav .nav-links{display:flex;align-items:center;gap:15px}
+        .top-nav .nav-links a{color:#ccc;text-decoration:none;font-size:.85rem;transition:color .3s}
+        .top-nav .nav-links a:hover{color:#f5a623}
+        .btn-logout{background:#ef4444;color:#fff;border:none;padding:7px 16px;border-radius:8px;cursor:pointer;font-family:'Poppins',sans-serif;font-size:.8rem}
+
+        /* Main Layout */
+        .main-container{max-width:1400px;margin:0 auto;padding:20px;display:grid;grid-template-columns:1fr 350px;gap:20px}
+        
+        /* Player Section */
+        .player-section{background:#000;border-radius:15px;overflow:hidden;position:relative}
+        .player-wrapper{position:relative;padding-bottom:56.25%}
+        .player-wrapper iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
+        .protect-overlay{position:absolute;top:0;left:0;width:100%;height:100%;z-index:2;background:transparent;cursor:default}
+        
+        /* Video Info */
+        .video-info{background:#1a1a2e;border-radius:15px;padding:25px;margin-top:20px}
+        .video-info h1{font-size:1.3rem;margin-bottom:12px;color:#fff}
+        .video-meta{display:flex;gap:20px;flex-wrap:wrap;color:#aaa;font-size:.85rem;margin-bottom:15px}
+        .video-meta span{display:flex;align-items:center;gap:6px}
+        .video-meta i{color:#f5a623}
+        .video-actions{display:flex;gap:10px;flex-wrap:wrap}
+        .btn{padding:10px 20px;border-radius:25px;text-decoration:none;font-weight:500;font-size:.85rem;transition:all .3s;cursor:pointer;border:none;font-family:'Poppins',sans-serif;display:inline-flex;align-items:center;gap:6px}
+        .btn-primary{background:#f5a623;color:#1a1a2e}
+        .btn-outline{background:transparent;border:2px solid #555;color:#fff}
+        .btn-outline:hover{border-color:#f5a623;color:#f5a623}
+        .btn-success{background:#10b981;color:#fff}
+
+        /* Sidebar */
+        .sidebar{display:flex;flex-direction:column;gap:20px}
+        .sidebar-card{background:#1a1a2e;border-radius:15px;padding:20px}
+        .sidebar-card h3{font-size:1rem;margin-bottom:15px;display:flex;align-items:center;gap:8px}
+        
+        /* Playlist */
+        .playlist-item{display:flex;gap:12px;padding:12px;border-radius:10px;cursor:pointer;transition:all .3s;margin-bottom:5px;text-decoration:none;color:#fff}
+        .playlist-item:hover{background:#2a2a3e}
+        .playlist-item.active{background:#1a237e;border-left:3px solid #f5a623}
+        .playlist-thumb{width:100px;height:60px;border-radius:8px;background:#333;flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center}
+        .playlist-thumb img{width:100%;height:100%;object-fit:cover}
+        .playlist-thumb i{font-size:1.5rem;color:#f5a623}
+        .playlist-info{flex:1;min-width:0}
+        .playlist-info h4{font-size:.85rem;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .playlist-info p{font-size:.7rem;color:#aaa;margin-top:2px}
+        .playlist-badge{font-size:.65rem;padding:2px 8px;border-radius:10px;display:inline-block;margin-top:4px}
+        .badge-live{background:#ef4444;color:#fff;animation:pulse 2s infinite}
+        .badge-video{background:#1a237e;color:#fff}
+        @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+
+        /* Progress */
+        .progress-item{display:flex;justify-content:space-between;font-size:.8rem;margin-bottom:8px}
+        .progress-bar{width:100%;height:6px;background:#333;border-radius:3px;overflow:hidden;margin-bottom:12px}
+        .progress-fill{height:100%;background:linear-gradient(90deg,#10b981,#38f9d7);border-radius:3px}
+
+        /* Faculty */
+        .faculty-card{display:flex;align-items:center;gap:12px}
+        .faculty-avatar{width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1.1rem;flex-shrink:0}
+        .faculty-info h4{font-size:.9rem}
+        .faculty-info p{font-size:.75rem;color:#aaa}
+
+        @media(max-width:968px){.main-container{grid-template-columns:1fr}}
+        @media(max-width:600px){.main-container{padding:10px}.video-info{padding:15px}}
+    </style>
+</head>
+<body>
+
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <a href="../index.html" class="logo">APEX<span>HUB</span></a>
+        <div class="nav-links">
+            <a href="course-content.html"><i class="fas fa-book"></i> My Courses</a>
+            <a href="dashboard.html"><i class="fas fa-th-large"></i> Dashboard</a>
+            <button class="btn-logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        
+        <!-- Left: Player + Info -->
+        <div>
+            <!-- Video Player -->
+            <div class="player-section">
+                <div class="player-wrapper">
+                    <div class="protect-overlay" oncontextmenu="return false"></div>
+                    <iframe id="mainPlayer" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                </div>
+            </div>
+
+            <!-- Video Info -->
+            <div class="video-info">
+                <h1 id="videoTitle">Select a video to play</h1>
+                <div class="video-meta">
+                    <span><i class="fas fa-user"></i> <span id="videoFaculty">-</span></span>
+                    <span><i class="fas fa-clock"></i> <span id="videoDuration">-</span></span>
+                    <span><i class="fas fa-eye"></i> <span id="videoViews">0</span> views</span>
+                    <span><i class="fas fa-calendar"></i> <span id="videoDate">-</span></span>
+                </div>
+                <p id="videoDescription" style="color:#aaa;font-size:.9rem;margin-bottom:15px"></p>
+                <div class="video-actions">
+                    <button class="btn btn-success" onclick="markComplete()"><i class="fas fa-check-circle"></i> Mark Complete</button>
+                    <button class="btn btn-outline" onclick="askDoubt()"><i class="fas fa-question-circle"></i> Ask Doubt</button>
+                    <a href="course-content.html" class="btn btn-outline"><i class="fas fa-list"></i> Course Curriculum</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Sidebar -->
+        <div class="sidebar">
+            
+            <!-- Playlist -->
+            <div class="sidebar-card">
+                <h3><i class="fas fa-list-ol"></i> Video Playlist</h3>
+                <div id="playlist">
+                    <p style="color:#aaa;font-size:.85rem;text-align:center;padding:20px">Loading videos...</p>
+                </div>
+            </div>
+
+            <!-- Progress -->
+            <div class="sidebar-card">
+                <h3><i class="fas fa-chart-line"></i> Course Progress</h3>
+                <div class="progress-item"><span>Videos Completed</span><span id="progressCount">0/0</span></div>
+                <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+                <p id="progressPercent" style="text-align:center;color:#10b981;font-weight:600">0% Complete</p>
+            </div>
+
+            <!-- Faculty -->
+            <div class="sidebar-card">
+                <h3><i class="fas fa-chalkboard-teacher"></i> Faculty</h3>
+                <div class="faculty-card" id="facultyInfo">
+                    <div class="faculty-avatar" id="facultyAvatar">DR</div>
+                    <div class="faculty-info">
+                        <h4 id="facultyName">Dr. Rajesh Sharma</h4>
+                        <p>Senior Faculty</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============ SECURITY ============
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('keydown', e => {
+            if (e.ctrlKey && ['s','u','S','U'].includes(e.key)) e.preventDefault();
+            if (e.key === 'F12') e.preventDefault();
+        });
+
+        // ============ LOAD VIDEOS ============
+        let allVideos = [];
+        let currentVideo = null;
+        let completedVideos = JSON.parse(localStorage.getItem('completedVideos') || '[]');
+
+        function loadVideos() {
+            // Load from localStorage
+            const stored = JSON.parse(localStorage.getItem('apexVideos') || '[]');
+            
+            // Also try server
+            fetch('/api/videos')
+                .then(r => r.json())
+                .then(d => {
+                    if (d.success && d.videos) {
+                        allVideos = [...stored, ...d.videos];
+                    } else {
+                        allVideos = stored;
+                    }
+                    renderPlaylist();
+                    if (allVideos.length > 0) playVideo(allVideos[0]);
+                })
+                .catch(() => {
+                    allVideos = stored;
+                    renderPlaylist();
+                    if (allVideos.length > 0) playVideo(allVideos[0]);
+                });
+        }
+
+        // ============ RENDER PLAYLIST ============
+        function renderPlaylist() {
+            const container = document.getElementById('playlist');
+            
+            if (allVideos.length === 0) {
+                container.innerHTML = '<p style="color:#aaa;font-size:.85rem;text-align:center;padding:20px">No videos yet</p>';
+                return;
+            }
+
+            container.innerHTML = allVideos.map((v, i) => {
+                const isLive = v.type === 'live' || v.status === 'live' || v.status === 'scheduled';
+                const isActive = currentVideo && currentVideo.id === v.id;
+                const thumbUrl = v.thumbnailUrl || `https://img.youtube.com/vi/${v.youtubeId}/mqdefault.jpg`;
+                
+                return `
+                    <div class="playlist-item ${isActive ? 'active' : ''}" onclick="playVideo(allVideos[${i}])">
+                        <div class="playlist-thumb">
+                            ${thumbUrl ? `<img src="${thumbUrl}" alt="" onerror="this.parentElement.innerHTML='<i class=\\'fab fa-youtube\\'></i>'">` : '<i class="fab fa-youtube"></i>'}
+                        </div>
+                        <div class="playlist-info">
+                            <h4>${v.title || 'Untitled'}</h4>
+                            <p>${v.faculty || ''} • ${v.duration || 'N/A'}</p>
+                            <span class="playlist-badge ${isLive ? 'badge-live' : 'badge-video'}">
+                                ${isLive ? '🔴 LIVE' : '📹 Video'}
+                            </span>
+                            ${completedVideos.includes(v.id) ? ' <span style="color:#10b981;font-size:.7rem">✅</span>' : ''}
+                        </div>
+                    </div>
+                `;
+            });
+
+            updateProgress();
+        }
+
+        // ============ PLAY VIDEO ============
+        function playVideo(video) {
+            currentVideo = video;
+            
+            // Update player
+            const player = document.getElementById('mainPlayer');
+            const ytId = video.youtubeId || 'dQw4w9WgXcQ';
+            const embedUrl = `https://www.youtube.com/embed/${ytId}?rel=0&modestbranding=1&controls=1&disablekb=1&fs=0&iv_load_policy=3&origin=${window.location.origin}&autoplay=1`;
+            player.src = embedUrl;
+
+            // Update info
+            document.getElementById('videoTitle').textContent = video.title || 'Untitled';
+            document.getElementById('videoFaculty').textContent = video.faculty || 'Faculty';
+            document.getElementById('videoDuration').textContent = video.duration || 'N/A';
+            document.getElementById('videoDescription').textContent = video.description || '';
+            document.getElementById('videoDate').textContent = video.date ? new Date(video.date).toLocaleDateString('en-IN') : new Date(video.createdAt).toLocaleDateString('en-IN');
+            document.getElementById('videoViews').textContent = (video.views || 0) + 1;
+
+            // Update faculty sidebar
+            document.getElementById('facultyName').textContent = video.faculty || 'Faculty';
+            document.getElementById('facultyAvatar').textContent = (video.faculty || 'F').split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+
+            // Update playlist active state
+            renderPlaylist();
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ============ PROGRESS ============
+        function markComplete() {
+            if (!currentVideo) return;
+            if (!completedVideos.includes(currentVideo.id)) {
+                completedVideos.push(currentVideo.id);
+                localStorage.setItem('completedVideos', JSON.stringify(completedVideos));
+            }
+            updateProgress();
+            renderPlaylist();
+            alert('✅ Video marked as complete!');
+        }
+
+        function updateProgress() {
+            const total = allVideos.length;
+            const done = allVideos.filter(v => completedVideos.includes(v.id)).length;
+            const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+            
+            document.getElementById('progressCount').textContent = `${done}/${total}`;
+            document.getElementById('progressFill').style.width = pct + '%';
+            document.getElementById('progressPercent').textContent = pct + '% Complete';
+        }
+
+        function askDoubt() {
+            alert('💬 Doubt forum coming soon! You can ask in the live chat during live classes.');
+        }
+
+        function logout() {
+            localStorage.removeItem('apexHubCurrentUser');
+            window.location.href = '../pages/login.html';
+        }
+
+        // ============ INIT ============
+        loadVideos();
+    </script>
+</body>
+</html>
