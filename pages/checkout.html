@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Apex Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .checkout-container {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 30px;
+            padding: 40px 0;
+        }
+        .checkout-form {
+            background: white;
+            padding: 30px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+        }
+        .checkout-form h2 { margin-bottom: 20px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 500; }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+        }
+        .order-summary {
+            background: white;
+            padding: 30px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .total {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-top: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .btn-pay {
+            width: 100%;
+            padding: 15px;
+            background: var(--gold);
+            color: var(--primary);
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            font-family: 'Poppins', sans-serif;
+        }
+        @media (max-width: 768px) {
+            .checkout-container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="text-align:center;padding:30px 0;">🛒 Checkout</h1>
+        <div class="checkout-container">
+            <div class="checkout-form">
+                <h2>Billing Details</h2>
+                <div class="form-group">
+                    <label>Full Name *</label>
+                    <input type="text" placeholder="Enter your full name" required>
+                </div>
+                <div class="form-group">
+                    <label>Email Address *</label>
+                    <input type="email" placeholder="you@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone Number *</label>
+                    <input type="tel" placeholder="+91 98765 43210" required>
+                </div>
+                <div class="form-group">
+                    <label>State *</label>
+                    <select>
+                        <option>Chhattisgarh</option>
+                        <option>Madhya Pradesh</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+            </div>
+            <div class="order-summary" id="orderSummary">
+                <h2>Order Summary</h2>
+                <div id="cartItems"></div>
+                <div class="total">
+                    <span>Total:</span>
+                    <span id="totalAmount">₹0</span>
+                </div>
+                <button class="btn-pay" onclick="processPayment()">
+                    <i class="fas fa-lock"></i> Pay Securely
+                </button>
+                <p style="text-align:center;margin-top:10px;font-size:0.8rem;color:var(--text-light);">
+                    🔒 Your payment is secure and encrypted
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load cart from localStorage
+        function loadCart() {
+            const cart = JSON.parse(localStorage.getItem('apexCart')) || [];
+            const cartItems = document.getElementById('cartItems');
+            const totalAmount = document.getElementById('totalAmount');
+            
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p style="text-align:center;color:var(--text-light);">Your cart is empty.</p>';
+                totalAmount.textContent = '₹0';
+                return;
+            }
+            
+            let total = 0;
+            cartItems.innerHTML = cart.map(item => {
+                total += item.price;
+                return `
+                    <div class="order-item">
+                        <span>${item.name}</span>
+                        <span>₹${item.price.toLocaleString()}</span>
+                    </div>
+                `;
+            }).join('');
+            
+            totalAmount.textContent = '₹' + total.toLocaleString();
+        }
+        
+        function processPayment() {
+            alert('✅ Demo Payment Successful!\n\nIn a real implementation, this would connect to Razorpay/Instamojo.\n\nThank you for choosing Apex Hub!');
+            localStorage.removeItem('apexCart');
+            window.location.href = 'dashboard.html';
+        }
+        
+        loadCart();
+    </script>
+</body>
+</html>

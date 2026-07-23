@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Testimonials - Apex Hub Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css">
+    <style>
+        .testimonial-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+        .testimonial-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 25px;
+            box-shadow: var(--shadow-sm);
+            text-align: center;
+            position: relative;
+        }
+        .testimonial-avatar-large {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            margin: 0 auto 15px;
+        }
+        .stars-display { color: var(--gold); margin-bottom: 10px; }
+        .testimonial-text { font-style: italic; color: var(--text-light); margin: 10px 0; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+    <aside class="admin-sidebar">
+        <div class="sidebar-logo"><h2>APEX<span>HUB</span></h2><p class="logo-subtitle">Admin Panel</p></div>
+        <div class="sidebar-user"><div class="sidebar-avatar">AD</div><div class="sidebar-user-info"><h4>Admin</h4><p>Super Admin</p></div></div>
+        <ul class="sidebar-nav">
+            <li><a href="dashboard.html"><i class="fas fa-th-large"></i> <span>Dashboard</span></a></li>
+            <p class="sidebar-section-title">Content</p>
+            <li><a href="edit-hero.html"><i class="fas fa-image"></i> <span>Hero</span></a></li>
+            <li><a href="manage-courses.html"><i class="fas fa-book"></i> <span>Courses</span></a></li>
+            <li><a href="edit-batches.html"><i class="fas fa-calendar-alt"></i> <span>Batches</span></a></li>
+            <li><a href="edit-testimonials.html" class="active"><i class="fas fa-star"></i> <span>Testimonials</span></a></li>
+            <li><a href="edit-faculty.html"><i class="fas fa-chalkboard-teacher"></i> <span>Faculty</span></a></li>
+            <li><a href="edit-blog.html"><i class="fas fa-newspaper"></i> <span>Blog</span></a></li>
+            <li><a href="edit-pages.html"><i class="fas fa-file-alt"></i> <span>Pages</span></a></li>
+            <li><a href="site-settings.html"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
+            <li><a href="#" onclick="adminLogout()"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a></li>
+        </ul>
+    </aside>
+
+    <main class="admin-main">
+        <div class="admin-header">
+            <div class="admin-header-left">
+                <h1>⭐ Manage Testimonials</h1>
+                <p class="breadcrumb">Content / <strong>Testimonials</strong></p>
+            </div>
+            <button class="btn btn-primary" onclick="openTestimonialModal()">
+                <i class="fas fa-plus"></i> Add Testimonial
+            </button>
+        </div>
+
+        <div class="testimonial-cards" id="testimonialsGrid"></div>
+    </main>
+
+    <!-- Add/Edit Modal -->
+    <div class="modal-overlay" id="testimonialModal">
+        <div class="modal">
+            <button class="modal-close" onclick="closeModal()">✕</button>
+            <h3 id="modalTitle">➕ Add Testimonial</h3>
+            <form onsubmit="saveTestimonial(event)">
+                <input type="hidden" id="testId">
+                <div class="form-row">
+                    <div class="form-group"><label>Name *</label><input type="text" id="testName" required></div>
+                    <div class="form-group"><label>Initials</label><input type="text" id="testInitials" maxlength="2"></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Exam</label><input type="text" id="testExam"></div>
+                    <div class="form-group"><label>Rank</label><input type="text" id="testRank"></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Year</label><input type="text" id="testYear"></div>
+                    <div class="form-group"><label>Rating (1-5)</label><input type="number" id="testRating" min="1" max="5" value="5"></div>
+                </div>
+                <div class="form-group"><label>Review *</label><textarea id="testReview" rows="4" required></textarea></div>
+                <div class="form-row">
+                    <div class="form-group"><label>Badge Text</label><input type="text" id="testBadge"></div>
+                    <div class="form-group"><label>Featured</label><select id="testFeatured"><option value="true">Yes</option><option value="false">No</option></select></div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block"><i class="fas fa-save"></i> Save Testimonial</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/admin-editor.js"></script>
+    <script>
+        checkAdminAuth();
+        let testimonials = getSection('testimonials');
+        let editingId = null;
+
+        function renderTestimonials() {
+            const grid = document.getElementById('testimonialsGrid');
+            grid.innerHTML = testimonials.map((t, i) => `
+                <div class="testimonial-card">
+                    <div class="testimonial-avatar-large" style="background:${getRandomGradient(i)};">${t.initials}</div>
+                    <div class="stars-display">${'★'.repeat(t.rating)}${'☆'.repeat(5-t.rating)}</div>
+                    <p class="testimonial-text">"${t.review}"</p>
+                    <h4>${t.name}</h4>
+                    <p style="font-size:0.85rem;color:var(--text-light);">${t.exam} ${t.year} - ${t.rank}</p>
+                    <span class="status-badge status-published">${t.badge}</span>
+                    <div class="batch-actions" style="margin-top:12px;">
+                        <button class="action-btn btn-edit" onclick="editTestimonial('${t.id}')">Edit</button>
+                        <button class="action-btn btn-delete" onclick="deleteTestimonial('${t.id}')">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getRandomGradient(index) {
+            const gradients = [
+                'linear-gradient(135deg, #667eea, #764ba2)',
+                'linear-gradient(135deg, #f093fb, #f5576c)',
+                'linear-gradient(135deg, #43e97b, #38f9d7)',
+                'linear-gradient(135deg, #fa709a, #fee140)',
+                'linear-gradient(135deg, #4facfe, #00f2fe)'
+            ];
+            return gradients[index % gradients.length];
+        }
+
+        function openTestimonialModal(id = null) {
+            editingId = id;
+            document.getElementById('modalTitle').textContent = id ? '✏️ Edit Testimonial' : '➕ Add Testimonial';
+            if (id) {
+                const t = testimonials.find(x => x.id === id);
+                if (t) {
+                    document.getElementById('testId').value = t.id;
+                    document.getElementById('testName').value = t.name;
+                    document.getElementById('testInitials').value = t.initials;
+                    document.getElementById('testExam').value = t.exam;
+                    document.getElementById('testRank').value = t.rank;
+                    document.getElementById('testYear').value = t.year;
+                    document.getElementById('testRating').value = t.rating;
+                    document.getElementById('testReview').value = t.review;
+                    document.getElementById('testBadge').value = t.badge;
+                    document.getElementById('testFeatured').value = t.featured.toString();
+                }
+            } else {
+                document.getElementById('testId').value = '';
+                ['testName','testInitials','testExam','testRank','testYear','testReview','testBadge'].forEach(id => document.getElementById(id).value = '');
+                document.getElementById('testRating').value = '5';
+                document.getElementById('testFeatured').value = 'true';
+            }
+            document.getElementById('testimonialModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('testimonialModal').classList.remove('active');
+            editingId = null;
+        }
+
+        function saveTestimonial(e) {
+            e.preventDefault();
+            const data = {
+                id: document.getElementById('testId').value || generateId('test'),
+                name: document.getElementById('testName').value,
+                initials: document.getElementById('testInitials').value || document.getElementById('testName').value.substring(0,2).toUpperCase(),
+                exam: document.getElementById('testExam').value,
+                rank: document.getElementById('testRank').value,
+                year: document.getElementById('testYear').value,
+                rating: parseInt(document.getElementById('testRating').value),
+                review: document.getElementById('testReview').value,
+                badge: document.getElementById('testBadge').value,
+                featured: document.getElementById('testFeatured').value === 'true',
+                order: testimonials.length + 1
+            };
+
+            if (editingId) {
+                updateItem('testimonials', editingId, data);
+            } else {
+                addItem('testimonials', data);
+            }
+            
+            testimonials = getSection('testimonials');
+            renderTestimonials();
+            closeModal();
+            showToast('✅ Testimonial saved successfully!');
+        }
+
+        function editTestimonial(id) { openTestimonialModal(id); }
+
+        function deleteTestimonial(id) {
+            if (confirm('Delete this testimonial?')) {
+                deleteItem('testimonials', id);
+                testimonials = getSection('testimonials');
+                renderTestimonials();
+                showToast('🗑️ Testimonial deleted.');
+            }
+        }
+
+        document.getElementById('testimonialModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        renderTestimonials();
+    </script>
+</body>
+</html>

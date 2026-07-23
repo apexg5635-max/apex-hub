@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Apex Hub</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css">
+    
+    <style>
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .quick-action-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            color: var(--text-dark);
+        }
+        
+        .quick-action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .quick-action-card i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .quick-action-card h4 {
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .recent-activity {
+            list-style: none;
+        }
+        
+        .recent-activity li {
+            padding: 12px 0;
+            border-bottom: 1px solid #f3f4f6;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.85rem;
+        }
+        
+        .activity-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        
+        .activity-dot.enrollment { background: var(--success); }
+        .activity-dot.upload { background: var(--info); }
+        .activity-dot.live { background: var(--danger); }
+        .activity-dot.payment { background: var(--warning); }
+        
+        .activity-time {
+            margin-left: auto;
+            font-size: 0.75rem;
+            color: var(--text-light);
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- ============ SIDEBAR ============ -->
+    <aside class="admin-sidebar">
+        <div class="sidebar-logo">
+            <h2>APEX<span>HUB</span></h2>
+            <p class="logo-subtitle">Admin Panel</p>
+        </div>
+        
+        <div class="sidebar-user">
+            <div class="sidebar-avatar">AD</div>
+            <div class="sidebar-user-info">
+                <h4>Admin User</h4>
+                <p>Super Admin</p>
+            </div>
+        </div>
+        
+        <ul class="sidebar-nav">
+            <li><a href="dashboard.html" class="active">
+                <i class="fas fa-th-large"></i> <span>Dashboard</span>
+            </a></li>
+            
+            <p class="sidebar-section-title">Content</p>
+            
+            <li><a href="upload-video.html">
+                <i class="fas fa-upload"></i> <span>Upload Videos</span>
+            </a></li>
+            <li><a href="schedule-live.html">
+                <i class="fas fa-broadcast-tower"></i> <span>Live Classes</span>
+                <span class="badge">3</span>
+            </a></li>
+            <li><a href="manage-courses.html">
+                <i class="fas fa-book"></i> <span>Manage Courses</span>
+            </a></li>
+            
+            <p class="sidebar-section-title">Management</p>
+            
+            <li><a href="#">
+                <i class="fas fa-users"></i> <span>Students</span>
+                <span class="badge">5.2K</span>
+            </a></li>
+            <li><a href="#">
+                <i class="fas fa-chalkboard-teacher"></i> <span>Faculty</span>
+            </a></li>
+            <li><a href="#">
+                <i class="fas fa-comments"></i> <span>Doubts</span>
+                <span class="badge">12</span>
+            </a></li>
+            
+            <p class="sidebar-section-title">Analytics</p>
+            
+            <li><a href="#">
+                <i class="fas fa-chart-bar"></i> <span>Reports</span>
+            </a></li>
+            <li><a href="#">
+                <i class="fas fa-dollar-sign"></i> <span>Revenue</span>
+            </a></li>
+            
+            <p class="sidebar-section-title">Settings</p>
+            
+            <li><a href="#">
+                <i class="fas fa-cog"></i> <span>Settings</span>
+            </a></li>
+            <li><a href="#" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
+            </a></li>
+        </ul>
+    </aside>
+
+    <!-- ============ MAIN CONTENT ============ -->
+    <main class="admin-main">
+        
+        <!-- Header -->
+        <div class="admin-header">
+            <div class="admin-header-left">
+                <h1>📊 Dashboard Overview</h1>
+                <p class="breadcrumb">Home / <strong>Dashboard</strong></p>
+            </div>
+            <div class="admin-header-right">
+                <div class="header-search">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search anything...">
+                </div>
+                <div class="header-icon">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-dot"></span>
+                </div>
+                <div class="header-icon">
+                    <i class="fas fa-envelope"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <a href="upload-video.html" class="quick-action-card">
+                <i class="fas fa-video" style="color:#667eea;"></i>
+                <h4>Upload Video</h4>
+            </a>
+            <a href="schedule-live.html" class="quick-action-card">
+                <i class="fas fa-broadcast-tower" style="color:#ef4444;"></i>
+                <h4>Start Live Class</h4>
+            </a>
+            <a href="manage-courses.html" class="quick-action-card">
+                <i class="fas fa-plus-circle" style="color:#10b981;"></i>
+                <h4>Add Course</h4>
+            </a>
+            <a href="#" class="quick-action-card">
+                <i class="fas fa-file-pdf" style="color:#f59e0b;"></i>
+                <h4>Upload Notes</h4>
+            </a>
+            <a href="#" class="quick-action-card">
+                <i class="fas fa-user-plus" style="color:#8b5cf6;"></i>
+                <h4>Add Student</h4>
+            </a>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon blue"><i class="fas fa-users"></i></div>
+                <div class="stat-info">
+                    <p>Total Students</p>
+                    <h3>5,234</h3>
+                    <span class="stat-change up">↑ 12% this month</span>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon green"><i class="fas fa-book-open"></i></div>
+                <div class="stat-info">
+                    <p>Active Courses</p>
+                    <h3>24</h3>
+                    <span class="stat-change up">↑ 3 new</span>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon orange"><i class="fas fa-video"></i></div>
+                <div class="stat-info">
+                    <p>Total Videos</p>
+                    <h3>486</h3>
+                    <span class="stat-change up">↑ 18 this week</span>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon purple"><i class="fas fa-indian-rupee-sign"></i></div>
+                <div class="stat-info">
+                    <p>Monthly Revenue</p>
+                    <h3>₹12.4L</h3>
+                    <span class="stat-change up">↑ 8% vs last month</span>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon red"><i class="fas fa-broadcast-tower"></i></div>
+                <div class="stat-info">
+                    <p>Live Classes Today</p>
+                    <h3>3</h3>
+                    <span class="stat-change">Next at 6:00 PM</span>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon teal"><i class="fas fa-star"></i></div>
+                <div class="stat-info">
+                    <p>Avg. Rating</p>
+                    <h3>4.9</h3>
+                    <span class="stat-change">★★★★★</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Grid -->
+        <div class="dashboard-grid">
+            
+            <!-- Recent Enrollments -->
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3>📋 Recent Enrollments</h3>
+                    <a href="#" class="btn-view-all">View All →</a>
+                </div>
+                <div style="overflow-x:auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Course</th>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Rahul Sahu</strong><br><small>rahul@email.com</small></td>
+                                <td>CG PSC Foundation</td>
+                                <td>22 Jul 2025</td>
+                                <td>₹4,999</td>
+                                <td><span class="status-badge status-active">Active</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Priya Verma</strong><br><small>priya@email.com</small></td>
+                                <td>NEET Dropper Batch</td>
+                                <td>22 Jul 2025</td>
+                                <td>₹6,999</td>
+                                <td><span class="status-badge status-active">Active</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Amit Sharma</strong><br><small>amit@email.com</small></td>
+                                <td>JEE Main Booster</td>
+                                <td>21 Jul 2025</td>
+                                <td>₹4,999</td>
+                                <td><span class="status-badge status-active">Active</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Sneha Patel</strong><br><small>sneha@email.com</small></td>
+                                <td>CG Vyapam Combo</td>
+                                <td>21 Jul 2025</td>
+                                <td>₹2,499</td>
+                                <td><span class="status-badge status-pending">Pending</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Vikram Singh</strong><br><small>vikram@email.com</small></td>
+                                <td>CG PSC Mains</td>
+                                <td>20 Jul 2025</td>
+                                <td>₹3,499</td>
+                                <td><span class="status-badge status-active">Active</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Recent Activity & Upcoming -->
+            <div>
+                <!-- Recent Activity -->
+                <div class="dashboard-card" style="margin-bottom:20px;">
+                    <div class="card-header">
+                        <h3>🕐 Recent Activity</h3>
+                    </div>
+                    <ul class="recent-activity">
+                        <li>
+                            <span class="activity-dot enrollment"></span>
+                            <span>New student <strong>Rahul Sahu</strong> enrolled in CG PSC</span>
+                            <span class="activity-time">10 min ago</span>
+                        </li>
+                        <li>
+                            <span class="activity-dot upload"></span>
+                            <span><strong>Dr. Rajesh</strong> uploaded new video</span>
+                            <span class="activity-time">1 hour ago</span>
+                        </li>
+                        <li>
+                            <span class="activity-dot live"></span>
+                            <span>Live class <strong>Fundamental Rights</strong> ended</span>
+                            <span class="activity-time">2 hours ago</span>
+                        </li>
+                        <li>
+                            <span class="activity-dot payment"></span>
+                            <span>Payment of <strong>₹6,999</strong> received from Priya V.</span>
+                            <span class="activity-time">3 hours ago</span>
+                        </li>
+                        <li>
+                            <span class="activity-dot enrollment"></span>
+                            <span><strong>Amit Sharma</strong> enrolled in JEE Booster</span>
+                            <span class="activity-time">5 hours ago</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Upcoming Live Classes -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3>🔴 Upcoming Live Classes</h3>
+                        <a href="schedule-live.html" class="btn-view-all">Manage →</a>
+                    </div>
+                    <div style="padding:10px 0;border-bottom:1px solid #f3f4f6;">
+                        <strong>Fundamental Rights Doubt Session</strong>
+                        <p style="font-size:0.8rem;color:var(--text-light);">Today, 6:00 PM • CG PSC • 245 enrolled</p>
+                    </div>
+                    <div style="padding:10px 0;border-bottom:1px solid #f3f4f6;">
+                        <strong>Human Physiology Revision</strong>
+                        <p style="font-size:0.8rem;color:var(--text-light);">Today, 7:30 PM • NEET • 520 enrolled</p>
+                    </div>
+                    <div style="padding:10px 0;">
+                        <strong>Calculus Problem Solving</strong>
+                        <p style="font-size:0.8rem;color:var(--text-light);">Tomorrow, 5:00 PM • JEE • 312 enrolled</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script>
+        // Check admin authentication
+        if (localStorage.getItem('apexAdminLoggedIn') !== 'true') {
+            window.location.href = 'index.html';
+        }
+        
+        function logout() {
+            localStorage.removeItem('apexAdminLoggedIn');
+            localStorage.removeItem('apexAdminUser');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>

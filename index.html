@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apex Hub - Chhattisgarh's #1 Coaching for CG PSC, Vyapam, NEET & JEE</title>
+    <meta name="description" content="Apex Hub provides top-quality online coaching for CG PSC, CG Vyapam, NEET, and JEE exams. Live classes, recorded lectures, test series, and expert mentorship.">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    
+    <!-- ============ TOP BAR ============ -->
+    <div class="top-bar">
+        <div class="container">
+            <div class="top-bar-left">
+                <a href="tel:+919876543210"><i class="fas fa-phone"></i> +91 98765 43210</a>
+                <a href="mailto:info@apexhub.in"><i class="fas fa-envelope"></i> info@apexhub.in</a>
+            </div>
+            <div class="top-bar-right">
+                <a href="#" class="btn-free-demo"><i class="fas fa-play-circle"></i> Free Demo Class</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ NAVIGATION ============ -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <span class="logo-text">APEX<span class="logo-highlight">HUB</span></span>
+                <span class="logo-tagline">Climb to the Peak</span>
+            </a>
+            
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li class="dropdown">
+                    <a href="pages/courses.html">Courses <i class="fas fa-chevron-down"></i></a>
+                    <div class="dropdown-content">
+                        <a href="pages/courses.html#cgpsc">CG PSC</a>
+                        <a href="pages/courses.html#vyapam">CG Vyapam</a>
+                        <a href="pages/courses.html#neet">NEET</a>
+                        <a href="pages/courses.html#jee">JEE</a>
+                        <a href="pages/courses.html#test-series">Test Series</a>
+                    </div>
+                </li>
+                <li><a href="pages/courses.html#test-series">Test Series</a></li>
+                <li><a href="pages/about.html">About Us</a></li>
+                <li><a href="pages/blog.html">Blog</a></li>
+                <li><a href="pages/contact.html">Contact</a></li>
+                <li><a href="pages/faq.html">FAQ</a></li>
+                <li><a href="pages/dashboard.html" class="btn-login"><i class="fas fa-user"></i> Student Login</a></li>
+            </ul>
+            
+            <div class="hamburger" id="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ============ HERO SECTION (DYNAMIC) ============ -->
+    <section class="hero">
+        <div class="hero-overlay"></div>
+        <div class="container">
+            <div class="hero-content" data-aos="fade-up" data-aos-duration="1000">
+                <div class="hero-badge">🏆 Chhattisgarh's Most Trusted Coaching Platform</div>
+                <h1>Your Gateway to <span class="text-gold">Government Jobs</span> & <span class="text-gold">Top Medical & Engineering Colleges</span></h1>
+                <p class="hero-subtitle">Expert coaching for <strong>CG PSC, CG Vyapam, NEET, and JEE</strong> with live interactive classes, comprehensive study material, and personalized mentorship — all from the comfort of your home.</p>
+                
+                <div class="hero-search">
+                    <select class="exam-select" id="examSelect">
+                        <option value="">🎯 Select Your Exam...</option>
+                        <option value="cgpsc">CG PSC (CGPSC)</option>
+                        <option value="vyapam">CG Vyapam (CGVYAPAM)</option>
+                        <option value="neet">NEET (Medical)</option>
+                        <option value="jee">JEE (Engineering)</option>
+                    </select>
+                    <button class="btn-explore" onclick="exploreCourses()">Explore Courses <i class="fas fa-arrow-right"></i></button>
+                </div>
+                
+                <div class="hero-buttons">
+                    <button class="btn-primary"><i class="fas fa-video"></i> Watch Demo Lectures</button>
+                    <button class="btn-secondary"><i class="fas fa-download"></i> Download Free Study Material</button>
+                </div>
+                
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number counter" data-target="5000">0</span>
+                        <span class="stat-plus">+</span>
+                        <span class="stat-label">Active Students</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <span class="stat-number counter" data-target="200">0</span>
+                        <span class="stat-plus">+</span>
+                        <span class="stat-label">Selections in 2024</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item">
+                        <span class="stat-number">4.9</span>
+                        <span class="stat-label">Rating</span>
+                        <div class="stars">★★★★★</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ COURSE CATEGORIES (DYNAMIC) ============ -->
+    <section class="course-categories section-padding">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <h2>Choose Your <span class="text-blue">Path to Success</span></h2>
+                <p>Comprehensive coaching programs designed by Chhattisgarh's best faculty for every major competitive exam</p>
+            </div>
+            
+            <div class="category-grid" id="categoryGrid">
+                <!-- Dynamically loaded from admin data -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ WHY APEX HUB ============ -->
+    <section class="why-us section-padding bg-light">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <h2>Why <span class="text-blue">Apex Hub</span>?</h2>
+                <p>The Apex difference that sets us apart from traditional coaching institutes</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-item" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="feature-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+                    <h4>Expert Faculty</h4>
+                    <p>Learn from Chhattisgarh's top educators with 10+ years of experience in competitive exam coaching.</p>
+                </div>
+                
+                <div class="feature-item" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="feature-icon"><i class="fas fa-language"></i></div>
+                    <h4>Bilingual Teaching</h4>
+                    <p>Classes in Hindi & English mix — perfect for Chhattisgarh students. Switch languages anytime.</p>
+                </div>
+                
+                <div class="feature-item" data-aos="zoom-in" data-aos-delay="300">
+                    <div class="feature-icon"><i class="fas fa-indian-rupee-sign"></i></div>
+                    <h4>Affordable Fees</h4>
+                    <p>Quality education at 1/5th the cost of traditional coaching. EMI options available.</p>
+                </div>
+                
+                <div class="feature-item" data-aos="zoom-in" data-aos-delay="400">
+                    <div class="feature-icon"><i class="fas fa-clock"></i></div>
+                    <h4>24/7 Doubt Support</h4>
+                    <p>Dedicated WhatsApp groups & doubt forums. Get your queries resolved by faculty within hours.</p>
+                </div>
+                
+                <div class="feature-item" data-aos="zoom-in" data-aos-delay="500">
+                    <div class="feature-icon"><i class="fas fa-mobile-alt"></i></div>
+                    <h4>Learn Anywhere</h4>
+                    <p>Mobile app, tablet, laptop — attend live classes or watch recordings anytime, anywhere.</p>
+                </div>
+                
+                <div class="feature-item" data-aos="zoom-in" data-aos-delay="600">
+                    <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+                    <h4>Performance Analytics</h4>
+                    <p>Detailed test analysis, strength-weakness mapping, and personalized improvement plans.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ UPCOMING BATCHES (DYNAMIC) ============ -->
+    <section class="upcoming-batches section-padding">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <h2>Upcoming <span class="text-blue">Batches</span></h2>
+                <p>New batches starting soon. Book your seat now — limited seats per batch for personalized attention.</p>
+            </div>
+            
+            <div class="batches-grid" id="batchesContainer">
+                <!-- Dynamically loaded from admin data -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ TESTIMONIALS (DYNAMIC) ============ -->
+    <section class="testimonials section-padding bg-light">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <h2>Student <span class="text-blue">Success Stories</span></h2>
+                <p>Hear from our toppers who achieved their dreams with Apex Hub</p>
+            </div>
+            
+            <div class="testimonial-slider" id="testimonialContainer">
+                <!-- Dynamically loaded from admin data -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ FREE RESOURCES ============ -->
+    <section class="free-resources section-padding">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <h2>Free <span class="text-blue">Learning Resources</span></h2>
+                <p>Download free study material, previous year papers, and formula sheets</p>
+            </div>
+            
+            <div class="resources-grid">
+                <div class="resource-card" data-aos="fade-up" data-aos-delay="100">
+                    <i class="fas fa-file-pdf"></i>
+                    <h4>CGPSC Previous Year Papers</h4>
+                    <p>Last 10 years solved papers with detailed solutions</p>
+                    <a href="#" class="btn-download"><i class="fas fa-download"></i> Download PDF</a>
+                </div>
+                
+                <div class="resource-card" data-aos="fade-up" data-aos-delay="200">
+                    <i class="fas fa-book"></i>
+                    <h4>NEET Formula Sheet</h4>
+                    <p>Complete Physics, Chemistry, Biology formula compilation</p>
+                    <a href="#" class="btn-download"><i class="fas fa-download"></i> Download PDF</a>
+                </div>
+                
+                <div class="resource-card" data-aos="fade-up" data-aos-delay="300">
+                    <i class="fas fa-calculator"></i>
+                    <h4>JEE Mathematics Shortcuts</h4>
+                    <p>Time-saving tricks and techniques for JEE Main/Advanced</p>
+                    <a href="#" class="btn-download"><i class="fas fa-download"></i> Download PDF</a>
+                </div>
+                
+                <div class="resource-card" data-aos="fade-up" data-aos-delay="400">
+                    <i class="fas fa-map-marked-alt"></i>
+                    <h4>Chhattisgarh GK E-Book</h4>
+                    <p>Complete CG geography, history, culture, and current affairs</p>
+                    <a href="#" class="btn-download"><i class="fas fa-download"></i> Download PDF</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ CTA SECTION ============ -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content" data-aos="zoom-in">
+                <h2>Ready to Start Your <span class="text-gold">Success Journey</span>?</h2>
+                <p>Join 5000+ students already preparing with Apex Hub. Get a free demo class and experience the difference.</p>
+                <div class="cta-buttons">
+                    <a href="pages/courses.html" class="btn-primary">Browse All Courses</a>
+                    <a href="pages/contact.html" class="btn-outline">Talk to Our Counsellor</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ FOOTER ============ -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col about-col">
+                    <h3>APEX<span class="text-gold">HUB</span></h3>
+                    <p>Chhattisgarh's premier online coaching institute for CG PSC, CG Vyapam, NEET, and JEE. We are committed to providing affordable, high-quality education to every student in Chhattisgarh.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="pages/about.html">About Us</a></li>
+                        <li><a href="pages/courses.html">All Courses</a></li>
+                        <li><a href="pages/courses.html#test-series">Test Series</a></li>
+                        <li><a href="pages/blog.html">Blog</a></li>
+                        <li><a href="pages/contact.html">Contact Us</a></li>
+                        <li><a href="pages/faq.html">FAQ</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Exam Categories</h4>
+                    <ul>
+                        <li><a href="pages/courses.html#cgpsc">CG PSC Courses</a></li>
+                        <li><a href="pages/courses.html#vyapam">CG Vyapam Courses</a></li>
+                        <li><a href="pages/courses.html#neet">NEET Courses</a></li>
+                        <li><a href="pages/courses.html#jee">JEE Courses</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Contact Info</h4>
+                    <ul class="contact-info">
+                        <li><i class="fas fa-map-marker-alt"></i> 2nd Floor, Apex Hub Tower, GE Road, Raipur, Chhattisgarh - 492001</li>
+                        <li><i class="fas fa-phone"></i> <a href="tel:+919876543210">+91 98765 43210</a></li>
+                        <li><i class="fas fa-envelope"></i> <a href="mailto:info@apexhub.in">info@apexhub.in</a></li>
+                        <li><i class="fas fa-clock"></i> Mon-Sun: 9:00 AM - 8:00 PM</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Apex Hub. All rights reserved. | <a href="pages/privacy.html">Privacy Policy</a> | <a href="pages/privacy.html#terms-of-service">Terms & Conditions</a> | <a href="pages/privacy.html#refund-policy">Refund Policy</a> | <a href="admin/index.html" style="color:#999;font-size:0.7rem;">🔑 Admin</a></p>
+                <p>Made with ❤️ in Chhattisgarh</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ============ WHATSAPP BUTTON ============ -->
+    <a href="https://wa.me/919876543210?text=Hi%20Apex%20Hub,%20I%20need%20course%20guidance" class="whatsapp-float" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- ============ SCRIPTS ============ -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="js/main.js"></script>
+    
+    <!-- ============ LIVE DATA CONNECTION ============ -->
+    <script src="js/live-data.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({ duration: 800, once: true, offset: 100 });
+        
+        // Load dynamic content from admin data
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔄 Loading content from admin data...');
+            
+            // Render all dynamic sections
+            renderHeroFromData();
+            renderCoursesFromData('categoryGrid');
+            renderBatchesFromData('batchesContainer');
+            renderTestimonialsFromData('testimonialContainer');
+            
+            console.log('✅ Dynamic content loaded!');
+        });
+        
+        // Auto-refresh when admin updates data
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'apexHubSiteData') {
+                console.log('🔄 Admin data changed! Reloading...');
+                location.reload();
+            }
+        });
+        
+        // Counter animation
+        const counters = document.querySelectorAll('.counter');
+        counters.forEach(counter => {
+            const updateCount = () => {
+                const target = +counter.getAttribute('data-target');
+                const count = +counter.innerText;
+                const inc = target / 200;
+                if (count < target) {
+                    counter.innerText = Math.ceil(count + inc);
+                    setTimeout(updateCount, 1);
+                } else {
+                    counter.innerText = target;
+                }
+            };
+            const observer = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting) { updateCount(); observer.unobserve(counter); }
+            });
+            observer.observe(counter);
+        });
+        
+        function exploreCourses() {
+            const exam = document.getElementById('examSelect').value;
+            if (exam) { window.location.href = 'pages/courses.html#' + exam; }
+            else { window.location.href = 'pages/courses.html'; }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Series - Apex Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../js/auth.js"></script>
+    <script>if(!requireAuth()){}</script>
+    <style>
+        body{font-family:'Poppins',sans-serif;background:#f4f6f9;margin:0;}
+        .test-nav{background:white;padding:15px 20px;box-shadow:0 2px 8px rgba(0,0,0,0.06);display:flex;justify-content:space-between;align-items:center;}
+        .test-nav .logo{font-size:1.3rem;font-weight:800;color:#1a237e;text-decoration:none;}
+        .test-nav .logo span{color:#f5a623;}
+        .test-container{max-width:1000px;margin:30px auto;padding:0 20px;}
+        .test-card{background:white;border-radius:15px;padding:25px;box-shadow:0 2px 8px rgba(0,0,0,0.06);margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;}
+        .test-card h3{margin-bottom:5px;}
+        .test-card .meta{color:#6b7280;font-size:0.85rem;}
+        .btn-start{padding:10px 25px;background:#10b981;color:white;border:none;border-radius:10px;cursor:pointer;font-family:'Poppins',sans-serif;font-weight:600;}
+        @media(max-width:600px){.test-card{flex-direction:column;text-align:center;gap:15px;}}
+    </style>
+</head>
+<body>
+    <nav class="test-nav">
+        <a href="../index.html" class="logo">APEX<span>HUB</span></a>
+        <div>
+            <a href="dashboard.html" style="color:#1a237e;text-decoration:none;margin-right:15px;">← Dashboard</a>
+            <button onclick="localStorage.removeItem('apexHubCurrentUser');window.location.href='../pages/login.html'" style="background:#ef4444;color:white;border:none;padding:8px 16px;border-radius:8px;cursor:pointer;font-family:'Poppins',sans-serif;">Logout</button>
+        </div>
+    </nav>
+    <div class="test-container">
+        <h2 style="margin-bottom:20px;">📝 My Test Series</h2>
+        <div class="test-card">
+            <div>
+                <h3>CG PSC Prelims Test Series 2025</h3>
+                <p class="meta">30 Tests • 100 Questions each • 120 mins</p>
+                <p class="meta">Progress: 12/30 Tests Completed</p>
+            </div>
+            <button class="btn-start">Start Next Test</button>
+        </div>
+    </div>
+</body>
+</html>

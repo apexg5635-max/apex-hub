@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Apex Hub | Chhattisgarh's Premier Coaching Institute</title>
+    <meta name="description" content="Learn about Apex Hub - Chhattisgarh's leading online coaching for CG PSC, CG Vyapam, NEET, and JEE. Meet our expert faculty.">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    
+    <style>
+        .about-hero {
+            background: linear-gradient(135deg, #0a0e27, #1a237e);
+            color: white; padding: 80px 0; text-align: center;
+        }
+        .about-hero h1 { font-size: 2.8rem; margin-bottom: 15px; }
+        .about-hero p { font-size: 1.2rem; opacity: 0.9; }
+        
+        .story-section { padding: 80px 0; }
+        .story-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center;
+        }
+        .story-image {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 20px; height: 400px; display: flex;
+            align-items: center; justify-content: center; color: white; font-size: 5rem;
+        }
+        .story-content h2 { font-size: 2rem; margin-bottom: 20px; color: #1a237e; }
+        .story-content p { color: #6b7280; margin-bottom: 15px; line-height: 1.8; }
+        
+        .mission-vision { background: #f8f9fd; padding: 80px 0; }
+        .mv-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .mv-card {
+            background: white; padding: 40px 30px; border-radius: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06); text-align: center; transition: all 0.3s ease;
+        }
+        .mv-card:hover { transform: translateY(-10px); box-shadow: 0 10px 40px rgba(0,0,0,0.12); }
+        .mv-icon {
+            width: 80px; height: 80px; border-radius: 50%; display: flex;
+            align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 2rem; color: white;
+        }
+        .mv-icon.mission { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .mv-icon.vision { background: linear-gradient(135deg, #f093fb, #f5576c); }
+        .mv-icon.values { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+        
+        .faculty-section { padding: 80px 0; }
+        .faculty-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px;
+        }
+        .faculty-card {
+            background: white; border-radius: 15px; overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06); transition: all 0.3s ease;
+        }
+        .faculty-card:hover { transform: translateY(-8px); box-shadow: 0 10px 40px rgba(0,0,0,0.12); }
+        .faculty-image {
+            height: 200px; display: flex; align-items: center; justify-content: center;
+            font-size: 3rem; color: white;
+        }
+        .faculty-info { padding: 25px; text-align: center; }
+        .faculty-info h3 { margin-bottom: 5px; }
+        .faculty-info .designation { color: #1a237e; font-weight: 600; font-size: 0.9rem; margin-bottom: 5px; }
+        .faculty-info .subject { color: #6b7280; font-size: 0.85rem; margin-bottom: 10px; }
+        .faculty-info .experience {
+            display: inline-block; background: #e8eaf6; color: #1a237e;
+            padding: 4px 14px; border-radius: 15px; font-size: 0.8rem;
+        }
+        
+        .stats-section {
+            background: linear-gradient(135deg, #1a237e, #283593);
+            color: white; padding: 60px 0; text-align: center;
+        }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 30px; }
+        .stat-box .number { font-size: 3rem; font-weight: 700; color: #f5a623; }
+        .stat-box .label { font-size: 1rem; opacity: 0.9; margin-top: 5px; }
+        
+        .timeline-section { padding: 80px 0; background: #f8f9fd; }
+        .timeline {
+            position: relative; max-width: 800px; margin: 0 auto;
+        }
+        .timeline::before {
+            content: ''; position: absolute; left: 50%; transform: translateX(-50%);
+            width: 3px; height: 100%; background: #1a237e;
+        }
+        .timeline-item {
+            display: flex; align-items: center; margin-bottom: 40px; position: relative;
+        }
+        .timeline-item:nth-child(odd) { flex-direction: row; }
+        .timeline-item:nth-child(even) { flex-direction: row-reverse; }
+        .timeline-content {
+            width: 45%; background: white; padding: 20px; border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .timeline-dot {
+            width: 20px; height: 20px; background: #f5a623; border-radius: 50%;
+            position: absolute; left: 50%; transform: translateX(-50%); z-index: 1;
+        }
+        .timeline-content h4 { color: #1a237e; margin-bottom: 5px; }
+        .timeline-content span { color: #f5a623; font-weight: 600; font-size: 0.9rem; }
+        
+        @media (max-width: 768px) {
+            .story-grid { grid-template-columns: 1fr; }
+            .timeline::before { left: 20px; }
+            .timeline-item, .timeline-item:nth-child(even) { flex-direction: row; }
+            .timeline-content { width: 80%; margin-left: 50px; }
+            .timeline-dot { left: 20px; }
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- ============ TOP BAR ============ -->
+    <div class="top-bar">
+        <div class="container">
+            <div class="top-bar-left">
+                <a href="tel:+919876543210"><i class="fas fa-phone"></i> +91 98765 43210</a>
+                <a href="mailto:info@apexhub.in"><i class="fas fa-envelope"></i> info@apexhub.in</a>
+            </div>
+            <div class="top-bar-right">
+                <a href="#" class="btn-free-demo"><i class="fas fa-play-circle"></i> Free Demo Class</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ NAVIGATION ============ -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="../index.html" class="logo">
+                <span class="logo-text">APEX<span class="logo-highlight">HUB</span></span>
+                <span class="logo-tagline">Climb to the Peak</span>
+            </a>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="../index.html">Home</a></li>
+                <li class="dropdown">
+                    <a href="courses.html">Courses <i class="fas fa-chevron-down"></i></a>
+                    <div class="dropdown-content">
+                        <a href="courses.html#cgpsc">CG PSC</a>
+                        <a href="courses.html#vyapam">CG Vyapam</a>
+                        <a href="courses.html#neet">NEET</a>
+                        <a href="courses.html#jee">JEE</a>
+                        <a href="courses.html#test-series">Test Series</a>
+                    </div>
+                </li>
+                <li><a href="courses.html#test-series">Test Series</a></li>
+                <li><a href="about.html" class="active">About Us</a></li>
+                <li><a href="blog.html">Blog</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="dashboard.html" class="btn-login"><i class="fas fa-user"></i> Student Login</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ============ ABOUT HERO ============ -->
+    <section class="about-hero">
+        <div class="container" data-aos="fade-up">
+            <h1>About Apex Hub</h1>
+            <p>Chhattisgarh's Most Trusted Coaching Platform Since 2018</p>
+        </div>
+    </section>
+
+    <!-- ============ OUR STORY ============ -->
+    <section class="story-section">
+        <div class="container">
+            <div class="story-grid">
+                <div class="story-image" data-aos="fade-right">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <div class="story-content" data-aos="fade-left">
+                    <h2>Our Story</h2>
+                    <p>Apex Hub was born in 2018 with a simple yet powerful vision: <strong>every student in Chhattisgarh deserves access to world-class coaching, regardless of their location or financial background.</strong></p>
+                    <p>Founded by a group of IITians, doctors, and civil servants from Chhattisgarh, we understood the challenges faced by students in Tier-2 and Tier-3 cities. Limited access to quality faculty, expensive coaching fees, and the need to relocate to metro cities were barriers that prevented talented students from achieving their dreams.</p>
+                    <p>Starting with just 50 students and 3 faculty members in a small room in Raipur, Apex Hub has now grown into Chhattisgarh's largest online coaching platform with <strong>5000+ active students, 50+ expert faculty, and 200+ selections</strong> in government jobs, medical, and engineering exams.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ MISSION, VISION, VALUES ============ -->
+    <section class="mission-vision">
+        <div class="container">
+            <div class="mv-grid">
+                <div class="mv-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="mv-icon mission"><i class="fas fa-bullseye"></i></div>
+                    <h3>Our Mission</h3>
+                    <p>To democratize competitive exam preparation by providing affordable, high-quality, bilingual coaching to every student in Chhattisgarh and beyond.</p>
+                </div>
+                <div class="mv-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="mv-icon vision"><i class="fas fa-eye"></i></div>
+                    <h3>Our Vision</h3>
+                    <p>To become India's most trusted regional coaching platform, producing 1000+ government officers, doctors, and engineers from Chhattisgarh every year by 2030.</p>
+                </div>
+                <div class="mv-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="mv-icon values"><i class="fas fa-heart"></i></div>
+                    <h3>Our Values</h3>
+                    <p>Student-first approach, uncompromising quality, affordability, innovation in teaching, and deep commitment to Chhattisgarh's educational development.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ STATS ============ -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-box"><div class="number">5000+</div><div class="label">Active Students</div></div>
+                <div class="stat-box"><div class="number">200+</div><div class="label">Selections in 2024</div></div>
+                <div class="stat-box"><div class="number">50+</div><div class="label">Expert Faculty</div></div>
+                <div class="stat-box"><div class="number">4.9</div><div class="label">Google Rating</div></div>
+                <div class="stat-box"><div class="number">28</div><div class="label">Districts Covered</div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ OUR JOURNEY ============ -->
+    <section class="timeline-section">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <h2>Our <span class="text-blue">Journey</span></h2>
+                <p>From a small room to Chhattisgarh's largest online coaching platform</p>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item" data-aos="fade-right"><div class="timeline-content"><span>2018</span><h4>The Beginning</h4><p>Founded in Raipur with 3 faculty and 50 students.</p></div><div class="timeline-dot"></div><div style="width:45%;"></div></div>
+                <div class="timeline-item" data-aos="fade-left"><div style="width:45%;"></div><div class="timeline-dot"></div><div class="timeline-content"><span>2019</span><h4>Expansion</h4><p>Added NEET & JEE coaching. Student base grew to 500.</p></div></div>
+                <div class="timeline-item" data-aos="fade-right"><div class="timeline-content"><span>2020</span><h4>Going Online</h4><p>Launched full online platform. Reached all 28 districts of CG.</p></div><div class="timeline-dot"></div><div style="width:45%;"></div></div>
+                <div class="timeline-item" data-aos="fade-left"><div style="width:45%;"></div><div class="timeline-dot"></div><div class="timeline-content"><span>2022</span><h4>100+ Selections</h4><p>Crossed 100 selections in a single year.</p></div></div>
+                <div class="timeline-item" data-aos="fade-right"><div class="timeline-content"><span>2024</span><h4>5000+ Students</h4><p>Became Chhattisgarh's #1 online coaching platform.</p></div><div class="timeline-dot"></div><div style="width:45%;"></div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ FACULTY (DYNAMIC) ============ -->
+    <section class="faculty-section">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <h2>Meet Our <span class="text-blue">Star Faculty</span></h2>
+                <p>Learn from Chhattisgarh's best educators with proven track records</p>
+            </div>
+            <div class="faculty-grid" id="facultyGrid">
+                <!-- Dynamically loaded from admin data -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ CTA ============ -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content" data-aos="zoom-in">
+                <h2>Ready to Start Your <span class="text-gold">Success Journey</span>?</h2>
+                <p>Join 5000+ students already preparing with Apex Hub. Get a free demo class and experience the difference.</p>
+                <div class="cta-buttons">
+                    <a href="courses.html" class="btn-primary">Browse All Courses</a>
+                    <a href="contact.html" class="btn-outline">Talk to Our Counsellor</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ FOOTER ============ -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col about-col">
+                    <h3>APEX<span class="text-gold">HUB</span></h3>
+                    <p>Chhattisgarh's premier online coaching institute for CG PSC, CG Vyapam, NEET, and JEE.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col"><h4>Quick Links</h4><ul><li><a href="about.html">About Us</a></li><li><a href="courses.html">All Courses</a></li><li><a href="faq.html">FAQ</a></li><li><a href="blog.html">Blog</a></li><li><a href="contact.html">Contact Us</a></li></ul></div>
+                <div class="footer-col"><h4>Exam Categories</h4><ul><li><a href="courses.html#cgpsc">CG PSC Courses</a></li><li><a href="courses.html#vyapam">CG Vyapam Courses</a></li><li><a href="courses.html#neet">NEET Courses</a></li><li><a href="courses.html#jee">JEE Courses</a></li></ul></div>
+                <div class="footer-col"><h4>Contact Info</h4><ul class="contact-info"><li><i class="fas fa-map-marker-alt"></i> Apex Hub Tower, GE Road, Raipur, CG</li><li><i class="fas fa-phone"></i> <a href="tel:+919876543210">+91 98765 43210</a></li><li><i class="fas fa-envelope"></i> <a href="mailto:info@apexhub.in">info@apexhub.in</a></li></ul></div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Apex Hub. All rights reserved. | <a href="privacy.html">Privacy Policy</a> | <a href="privacy.html#terms-of-service">Terms</a> | <a href="../admin/index.html" style="color:#999;font-size:0.7rem;">🔑 Admin</a></p>
+                <p>Made with ❤️ in Chhattisgarh</p>
+            </div>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/919876543210" class="whatsapp-float" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- ============ SCRIPTS ============ -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="../js/main.js"></script>
+    
+    <!-- ============ LIVE DATA CONNECTION ============ -->
+    <script src="../js/live-data.js"></script>
+    <script>
+        AOS.init({ duration: 800, once: true });
+        
+        // Load faculty from admin data
+        document.addEventListener('DOMContentLoaded', function() {
+            renderFacultyFromData('facultyGrid');
+        });
+        
+        // Auto-refresh on admin changes
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'apexHubSiteData') location.reload();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Pages Content - Apex Hub Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css">
+    <style>
+        .page-tabs { display: flex; gap: 5px; margin-bottom: 25px; flex-wrap: wrap; }
+        .page-tab {
+            padding: 10px 20px;
+            border: 2px solid var(--border);
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        .page-tab:hover { border-color: var(--primary); }
+        .page-tab.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .timeline-editor { list-style: none; }
+        .timeline-editor li {
+            display: flex; gap: 10px; align-items: center;
+            padding: 10px; background: #f9fafb; border-radius: 8px; margin-bottom: 8px;
+        }
+        .timeline-editor input { padding: 8px; border: 1px solid var(--border); border-radius: 5px; font-family: 'Poppins', sans-serif; }
+        .faq-editor-item {
+            background: #f9fafb; padding: 15px; border-radius: 8px; margin-bottom: 10px;
+            border-left: 4px solid var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <aside class="admin-sidebar">
+        <div class="sidebar-logo"><h2>APEX<span>HUB</span></h2><p class="logo-subtitle">Admin Panel</p></div>
+        <div class="sidebar-user"><div class="sidebar-avatar">AD</div><div class="sidebar-user-info"><h4>Admin</h4><p>Super Admin</p></div></div>
+        <ul class="sidebar-nav">
+            <li><a href="dashboard.html"><i class="fas fa-th-large"></i> <span>Dashboard</span></a></li>
+            <p class="sidebar-section-title">Content</p>
+            <li><a href="edit-hero.html"><i class="fas fa-image"></i> <span>Hero</span></a></li>
+            <li><a href="manage-courses.html"><i class="fas fa-book"></i> <span>Courses</span></a></li>
+            <li><a href="edit-batches.html"><i class="fas fa-calendar-alt"></i> <span>Batches</span></a></li>
+            <li><a href="edit-testimonials.html"><i class="fas fa-star"></i> <span>Testimonials</span></a></li>
+            <li><a href="edit-faculty.html"><i class="fas fa-chalkboard-teacher"></i> <span>Faculty</span></a></li>
+            <li><a href="edit-blog.html"><i class="fas fa-newspaper"></i> <span>Blog</span></a></li>
+            <li><a href="edit-pages.html" class="active"><i class="fas fa-file-alt"></i> <span>Pages</span></a></li>
+            <li><a href="site-settings.html"><i class="fas fa-cog"></i> <span>Settings</span></a></li>
+            <li><a href="#" onclick="adminLogout()"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a></li>
+        </ul>
+    </aside>
+
+    <main class="admin-main">
+        <div class="admin-header">
+            <div class="admin-header-left">
+                <h1>📄 Edit Pages Content</h1>
+                <p class="breadcrumb">Content / <strong>Pages</strong></p>
+            </div>
+            <button class="btn btn-primary" onclick="saveAllPages()"><i class="fas fa-save"></i> Save All Changes</button>
+        </div>
+
+        <!-- Page Tabs -->
+        <div class="page-tabs">
+            <button class="page-tab active" onclick="switchTab('about')">📖 About Page</button>
+            <button class="page-tab" onclick="switchTab('faq')">❓ FAQ Page</button>
+            <button class="page-tab" onclick="switchTab('privacy')">🔒 Privacy & Terms</button>
+        </div>
+
+        <!-- ABOUT PAGE TAB -->
+        <div id="tab-about" class="tab-content">
+            <div class="form-card">
+                <h2>About Page Content</h2>
+                <div class="form-group"><label>Hero Title</label><input type="text" id="aboutHeroTitle"></div>
+                <div class="form-group"><label>Hero Subtitle</label><input type="text" id="aboutHeroSubtitle"></div>
+                <div class="form-group"><label>Story Title</label><input type="text" id="aboutStoryTitle"></div>
+                <div class="form-group"><label>Story Content (HTML)</label><textarea id="aboutStoryContent" rows="6"></textarea></div>
+                <div class="form-row">
+                    <div class="form-group"><label>Mission</label><textarea id="aboutMission" rows="3"></textarea></div>
+                    <div class="form-group"><label>Vision</label><textarea id="aboutVision" rows="3"></textarea></div>
+                </div>
+                <div class="form-group"><label>Values</label><textarea id="aboutValues" rows="2"></textarea></div>
+                
+                <h3 style="margin-top:20px;">Company Timeline</h3>
+                <ul class="timeline-editor" id="timelineList"></ul>
+                <button class="btn btn-outline btn-sm" onclick="addTimelineItem()"><i class="fas fa-plus"></i> Add Timeline Item</button>
+            </div>
+        </div>
+
+        <!-- FAQ PAGE TAB -->
+        <div id="tab-faq" class="tab-content" style="display:none;">
+            <div class="form-card">
+                <h2>FAQ Page Content</h2>
+                <div id="faqList"></div>
+                <button class="btn btn-outline btn-sm" onclick="addFaqItem()"><i class="fas fa-plus"></i> Add FAQ</button>
+            </div>
+        </div>
+
+        <!-- PRIVACY PAGE TAB -->
+        <div id="tab-privacy" class="tab-content" style="display:none;">
+            <div class="form-card">
+                <h2>Privacy Policy & Terms</h2>
+                <div class="form-row">
+                    <div class="form-group"><label>Last Updated Date</label><input type="date" id="privacyDate"></div>
+                    <div class="form-group"><label>Version</label><input type="text" id="privacyVersion"></div>
+                </div>
+                <div id="privacySections"></div>
+                <button class="btn btn-outline btn-sm" onclick="addPrivacySection()"><i class="fas fa-plus"></i> Add Section</button>
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/admin-editor.js"></script>
+    <script>
+        checkAdminAuth();
+        let pagesData = getSection('pages');
+        let currentTab = 'about';
+
+        function switchTab(tab) {
+            currentTab = tab;
+            document.querySelectorAll('.page-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
+            document.getElementById('tab-' + tab).style.display = 'block';
+            document.querySelector(`.page-tab:nth-${tab === 'about' ? '1' : tab === 'faq' ? '2' : '3'}`).classList.add('active');
+            loadTabData();
+        }
+
+        function loadTabData() {
+            if (currentTab === 'about') loadAboutTab();
+            else if (currentTab === 'faq') loadFaqTab();
+            else loadPrivacyTab();
+        }
+
+        // ===== ABOUT TAB =====
+        function loadAboutTab() {
+            const a = pagesData.about;
+            document.getElementById('aboutHeroTitle').value = a.heroTitle || '';
+            document.getElementById('aboutHeroSubtitle').value = a.heroSubtitle || '';
+            document.getElementById('aboutStoryTitle').value = a.storyTitle || '';
+            document.getElementById('aboutStoryContent').value = a.storyContent || '';
+            document.getElementById('aboutMission').value = a.mission || '';
+            document.getElementById('aboutVision').value = a.vision || '';
+            document.getElementById('aboutValues').value = a.values || '';
+            renderTimeline();
+        }
+
+        function renderTimeline() {
+            const timeline = pagesData.about.timeline || [];
+            document.getElementById('timelineList').innerHTML = timeline.map((t, i) => `
+                <li>
+                    <input type="text" value="${t.year}" style="width:80px;" onchange="updateTimeline(${i},'year',this.value)" placeholder="Year">
+                    <input type="text" value="${t.title}" style="flex:1;" onchange="updateTimeline(${i},'title',this.value)" placeholder="Title">
+                    <input type="text" value="${t.description}" style="flex:2;" onchange="updateTimeline(${i},'description',this.value)" placeholder="Description">
+                    <button class="action-btn btn-delete" onclick="removeTimeline(${i})"><i class="fas fa-trash"></i></button>
+                </li>
+            `).join('');
+        }
+
+        function addTimelineItem() {
+            if (!pagesData.about.timeline) pagesData.about.timeline = [];
+            pagesData.about.timeline.push({ year: '2025', title: 'New Event', description: 'Description' });
+            renderTimeline();
+        }
+
+        function updateTimeline(index, key, value) {
+            pagesData.about.timeline[index][key] = value;
+        }
+
+        function removeTimeline(index) {
+            pagesData.about.timeline.splice(index, 1);
+            renderTimeline();
+        }
+
+        // ===== FAQ TAB =====
+        function loadFaqTab() {
+            const faqs = pagesData.faq || [];
+            document.getElementById('faqList').innerHTML = faqs.map((f, i) => `
+                <div class="faq-editor-item">
+                    <div class="form-row">
+                        <div class="form-group"><label>Question</label><input type="text" value="${f.question}" onchange="updateFaq(${i},'question',this.value)"></div>
+                        <div class="form-group"><label>Category</label><input type="text" value="${f.category || ''}" onchange="updateFaq(${i},'category',this.value)" placeholder="General"></div>
+                    </div>
+                    <div class="form-group"><label>Answer</label><textarea rows="2" onchange="updateFaq(${i},'answer',this.value)">${f.answer}</textarea></div>
+                    <button class="action-btn btn-delete" onclick="removeFaq(${i})">Delete</button>
+                </div>
+            `).join('');
+        }
+
+        function addFaqItem() {
+            if (!pagesData.faq) pagesData.faq = [];
+            pagesData.faq.push({ id: generateId('faq'), question: 'New Question', answer: 'Answer here...', category: 'General' });
+            loadFaqTab();
+        }
+
+        function updateFaq(index, key, value) {
+            pagesData.faq[index][key] = value;
+        }
+
+        function removeFaq(index) {
+            pagesData.faq.splice(index, 1);
+            loadFaqTab();
+        }
+
+        // ===== PRIVACY TAB =====
+        function loadPrivacyTab() {
+            const p = pagesData.privacy;
+            document.getElementById('privacyDate').value = p.lastUpdated || '';
+            document.getElementById('privacyVersion').value = p.version || '';
+            const sections = p.sections || [];
+            document.getElementById('privacySections').innerHTML = sections.map((s, i) => `
+                <div style="background:#f9fafb;padding:15px;border-radius:8px;margin-bottom:10px;">
+                    <div class="form-row">
+                        <div class="form-group"><label>Section ID</label><input type="text" value="${s.id}" onchange="updatePrivacySection(${i},'id',this.value)"></div>
+                        <div class="form-group"><label>Title</label><input type="text" value="${s.title}" onchange="updatePrivacySection(${i},'title',this.value)"></div>
+                    </div>
+                    <div class="form-group"><label>Content (HTML)</label><textarea rows="4" onchange="updatePrivacySection(${i},'content',this.value)">${s.content}</textarea></div>
+                    <button class="action-btn btn-delete" onclick="removePrivacySection(${i})">Delete Section</button>
+                </div>
+            `).join('');
+        }
+
+        function addPrivacySection() {
+            if (!pagesData.privacy.sections) pagesData.privacy.sections = [];
+            pagesData.privacy.sections.push({ id: 'section-' + Date.now(), title: 'New Section', content: '<p>Content here...</p>' });
+            loadPrivacyTab();
+        }
+
+        function updatePrivacySection(index, key, value) {
+            pagesData.privacy.sections[index][key] = value;
+        }
+
+        function removePrivacySection(index) {
+            pagesData.privacy.sections.splice(index, 1);
+            loadPrivacyTab();
+        }
+
+        // ===== SAVE ALL =====
+        function saveAllPages() {
+            // About
+            pagesData.about.heroTitle = document.getElementById('aboutHeroTitle').value;
+            pagesData.about.heroSubtitle = document.getElementById('aboutHeroSubtitle').value;
+            pagesData.about.storyTitle = document.getElementById('aboutStoryTitle').value;
+            pagesData.about.storyContent = document.getElementById('aboutStoryContent').value;
+            pagesData.about.mission = document.getElementById('aboutMission').value;
+            pagesData.about.vision = document.getElementById('aboutVision').value;
+            pagesData.about.values = document.getElementById('aboutValues').value;
+            
+            // Privacy
+            pagesData.privacy.lastUpdated = document.getElementById('privacyDate').value;
+            pagesData.privacy.version = document.getElementById('privacyVersion').value;
+            
+            updateSection('pages', pagesData);
+            showToast('✅ All page content saved! Changes are live on the website.');
+        }
+
+        loadTabData();
+    </script>
+</body>
+</html>

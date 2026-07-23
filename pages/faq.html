@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - Apex Hub | Frequently Asked Questions</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    
+    <style>
+        .faq-hero {
+            background: linear-gradient(135deg, #0a0e27, #1a237e);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+        .faq-section { padding: 60px 0; }
+        .faq-categories {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+            justify-content: center;
+        }
+        .faq-cat-btn {
+            padding: 10px 25px;
+            border: 2px solid var(--primary);
+            background: white;
+            color: var(--primary);
+            border-radius: 30px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        .faq-cat-btn:hover,
+        .faq-cat-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+        .faq-list { max-width: 800px; margin: 0 auto; }
+        .faq-item {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+        .faq-question {
+            padding: 20px 25px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        .faq-question:hover { background: var(--light-bg); }
+        .faq-question i { transition: transform 0.3s; }
+        .faq-item.active .faq-question i { transform: rotate(180deg); }
+        .faq-answer {
+            padding: 0 25px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            color: var(--text-light);
+            line-height: 1.8;
+        }
+        .faq-item.active .faq-answer {
+            padding: 0 25px 20px;
+            max-height: 500px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar & Navbar (same as before) -->
+    <div class="top-bar">
+        <div class="container">
+            <div class="top-bar-left">
+                <a href="tel:+919876543210"><i class="fas fa-phone"></i> +91 98765 43210</a>
+                <a href="mailto:info@apexhub.in"><i class="fas fa-envelope"></i> info@apexhub.in</a>
+            </div>
+            <div class="top-bar-right">
+                <a href="#" class="btn-free-demo"><i class="fas fa-play-circle"></i> Free Demo Class</a>
+            </div>
+        </div>
+    </div>
+
+    <nav class="navbar">
+        <div class="container">
+            <a href="../index.html" class="logo">
+                <span class="logo-text">APEX<span class="logo-highlight">HUB</span></span>
+                <span class="logo-tagline">Climb to the Peak</span>
+            </a>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="../index.html">Home</a></li>
+                <li class="dropdown">
+                    <a href="courses.html">Courses <i class="fas fa-chevron-down"></i></a>
+                    <div class="dropdown-content">
+                        <a href="courses.html#cgpsc">CG PSC</a>
+                        <a href="courses.html#vyapam">CG Vyapam</a>
+                        <a href="courses.html#neet">NEET</a>
+                        <a href="courses.html#jee">JEE</a>
+                    </div>
+                </li>
+                <li><a href="courses.html#test-series">Test Series</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="dashboard.html" class="btn-login"><i class="fas fa-user"></i> Student Login</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <section class="faq-hero">
+        <div class="container">
+            <h1>Frequently Asked Questions</h1>
+            <p>Everything you need to know about Apex Hub courses and platform</p>
+        </div>
+    </section>
+
+    <section class="faq-section">
+        <div class="container">
+            <div class="faq-categories">
+                <button class="faq-cat-btn active">All</button>
+                <button class="faq-cat-btn">Courses</button>
+                <button class="faq-cat-btn">Payments</button>
+                <button class="faq-cat-btn">Classes</button>
+                <button class="faq-cat-btn">Technical</button>
+            </div>
+
+            <div class="faq-list">
+                <div class="faq-item" data-aos="fade-up">
+                    <div class="faq-question">
+                        <span>What is Apex Hub and what courses do you offer?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Apex Hub is Chhattisgarh's premier online coaching platform. We offer comprehensive courses for CG PSC (CGPSC), CG Vyapam (all posts), NEET (Medical), and JEE (Main + Advanced). All courses include live interactive classes, recorded lectures, study material, test series, and doubt resolution.
+                    </div>
+                </div>
+
+                <div class="faq-item" data-aos="fade-up">
+                    <div class="faq-question">
+                        <span>How do live classes work? What if I miss a class?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Live classes are conducted on our secure platform (Zoom/Google Meet integrated). You'll receive class links 30 minutes before the session via email, WhatsApp, and dashboard. All live classes are recorded and uploaded within 2 hours. You can watch them anytime from your dashboard. Recordings remain accessible until your course validity expires.
+                    </div>
+                </div>
+
+                <div class="faq-item" data-aos="fade-up">
+                    <div class="faq-question">
+                        <span>What is the course fee and are there any EMI options?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Course fees vary by program. CG Vyapam courses start at ₹1,499, CG PSC at ₹3,499, NEET at ₹3,999, and JEE at ₹4,999. We offer EMI options starting at just ₹499/month through our payment partners. We also provide scholarship discounts based on merit-cum-means and early-bird offers. Contact our counsellor for personalized pricing.
+                    </div>
+                </div>
+
+                <div class="faq-item" data-aos="fade-up">
+                    <div class="faq-question">
+                        <span>Can I get a demo class before enrolling?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Absolutely! We offer 3 free demo classes for every course. You can experience our teaching quality, platform features, and interact with faculty before making any payment. Click the "Free Demo Class" button on our website or WhatsApp us to schedule your demo.
+                    </div>
+                </div>
+
+                <div class="faq-item" data-aos="fade-up">
+                    <div class="faq-question">
+                        <span>Is the course content bilingual (Hindi + English)?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Yes! All our courses are taught in a Hindi-English mix, specifically designed for Chhattisgarh students. Study material is available in both Hindi and English. You can choose your preferred language for notes and tests. This bilingual approach ensures complete conceptual clarity.
+                    </div>
+                </div>
+
+                <div class="faq-item" data-aos="fade-up">
+                    <div class="faq-question">
+                        <span>What is your refund policy?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        We offer a 7-day no-questions-asked refund policy from the batch start date. If you're not satisfied with the course quality, you'll get a full refund within 7 working days. After 7 days, refunds are processed on a pro-rata basis. No refunds are available after 30% of the course is completed. Refer to our Refund Policy page for detailed terms.
+                    </div>
+                </div>
+
+                <div class="faq-item" data-aos="fade-up">
+                    <div class="faq-question">
+                        <span>How do I resolve doubts during the course?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        You can ask doubts in multiple ways: (1) During live classes using the chat feature, (2) In the dedicated WhatsApp group for your batch, (3) On the Doubt Forum in your dashboard, (4) During weekly doubt-clearing sessions. Faculty typically responds within 2-4 hours, with a maximum response time of 24 hours.
+                    </div>
+                </div>
+
+                <div class="faq-item" data-aos="fade-up">
+                    <div class="faq-question">
+                        <span>Are the test series similar to actual exam patterns?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Yes, our test series is meticulously designed to match the exact pattern, difficulty level, and syllabus of the respective exams. We analyze previous year trends and update our tests accordingly. For NEET and JEE, we provide All India Rank predictions. For CG PSC and Vyapam, we provide state-level rank analysis.
+                    </div>
+                </div>
+
+                <div class="faq-item" data-aos="fade-up">
+                    <div class="faq-question">
+                        <span>What devices can I use to access the courses?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        You can access Apex Hub on any device — laptop, desktop, tablet, or smartphone. Our platform is fully responsive. We recommend using a laptop/desktop for an optimal learning experience, especially for test series. Mobile users can install our website as a PWA (Progressive Web App) for easy access.
+                    </div>
+                </div>
+
+                <div class="faq-item" data-aos="fade-up">
+                    <div class="faq-question">
+                        <span>Do you provide placement assistance or interview guidance?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        For CG PSC and CG Vyapam courses, we provide complete interview guidance including mock interviews, personality development sessions, and current affairs preparation. While we don't guarantee job placement (as selection depends on exam performance), we provide all necessary support until your final selection.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <!-- Same footer -->
+    </footer>
+
+    <a href="https://wa.me/919876543210" class="whatsapp-float" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="../js/main.js"></script>
+    <script>
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const faqItem = question.parentElement;
+                faqItem.classList.toggle('active');
+                
+                // Close other open FAQs
+                document.querySelectorAll('.faq-item').forEach(item => {
+                    if (item !== faqItem) {
+                        item.classList.remove('active');
+                    }
+                });
+            });
+        });
+        
+        // FAQ Category Filter
+        document.querySelectorAll('.faq-cat-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.faq-cat-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                // In production, filter FAQ items by category
+            });
+        });
+    </script>
+</body>
+</html>

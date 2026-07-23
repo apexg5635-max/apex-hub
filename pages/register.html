@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Apex Hub</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a237e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .register-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 500px;
+        }
+        
+        .register-header {
+            background: linear-gradient(135deg, #1a237e, #283593);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .register-header .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+        
+        .register-header .logo span { color: #f5a623; }
+        
+        .register-header h2 {
+            margin-top: 10px;
+            font-size: 1.3rem;
+        }
+        
+        .register-body {
+            padding: 30px;
+        }
+        
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 25px;
+        }
+        
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #ccc;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .step.active { color: #1a237e; }
+        .step.completed { color: #10b981; }
+        
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.8rem;
+            background: #e5e7eb;
+            color: #999;
+        }
+        
+        .step.active .step-circle { background: #1a237e; color: white; }
+        .step.completed .step-circle { background: #10b981; color: white; }
+        
+        .form-group {
+            margin-bottom: 18px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            font-size: 0.85rem;
+            color: #333;
+        }
+        
+        .form-group label .required { color: #ef4444; }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #1a237e;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .input-with-icon {
+            position: relative;
+        }
+        
+        .input-with-icon input {
+            padding-left: 45px;
+        }
+        
+        .input-with-icon i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+        
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #1a237e, #283593);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s;
+        }
+        
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(26,35,126,0.3);
+        }
+        
+        .alert {
+            padding: 12px 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-size: 0.85rem;
+            display: none;
+        }
+        
+        .alert-error { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+        .alert-success { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
+        
+        .auth-footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: #666;
+        }
+        
+        .auth-footer a {
+            color: #1a237e;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        
+        .otp-group {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .otp-group input { flex: 1; }
+        
+        .btn-send-otp {
+            background: #1a237e;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 0.85rem;
+            white-space: nowrap;
+        }
+        
+        .btn-send-otp:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .password-strength {
+            height: 4px;
+            background: #e5e7eb;
+            border-radius: 2px;
+            margin-top: 5px;
+        }
+        
+        .password-strength-fill {
+            height: 100%;
+            border-radius: 2px;
+            transition: width 0.3s;
+        }
+        
+        .strength-text {
+            font-size: 0.75rem;
+            margin-top: 3px;
+        }
+        
+        @media (max-width: 480px) {
+            .form-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="register-container">
+        <div class="register-header">
+            <div class="logo">APEX<span>HUB</span></div>
+            <h2>Create Your Account</h2>
+        </div>
+        
+        <div class="register-body">
+            
+            <!-- Steps -->
+            <div class="step-indicator">
+                <div class="step active" id="step1Indicator">
+                    <span class="step-circle">1</span> Mobile
+                </div>
+                <div class="step" id="step2Indicator">
+                    <span class="step-circle">2</span> Details
+                </div>
+                <div class="step" id="step3Indicator">
+                    <span class="step-circle">3</span> Done
+                </div>
+            </div>
+            
+            <!-- Alerts -->
+            <div class="alert alert-error" id="errorAlert"></div>
+            <div class="alert alert-success" id="successAlert"></div>
+            
+            <!-- Step 1: Mobile & OTP -->
+            <div id="step1">
+                <form onsubmit="handleStep1(event)">
+                    <div class="form-group">
+                        <label>Mobile Number <span class="required">*</span></label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                            <input type="tel" id="regMobile" placeholder="Enter 10-digit mobile number" maxlength="10" pattern="[6-9]\d{9}" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" id="regOtpField" style="display:none;">
+                        <label>Verify OTP</label>
+                        <div class="otp-group">
+                            <input type="text" id="regOtp" placeholder="Enter 6-digit OTP" maxlength="6" pattern="\d{6}">
+                            <button type="button" class="btn-send-otp" id="regResendBtn" onclick="resendRegOTP()" disabled>Resend</button>
+                        </div>
+                        <p class="timer" id="regOtpTimer"></p>
+                    </div>
+                    
+                    <button type="submit" class="btn-submit" id="step1Btn">
+                        <i class="fas fa-paper-plane"></i> Send OTP
+                    </button>
+                </form>
+            </div>
+            
+            <!-- Step 2: Personal Details -->
+            <div id="step2" style="display:none;">
+                <form onsubmit="handleStep2(event)">
+                    <div class="form-group">
+                        <label>Full Name <span class="required">*</span></label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="regFullName" placeholder="Enter your full name" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="regEmail" placeholder="you@example.com">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Create Password <span class="required">*</span></label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="regPassword" placeholder="Min 6 characters" minlength="6" required oninput="checkPasswordStrength()">
+                        </div>
+                        <div class="password-strength"><div class="password-strength-fill" id="passwordStrengthFill"></div></div>
+                        <p class="strength-text" id="strengthText"></p>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Exam Preparing For</label>
+                            <select id="regExam">
+                                <option value="">Select Exam</option>
+                                <option>CG PSC</option>
+                                <option>CG Vyapam</option>
+                                <option>NEET</option>
+                                <option>JEE</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>City</label>
+                            <input type="text" id="regCity" placeholder="Your city">
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn-submit">
+                        <i class="fas fa-user-plus"></i> Create Account
+                    </button>
+                </form>
+            </div>
+            
+            <!-- Step 3: Success -->
+            <div id="step3" style="display:none;text-align:center;">
+                <i class="fas fa-check-circle" style="font-size:5rem;color:#10b981;"></i>
+                <h3 style="margin:15px 0;">Registration Successful! 🎉</h3>
+                <p style="color:#666;margin-bottom:20px;">Your account has been created. Redirecting to dashboard...</p>
+                <button class="btn-submit" onclick="window.location.href='dashboard.html'">
+                    <i class="fas fa-arrow-right"></i> Go to Dashboard
+                </button>
+            </div>
+            
+            <!-- Footer -->
+            <div class="auth-footer">
+                <p>Already have an account? <a href="login.html">Login Here</a></p>
+                <p style="margin-top:5px;"><a href="../index.html">← Back to Home</a></p>
+            </div>
+            
+        </div>
+    </div>
+
+    <script src="../js/auth.js"></script>
+    <script>
+        let regOtpSent = false;
+        let regMobileNumber = '';
+        let regOtpTimerInterval = null;
+
+        // Check if already logged in
+        redirectIfLoggedIn();
+
+        // Pre-fill mobile from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const mobileParam = urlParams.get('mobile');
+        if (mobileParam) {
+            document.getElementById('regMobile').value = mobileParam;
+        }
+
+        function showError(msg) {
+            const alert = document.getElementById('errorAlert');
+            alert.textContent = msg;
+            alert.style.display = 'block';
+            document.getElementById('successAlert').style.display = 'none';
+        }
+
+        function showSuccess(msg) {
+            const alert = document.getElementById('successAlert');
+            alert.textContent = msg;
+            alert.style.display = 'block';
+            document.getElementById('errorAlert').style.display = 'none';
+        }
+
+        function hideAlerts() {
+            document.getElementById('errorAlert').style.display = 'none';
+            document.getElementById('successAlert').style.display = 'none';
+        }
+
+        // ============ STEP 1: SEND & VERIFY OTP ============
+        async function handleStep1(event) {
+            event.preventDefault();
+            hideAlerts();
+
+            if (!regOtpSent) {
+                const mobile = document.getElementById('regMobile').value.trim();
+                const btn = document.getElementById('step1Btn');
+                
+                try {
+                    btn.disabled = true;
+                    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending OTP...';
+                    
+                    const result = await sendOTP(mobile);
+                    
+                    regOtpSent = true;
+                    regMobileNumber = mobile;
+                    
+                    document.getElementById('regOtpField').style.display = 'block';
+                    document.getElementById('regMobile').readOnly = true;
+                    btn.innerHTML = '<i class="fas fa-check"></i> Verify OTP';
+                    btn.disabled = false;
+                    
+                    showSuccess(result.message);
+                    startRegOTPTimer(OTP_EXPIRY_MINUTES * 60);
+                    
+                } catch (error) {
+                    showError(error.message);
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send OTP';
+                }
+            } else {
+                const enteredOTP = document.getElementById('regOtp').value.trim();
+                
+                if (!enteredOTP || enteredOTP.length !== 6) {
+                    showError('Please enter a valid 6-digit OTP');
+                    return;
+                }
+                
+                const result = verifyOTP(regMobileNumber, enteredOTP);
+                
+                if (!result.success) {
+                    showError(result.message);
+                    return;
+                }
+                
+                // OTP verified, move to step 2
+                showSuccess('Mobile verified! Please fill your details.');
+                document.getElementById('step1').style.display = 'none';
+                document.getElementById('step2').style.display = 'block';
+                updateStepIndicator(2);
+                clearInterval(regOtpTimerInterval);
+            }
+        }
+
+        function resendRegOTP() {
+            regOtpSent = false;
+            document.getElementById('regOtpField').style.display = 'none';
+            document.getElementById('regMobile').readOnly = false;
+            document.getElementById('regOtp').value = '';
+            document.getElementById('step1Btn').innerHTML = '<i class="fas fa-paper-plane"></i> Send OTP';
+            clearInterval(regOtpTimerInterval);
+            document.getElementById('regOtpTimer').textContent = '';
+            document.getElementById('regResendBtn').disabled = true;
+            hideAlerts();
+        }
+
+        function startRegOTPTimer(seconds) {
+            let secsLeft = seconds;
+            updateRegTimer(secsLeft);
+            
+            clearInterval(regOtpTimerInterval);
+            regOtpTimerInterval = setInterval(() => {
+                secsLeft--;
+                updateRegTimer(secsLeft);
+                
+                if (secsLeft <= 0) {
+                    clearInterval(regOtpTimerInterval);
+                    document.getElementById('regResendBtn').disabled = false;
+                }
+            }, 1000);
+        }
+
+        function updateRegTimer(secs) {
+            const mins = Math.floor(secs / 60);
+            const s = secs % 60;
+            document.getElementById('regOtpTimer').textContent = `Expires in: ${mins}:${s.toString().padStart(2, '0')}`;
+            document.getElementById('regResendBtn').disabled = secs > 0;
+        }
+
+        // ============ STEP 2: CREATE ACCOUNT ============
+        function handleStep2(event) {
+            event.preventDefault();
+            hideAlerts();
+            
+            const studentData = {
+                fullName: document.getElementById('regFullName').value.trim(),
+                mobile: regMobileNumber,
+                email: document.getElementById('regEmail').value.trim(),
+                password: document.getElementById('regPassword').value,
+                examPreparing: document.getElementById('regExam').value,
+                city: document.getElementById('regCity').value.trim(),
+                state: 'Chhattisgarh'
+            };
+            
+            if (!studentData.fullName || !studentData.password) {
+                showError('Please fill all required fields');
+                return;
+            }
+            
+            if (studentData.password.length < 6) {
+                showError('Password must be at least 6 characters');
+                return;
+            }
+            
+            const result = registerStudent(studentData);
+            
+            if (result.success) {
+                document.getElementById('step2').style.display = 'none';
+                document.getElementById('step3').style.display = 'block';
+                updateStepIndicator(3);
+                
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 2000);
+            } else {
+                showError(result.message);
+            }
+        }
+
+        // ============ PASSWORD STRENGTH ============
+        function checkPasswordStrength() {
+            const password = document.getElementById('regPassword').value;
+            const fill = document.getElementById('passwordStrengthFill');
+            const text = document.getElementById('strengthText');
+            
+            let strength = 0;
+            if (password.length >= 6) strength++;
+            if (password.length >= 8) strength++;
+            if (/[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^A-Za-z0-9]/.test(password)) strength++;
+            
+            const colors = ['#ef4444', '#f59e0b', '#f59e0b', '#10b981', '#10b981'];
+            const labels = ['Weak', 'Fair', 'Good', 'Strong', 'Very Strong'];
+            
+            fill.style.width = (strength * 20) + '%';
+            fill.style.background = colors[strength - 1] || '#e5e7eb';
+            text.textContent = strength > 0 ? 'Strength: ' + labels[strength - 1] : '';
+            text.style.color = colors[strength - 1] || '#999';
+        }
+
+        // ============ STEP INDICATOR ============
+        function updateStepIndicator(step) {
+            document.querySelectorAll('.step').forEach((s, i) => {
+                s.classList.remove('active', 'completed');
+                if (i + 1 < step) s.classList.add('completed');
+                if (i + 1 === step) s.classList.add('active');
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site Settings - Apex Hub Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css">
+    <style>
+        .settings-section { margin-bottom: 30px; }
+        .color-preview {
+            width: 40px; height: 40px; border-radius: 8px;
+            display: inline-block; border: 2px solid var(--border); vertical-align: middle; margin-left: 10px;
+        }
+        .social-row {
+            display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
+            padding: 10px; background: #f9fafb; border-radius: 8px;
+        }
+        .social-row i { width: 25px; text-align: center; font-size: 1.2rem; }
+        .social-row input { flex: 1; }
+    </style>
+</head>
+<body>
+    <aside class="admin-sidebar">
+        <div class="sidebar-logo"><h2>APEX<span>HUB</span></h2><p class="logo-subtitle">Admin Panel</p></div>
+        <div class="sidebar-user"><div class="sidebar-avatar">AD</div><div class="sidebar-user-info"><h4>Admin</h4><p>Super Admin</p></div></div>
+        <ul class="sidebar-nav">
+            <li><a href="dashboard.html"><i class="fas fa-th-large"></i> <span>Dashboard</span></a></li>
+            <p class="sidebar-section-title">Content</p>
+            <li><a href="edit-hero.html"><i class="fas fa-image"></i> <span>Hero</span></a></li>
+            <li><a href="manage-courses.html"><i class="fas fa-book"></i> <span>Courses</span></a></li>
+            <li><a href="edit-batches.html"><i class="fas fa-calendar-alt"></i> <span>Batches</span></a></li>
+            <li><a href="edit-testimonials.html"><i class="fas fa-star"></i> <span>Testimonials</span></a></li>
+            <li><a href="edit-faculty.html"><i class="fas fa-chalkboard-teacher"></i> <span>Faculty</span></a></li>
+            <li><a href="edit-blog.html"><i class="fas fa-newspaper"></i> <span>Blog</span></a></li>
+            <li><a href="edit-pages.html"><i class="fas fa-file-alt"></i> <span>Pages</span></a></li>
+            <p class="sidebar-section-title">Settings</p>
+            <li><a href="site-settings.html" class="active"><i class="fas fa-cog"></i> <span>Site Settings</span></a></li>
+            <li><a href="#" onclick="adminLogout()"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a></li>
+        </ul>
+    </aside>
+
+    <main class="admin-main">
+        <div class="admin-header">
+            <div class="admin-header-left">
+                <h1>⚙️ Site Settings</h1>
+                <p class="breadcrumb">Settings / <strong>General</strong></p>
+            </div>
+            <div>
+                <button class="btn btn-danger btn-sm" onclick="resetAllData()"><i class="fas fa-undo"></i> Reset All</button>
+                <button class="btn btn-outline btn-sm" onclick="exportAllData()"><i class="fas fa-download"></i> Export</button>
+                <button class="btn btn-outline btn-sm" onclick="document.getElementById('importFile').click()"><i class="fas fa-upload"></i> Import</button>
+                <input type="file" id="importFile" accept=".json" style="display:none;" onchange="importAllData(this.files[0])">
+                <button class="btn btn-primary" onclick="saveSettings()"><i class="fas fa-save"></i> Save Settings</button>
+            </div>
+        </div>
+
+        <!-- General Settings -->
+        <div class="form-card settings-section">
+            <h2>🏢 General Information</h2>
+            <div class="form-row">
+                <div class="form-group"><label>Site Name</label><input type="text" id="siteName"></div>
+                <div class="form-group"><label>Tagline</label><input type="text" id="siteTagline"></div>
+            </div>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="form-card settings-section">
+            <h2>📞 Contact Information</h2>
+            <div class="form-row">
+                <div class="form-group"><label>Phone Number</label><input type="text" id="sitePhone"></div>
+                <div class="form-group"><label>Email Address</label><input type="email" id="siteEmail"></div>
+            </div>
+            <div class="form-group"><label>Address</label><textarea id="siteAddress" rows="2"></textarea></div>
+            <div class="form-group"><label>Working Hours</label><input type="text" id="siteHours"></div>
+        </div>
+
+        <!-- Social Media Links -->
+        <div class="form-card settings-section">
+            <h2>🔗 Social Media Links</h2>
+            <div id="socialLinks"></div>
+        </div>
+
+        <!-- SEO Settings -->
+        <div class="form-card settings-section">
+            <h2>🔍 SEO Settings</h2>
+            <div class="form-group"><label>Meta Title</label><input type="text" id="seoTitle"></div>
+            <div class="form-group"><label>Meta Description</label><textarea id="seoDescription" rows="2"></textarea></div>
+            <div class="form-group"><label>Meta Keywords</label><input type="text" id="seoKeywords"></div>
+        </div>
+
+        <!-- Appearance -->
+        <div class="form-card settings-section">
+            <h2>🎨 Appearance</h2>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Primary Color</label>
+                    <input type="color" id="primaryColor" style="height:45px;">
+                </div>
+                <div class="form-group">
+                    <label>Gold/Accent Color</label>
+                    <input type="color" id="goldColor" style="height:45px;">
+                </div>
+            </div>
+        </div>
+
+        <!-- Danger Zone -->
+        <div class="form-card settings-section" style="border:2px solid var(--danger);">
+            <h2 style="color:var(--danger);">⚠️ Danger Zone</h2>
+            <p style="color:var(--text-light);margin-bottom:15px;">These actions cannot be undone. Please be careful.</p>
+            <button class="btn btn-danger" onclick="resetAllData()"><i class="fas fa-exclamation-triangle"></i> Reset All Website Data to Defaults</button>
+            <button class="btn btn-outline" onclick="exportAllData()" style="margin-left:10px;"><i class="fas fa-download"></i> Backup Data First</button>
+        </div>
+    </main>
+
+    <script src="../js/admin-editor.js"></script>
+    <script>
+        checkAdminAuth();
+        let siteData = getSiteData();
+
+        function loadSettings() {
+            const s = siteData.site;
+            document.getElementById('siteName').value = s.name || '';
+            document.getElementById('siteTagline').value = s.tagline || '';
+            document.getElementById('sitePhone').value = s.phone || '';
+            document.getElementById('siteEmail').value = s.email || '';
+            document.getElementById('siteAddress').value = s.address || '';
+            document.getElementById('siteHours').value = s.workingHours || '';
+            
+            document.getElementById('seoTitle').value = s.seo?.title || '';
+            document.getElementById('seoDescription').value = s.seo?.description || '';
+            document.getElementById('seoKeywords').value = s.seo?.keywords || '';
+            
+            document.getElementById('primaryColor').value = s.colors?.primary || '#1a237e';
+            document.getElementById('goldColor').value = s.colors?.gold || '#f5a623';
+            
+            renderSocialLinks();
+        }
+
+        function renderSocialLinks() {
+            const social = siteData.site.social || {};
+            const platforms = [
+                { key: 'youtube', icon: 'fab fa-youtube', color: '#ff0000', label: 'YouTube' },
+                { key: 'instagram', icon: 'fab fa-instagram', color: '#e4405f', label: 'Instagram' },
+                { key: 'facebook', icon: 'fab fa-facebook', color: '#1877f2', label: 'Facebook' },
+                { key: 'telegram', icon: 'fab fa-telegram', color: '#0088cc', label: 'Telegram' },
+                { key: 'whatsapp', icon: 'fab fa-whatsapp', color: '#25d366', label: 'WhatsApp' }
+            ];
+            
+            document.getElementById('socialLinks').innerHTML = platforms.map(p => `
+                <div class="social-row">
+                    <i class="${p.icon}" style="color:${p.color};"></i>
+                    <span style="min-width:80px;">${p.label}</span>
+                    <input type="text" value="${social[p.key] || ''}" placeholder="https://..." onchange="updateSocial('${p.key}', this.value)">
+                </div>
+            `).join('');
+        }
+
+        function updateSocial(key, value) {
+            if (!siteData.site.social) siteData.site.social = {};
+            siteData.site.social[key] = value;
+        }
+
+        function saveSettings() {
+            siteData.site.name = document.getElementById('siteName').value;
+            siteData.site.tagline = document.getElementById('siteTagline').value;
+            siteData.site.phone = document.getElementById('sitePhone').value;
+            siteData.site.email = document.getElementById('siteEmail').value;
+            siteData.site.address = document.getElementById('siteAddress').value;
+            siteData.site.workingHours = document.getElementById('siteHours').value;
+            
+            if (!siteData.site.seo) siteData.site.seo = {};
+            siteData.site.seo.title = document.getElementById('seoTitle').value;
+            siteData.site.seo.description = document.getElementById('seoDescription').value;
+            siteData.site.seo.keywords = document.getElementById('seoKeywords').value;
+            
+            if (!siteData.site.colors) siteData.site.colors = {};
+            siteData.site.colors.primary = document.getElementById('primaryColor').value;
+            siteData.site.colors.gold = document.getElementById('goldColor').value;
+            
+            updateSection('site', siteData.site);
+            showToast('✅ Site settings saved successfully!');
+            
+            // Apply color changes immediately
+            document.documentElement.style.setProperty('--primary', siteData.site.colors.primary);
+            document.documentElement.style.setProperty('--gold', siteData.site.colors.gold);
+        }
+
+        loadSettings();
+    </script>
+</body>
+</html>

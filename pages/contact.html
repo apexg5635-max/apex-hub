@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Apex Hub | Get in Touch</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    
+    <style>
+        .contact-hero {
+            background: linear-gradient(135deg, #0a0e27, #1a237e);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 40px;
+            padding: 60px 0;
+        }
+        .contact-info-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .info-card {
+            background: white;
+            padding: 25px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+            transition: var(--transition);
+        }
+        .info-card:hover {
+            transform: translateX(5px);
+            box-shadow: var(--shadow-md);
+        }
+        .info-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: white;
+            flex-shrink: 0;
+        }
+        .info-icon.address { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .info-icon.phone { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+        .info-icon.email { background: linear-gradient(135deg, #f093fb, #f5576c); }
+        .info-icon.clock { background: linear-gradient(135deg, #fa709a, #fee140); }
+        .info-card h4 { margin-bottom: 5px; }
+        .info-card p { color: var(--text-light); font-size: 0.9rem; }
+        
+        .contact-form-wrapper {
+            background: white;
+            padding: 40px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-md);
+        }
+        .contact-form-wrapper h2 { margin-bottom: 10px; }
+        .contact-form-wrapper > p { color: var(--text-light); margin-bottom: 25px; }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 6px; font-weight: 500; font-size: 0.9rem; }
+        .form-group label .required { color: var(--danger); }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        .form-group textarea { resize: vertical; min-height: 120px; }
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            background: var(--gradient-blue);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            transition: var(--transition);
+        }
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(26,35,126,0.4);
+        }
+        .map-section {
+            height: 400px;
+            background: var(--light-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--text-light);
+        }
+        .map-section iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .social-connect {
+            padding: 60px 0;
+            background: var(--light-bg);
+            text-align: center;
+        }
+        .social-grid {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        .social-card {
+            background: white;
+            padding: 25px 30px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            text-decoration: none;
+            color: var(--text-dark);
+            transition: var(--transition);
+            min-width: 150px;
+        }
+        .social-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+        .social-card i { font-size: 2rem; margin-bottom: 10px; }
+        .social-card.youtube i { color: #ff0000; }
+        .social-card.telegram i { color: #0088cc; }
+        .social-card.instagram i { color: #e4405f; }
+        .social-card.whatsapp i { color: #25d366; }
+        
+        @media (max-width: 768px) {
+            .contact-container { grid-template-columns: 1fr; }
+            .form-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar & Navbar (same as about.html, just update active class) -->
+    <div class="top-bar">
+        <div class="container">
+            <div class="top-bar-left">
+                <a href="tel:+919876543210"><i class="fas fa-phone"></i> +91 98765 43210</a>
+                <a href="mailto:info@apexhub.in"><i class="fas fa-envelope"></i> info@apexhub.in</a>
+            </div>
+            <div class="top-bar-right">
+                <a href="#" class="btn-free-demo"><i class="fas fa-play-circle"></i> Free Demo Class</a>
+            </div>
+        </div>
+    </div>
+
+    <nav class="navbar">
+        <div class="container">
+            <a href="../index.html" class="logo">
+                <span class="logo-text">APEX<span class="logo-highlight">HUB</span></span>
+                <span class="logo-tagline">Climb to the Peak</span>
+            </a>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="../index.html">Home</a></li>
+                <li class="dropdown">
+                    <a href="courses.html">Courses <i class="fas fa-chevron-down"></i></a>
+                    <div class="dropdown-content">
+                        <a href="courses.html#cgpsc">CG PSC</a>
+                        <a href="courses.html#vyapam">CG Vyapam</a>
+                        <a href="courses.html#neet">NEET</a>
+                        <a href="courses.html#jee">JEE</a>
+                    </div>
+                </li>
+                <li><a href="courses.html#test-series">Test Series</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html" class="active">Contact</a></li>
+                <li><a href="dashboard.html" class="btn-login"><i class="fas fa-user"></i> Student Login</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contact Hero -->
+    <section class="contact-hero">
+        <div class="container" data-aos="fade-up">
+            <h1>Contact Us</h1>
+            <p>We'd love to hear from you. Get in touch with our team.</p>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <div class="container">
+        <div class="contact-container">
+            <div class="contact-info-cards" data-aos="fade-right">
+                <div class="info-card">
+                    <div class="info-icon address"><i class="fas fa-map-marker-alt"></i></div>
+                    <div>
+                        <h4>Our Office</h4>
+                        <p>2nd Floor, Apex Hub Tower, GE Road, Near Telibandha, Raipur, Chhattisgarh - 492001</p>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon phone"><i class="fas fa-phone-alt"></i></div>
+                    <div>
+                        <h4>Phone</h4>
+                        <p>+91 98765 43210<br>+91 98765 43211</p>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon email"><i class="fas fa-envelope"></i></div>
+                    <div>
+                        <h4>Email</h4>
+                        <p>info@apexhub.in<br>support@apexhub.in</p>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon clock"><i class="fas fa-clock"></i></div>
+                    <div>
+                        <h4>Working Hours</h4>
+                        <p>Monday - Sunday: 9:00 AM - 8:00 PM<br>Sunday: 10:00 AM - 5:00 PM</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-form-wrapper" data-aos="fade-left">
+                <h2>Send Us a Message</h2>
+                <p>Fill the form below and our team will get back to you within 24 hours.</p>
+                <form id="contactForm" onsubmit="submitContactForm(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Full Name <span class="required">*</span></label>
+                            <input type="text" placeholder="Enter your full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone Number <span class="required">*</span></label>
+                            <input type="tel" placeholder="+91 98765 43210" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Email Address <span class="required">*</span></label>
+                            <input type="email" placeholder="you@example.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Exam Preparing For</label>
+                            <select>
+                                <option value="">Select Exam</option>
+                                <option>CG PSC</option>
+                                <option>CG Vyapam</option>
+                                <option>NEET</option>
+                                <option>JEE</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Your Message <span class="required">*</span></label>
+                        <textarea placeholder="Tell us about your query..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn-submit">
+                        <i class="fas fa-paper-plane"></i> Send Message
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Map Section -->
+    <div class="map-section">
+        <div style="text-align:center;padding:50px;">
+            <i class="fas fa-map-marked-alt" style="font-size:3rem;color:var(--primary);"></i>
+            <p style="margin-top:15px;color:var(--text-light);">
+                📍 Google Map will be embedded here<br>
+                <small>Apex Hub Tower, GE Road, Raipur, Chhattisgarh</small>
+            </p>
+        </div>
+    </div>
+
+    <!-- Social Connect -->
+    <section class="social-connect">
+        <div class="container">
+            <h2 data-aos="fade-up">Connect With Us on <span class="text-blue">Social Media</span></h2>
+            <p data-aos="fade-up">Join our community for daily updates, free classes, and study tips</p>
+            <div class="social-grid" data-aos="fade-up" data-aos-delay="200">
+                <a href="#" class="social-card youtube">
+                    <i class="fab fa-youtube"></i>
+                    <h4>YouTube</h4>
+                    <p>50K+ Subscribers</p>
+                </a>
+                <a href="#" class="social-card telegram">
+                    <i class="fab fa-telegram"></i>
+                    <h4>Telegram</h4>
+                    <p>25K+ Members</p>
+                </a>
+                <a href="#" class="social-card instagram">
+                    <i class="fab fa-instagram"></i>
+                    <h4>Instagram</h4>
+                    <p>30K+ Followers</p>
+                </a>
+                <a href="#" class="social-card whatsapp">
+                    <i class="fab fa-whatsapp"></i>
+                    <h4>WhatsApp</h4>
+                    <p>10K+ Students</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer (same) -->
+    <footer class="footer">
+        <!-- Same footer -->
+    </footer>
+
+    <a href="https://wa.me/919876543210" class="whatsapp-float" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="../js/main.js"></script>
+    <script>
+        function submitContactForm(e) {
+            e.preventDefault();
+            alert('✅ Thank you for reaching out!\n\nOur team will contact you within 24 hours.\n\nFor immediate assistance, call: +91 98765 43210');
+            document.getElementById('contactForm').reset();
+        }
+    </script>
+</body>
+</html>

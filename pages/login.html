@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Login - Apex Hub</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a237e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .auth-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 450px;
+            overflow: hidden;
+        }
+        
+        .auth-header {
+            background: linear-gradient(135deg, #1a237e, #283593);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .auth-header .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+        
+        .auth-header .logo span { color: #f5a623; }
+        
+        .auth-header p {
+            opacity: 0.8;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        
+        .auth-body {
+            padding: 30px;
+        }
+        
+        .auth-tabs {
+            display: flex;
+            border-bottom: 2px solid #e5e7eb;
+            margin-bottom: 25px;
+        }
+        
+        .auth-tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 600;
+            color: #999;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            background: none;
+            border-top: none;
+            border-left: none;
+            border-right: none;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem;
+        }
+        
+        .auth-tab.active {
+            color: #1a237e;
+            border-bottom-color: #f5a623;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 18px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            font-size: 0.85rem;
+            color: #333;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #1a237e;
+        }
+        
+        .input-with-icon {
+            position: relative;
+        }
+        
+        .input-with-icon input {
+            padding-left: 45px;
+        }
+        
+        .input-with-icon i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+        
+        .otp-group {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .otp-group input {
+            flex: 1;
+        }
+        
+        .btn-send-otp {
+            background: #1a237e;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            transition: all 0.3s;
+        }
+        
+        .btn-send-otp:hover {
+            background: #283593;
+        }
+        
+        .btn-send-otp:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #1a237e, #283593);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s;
+        }
+        
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(26,35,126,0.3);
+        }
+        
+        .btn-submit:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .alert {
+            padding: 12px 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-size: 0.85rem;
+            display: none;
+        }
+        
+        .alert-error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+        
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+        
+        .auth-footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: #666;
+        }
+        
+        .auth-footer a {
+            color: #1a237e;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #999;
+            background: none;
+            border: none;
+            font-size: 1rem;
+        }
+        
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            color: #999;
+            font-size: 0.85rem;
+        }
+        
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #e5e7eb;
+        }
+        
+        .divider span {
+            padding: 0 15px;
+        }
+        
+        .timer {
+            color: #1a237e;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-align: center;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="auth-container">
+        <!-- Header -->
+        <div class="auth-header">
+            <div class="logo">APEX<span>HUB</span></div>
+            <p>Student Login Portal</p>
+        </div>
+        
+        <!-- Body -->
+        <div class="auth-body">
+            
+            <!-- Alert Messages -->
+            <div class="alert alert-error" id="errorAlert"></div>
+            <div class="alert alert-success" id="successAlert"></div>
+            
+            <!-- Tabs -->
+            <div class="auth-tabs">
+                <button class="auth-tab active" onclick="switchTab('otp')">📱 OTP Login</button>
+                <button class="auth-tab" onclick="switchTab('password')">🔑 Password</button>
+            </div>
+            
+            <!-- ========== OTP LOGIN TAB ========== -->
+            <div class="tab-content active" id="tab-otp">
+                <form onsubmit="handleOTPLogin(event)">
+                    <div class="form-group">
+                        <label>Mobile Number</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                            <input type="tel" id="otpMobile" placeholder="Enter 10-digit mobile number" maxlength="10" pattern="[6-9]\d{9}" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" id="otpFieldGroup" style="display:none;">
+                        <label>Enter OTP</label>
+                        <div class="otp-group">
+                            <div class="input-with-icon" style="flex:1;">
+                                <i class="fas fa-key"></i>
+                                <input type="text" id="otpInput" placeholder="Enter 6-digit OTP" maxlength="6" pattern="\d{6}">
+                            </div>
+                            <button type="button" class="btn-send-otp" id="resendBtn" onclick="resendOTP()" disabled>Resend</button>
+                        </div>
+                        <p class="timer" id="otpTimer"></p>
+                    </div>
+                    
+                    <button type="submit" class="btn-submit" id="otpSubmitBtn">
+                        <i class="fas fa-paper-plane"></i> Send OTP
+                    </button>
+                </form>
+                
+                <div class="divider"><span>or</span></div>
+                
+                <button class="btn-submit" style="background:white;color:#1a237e;border:2px solid #1a237e;" onclick="switchTab('password')">
+                    <i class="fas fa-lock"></i> Login with Password
+                </button>
+            </div>
+            
+            <!-- ========== PASSWORD LOGIN TAB ========== -->
+            <div class="tab-content" id="tab-password">
+                <form onsubmit="handlePasswordLogin(event)">
+                    <div class="form-group">
+                        <label>Mobile Number or Email</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="loginIdentifier" placeholder="Enter mobile number or email" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Password</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                            <button type="button" class="password-toggle" onclick="togglePassword('loginPassword', this)">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div style="display:flex;justify-content:flex-end;margin-bottom:15px;">
+                        <a href="#" style="font-size:0.8rem;color:#1a237e;text-decoration:none;">Forgot Password?</a>
+                    </div>
+                    
+                    <button type="submit" class="btn-submit">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </button>
+                </form>
+                
+                <div class="divider"><span>or</span></div>
+                
+                <button class="btn-submit" style="background:white;color:#1a237e;border:2px solid #1a237e;" onclick="switchTab('otp')">
+                    <i class="fas fa-mobile-alt"></i> Login with OTP
+                </button>
+            </div>
+            
+            <!-- Register Link -->
+            <div class="auth-footer">
+                <p>Don't have an account? <a href="register.html">Register Now</a></p>
+                <p style="margin-top:5px;"><a href="../index.html">← Back to Home</a></p>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- ============ SCRIPTS ============ -->
+    <script src="../js/auth.js"></script>
+    <script>
+        let otpSent = false;
+        let otpMobileNumber = '';
+        let otpTimerInterval = null;
+        let otpSecondsLeft = 0;
+
+        // Check if already logged in
+        if (redirectIfLoggedIn()) {
+            // Redirected to dashboard
+        }
+
+        // Tab switching
+        function switchTab(tab) {
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            
+            if (tab === 'otp') {
+                document.querySelectorAll('.auth-tab')[0].classList.add('active');
+                document.getElementById('tab-otp').classList.add('active');
+            } else {
+                document.querySelectorAll('.auth-tab')[1].classList.add('active');
+                document.getElementById('tab-password').classList.add('active');
+            }
+            
+            hideAlerts();
+        }
+
+        // Alert functions
+        function showError(msg) {
+            const alert = document.getElementById('errorAlert');
+            alert.textContent = msg;
+            alert.style.display = 'block';
+            document.getElementById('successAlert').style.display = 'none';
+        }
+
+        function showSuccess(msg) {
+            const alert = document.getElementById('successAlert');
+            alert.textContent = msg;
+            alert.style.display = 'block';
+            document.getElementById('errorAlert').style.display = 'none';
+        }
+
+        function hideAlerts() {
+            document.getElementById('errorAlert').style.display = 'none';
+            document.getElementById('successAlert').style.display = 'none';
+        }
+
+        // Toggle password visibility
+        function togglePassword(inputId, btn) {
+            const input = document.getElementById(inputId);
+            const icon = btn.querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = 'fas fa-eye-slash';
+            } else {
+                input.type = 'password';
+                icon.className = 'fas fa-eye';
+            }
+        }
+
+        // ============ OTP LOGIN ============
+        async function handleOTPLogin(event) {
+            event.preventDefault();
+            hideAlerts();
+
+            if (!otpSent) {
+                // Step 1: Send OTP
+                const mobile = document.getElementById('otpMobile').value.trim();
+                const submitBtn = document.getElementById('otpSubmitBtn');
+                
+                try {
+                    submitBtn.disabled = true;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending OTP...';
+                    
+                    const result = await sendOTP(mobile);
+                    
+                    otpSent = true;
+                    otpMobileNumber = mobile;
+                    
+                    document.getElementById('otpFieldGroup').style.display = 'block';
+                    document.getElementById('otpMobile').readOnly = true;
+                    submitBtn.innerHTML = '<i class="fas fa-check"></i> Verify OTP & Login';
+                    submitBtn.disabled = false;
+                    
+                    showSuccess(result.message);
+                    startOTPTimer(OTP_EXPIRY_MINUTES * 60);
+                    
+                } catch (error) {
+                    showError(error.message);
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send OTP';
+                }
+                
+            } else {
+                // Step 2: Verify OTP and Login
+                const enteredOTP = document.getElementById('otpInput').value.trim();
+                
+                if (!enteredOTP || enteredOTP.length !== 6) {
+                    showError('Please enter a valid 6-digit OTP');
+                    return;
+                }
+                
+                const verifyResult = verifyOTP(otpMobileNumber, enteredOTP);
+                
+                if (!verifyResult.success) {
+                    showError(verifyResult.message);
+                    return;
+                }
+                
+                // OTP verified, now login
+                const loginResult = loginWithOTP(otpMobileNumber);
+                
+                if (loginResult.success) {
+                    showSuccess('Login successful! Redirecting...');
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1000);
+                } else if (loginResult.isNewUser) {
+                    // Redirect to register with mobile pre-filled
+                    window.location.href = 'register.html?mobile=' + otpMobileNumber;
+                } else {
+                    showError(loginResult.message);
+                }
+            }
+        }
+
+        function resendOTP() {
+            otpSent = false;
+            document.getElementById('otpFieldGroup').style.display = 'none';
+            document.getElementById('otpMobile').readOnly = false;
+            document.getElementById('otpInput').value = '';
+            document.getElementById('otpSubmitBtn').innerHTML = '<i class="fas fa-paper-plane"></i> Send OTP';
+            clearInterval(otpTimerInterval);
+            document.getElementById('otpTimer').textContent = '';
+            document.getElementById('resendBtn').disabled = true;
+            hideAlerts();
+        }
+
+        function startOTPTimer(seconds) {
+            otpSecondsLeft = seconds;
+            updateTimerDisplay();
+            
+            clearInterval(otpTimerInterval);
+            otpTimerInterval = setInterval(() => {
+                otpSecondsLeft--;
+                updateTimerDisplay();
+                
+                if (otpSecondsLeft <= 0) {
+                    clearInterval(otpTimerInterval);
+                    document.getElementById('resendBtn').disabled = false;
+                    document.getElementById('otpTimer').textContent = 'OTP expired. Please resend.';
+                    document.getElementById('otpTimer').style.color = '#ef4444';
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const mins = Math.floor(otpSecondsLeft / 60);
+            const secs = otpSecondsLeft % 60;
+            document.getElementById('otpTimer').textContent = `OTP expires in: ${mins}:${secs.toString().padStart(2, '0')}`;
+            
+            if (otpSecondsLeft <= 60) {
+                document.getElementById('otpTimer').style.color = '#ef4444';
+            }
+            
+            document.getElementById('resendBtn').disabled = otpSecondsLeft > 0;
+        }
+
+        // ============ PASSWORD LOGIN ============
+        function handlePasswordLogin(event) {
+            event.preventDefault();
+            hideAlerts();
+            
+            const identifier = document.getElementById('loginIdentifier').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!identifier || !password) {
+                showError('Please fill all fields');
+                return;
+            }
+            
+            const result = loginWithPassword(identifier, password);
+            
+            if (result.success) {
+                showSuccess('Login successful! Redirecting...');
+                setTimeout(() => {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const redirect = urlParams.get('redirect');
+                    window.location.href = redirect || 'dashboard.html';
+                }, 1000);
+            } else {
+                showError(result.message);
+            }
+        }
+
+        // Auto-fill mobile from URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const mobileParam = urlParams.get('mobile');
+        if (mobileParam) {
+            document.getElementById('otpMobile').value = mobileParam;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Apex Hub | Exam Tips, Updates & Study Resources</title>
+    <meta name="description" content="Read the latest exam updates, study tips, topper interviews, and preparation strategies for CG PSC, CG Vyapam, NEET, and JEE at Apex Hub Blog.">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    
+    <style>
+        .blog-hero {
+            background: linear-gradient(135deg, #0a0e27, #1a237e);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+        .blog-hero h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .blog-hero p { opacity: 0.9; font-size: 1.1rem; }
+        
+        .blog-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+            padding: 60px 0;
+        }
+        
+        /* Featured Post */
+        .featured-post {
+            background: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 40px;
+        }
+        .featured-image {
+            height: 400px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 5rem;
+            position: relative;
+        }
+        .featured-category {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: var(--gold);
+            color: var(--primary);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+        .featured-content {
+            padding: 30px;
+        }
+        .featured-meta {
+            display: flex;
+            gap: 20px;
+            color: var(--text-light);
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+        }
+        .featured-meta i { color: var(--primary); margin-right: 5px; }
+        .featured-content h2 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+        .featured-content h2 a {
+            color: var(--text-dark);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        .featured-content h2 a:hover { color: var(--primary); }
+        .featured-content p {
+            color: var(--text-light);
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+        .btn-read-more {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--primary);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        .btn-read-more:hover {
+            background: var(--primary-light);
+            transform: translateX(5px);
+        }
+        
+        /* Blog Grid */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+        .blog-card {
+            background: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+        .blog-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+        }
+        .blog-card-image {
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+            position: relative;
+        }
+        .blog-card-image.bg1 { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .blog-card-image.bg2 { background: linear-gradient(135deg, #f093fb, #f5576c); }
+        .blog-card-image.bg3 { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+        .blog-card-image.bg4 { background: linear-gradient(135deg, #fa709a, #fee140); }
+        .blog-card-image.bg5 { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+        .blog-card-image.bg6 { background: linear-gradient(135deg, #a18cd1, #fbc2eb); }
+        .blog-card-image.bg7 { background: linear-gradient(135deg, #f5a623, #ffc107); }
+        .blog-card-image.bg8 { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+        
+        .blog-card-category {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(255,255,255,0.95);
+            color: var(--primary);
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .blog-card-body {
+            padding: 20px;
+        }
+        .blog-card-body .meta {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-bottom: 10px;
+        }
+        .blog-card-body .meta i { margin-right: 5px; }
+        .blog-card-body h3 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        .blog-card-body h3 a {
+            color: var(--text-dark);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        .blog-card-body h3 a:hover { color: var(--primary); }
+        .blog-card-body p {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-bottom: 15px;
+        }
+        .blog-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid var(--border);
+            font-size: 0.8rem;
+        }
+        .blog-card-footer .read-time {
+            color: var(--text-light);
+        }
+        .blog-card-footer .read-more {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        /* Sidebar */
+        .sidebar-widget {
+            background: white;
+            padding: 25px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 25px;
+        }
+        .sidebar-widget h4 {
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--gold);
+            display: inline-block;
+        }
+        .search-box {
+            display: flex;
+            gap: 10px;
+        }
+        .search-box input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+        }
+        .search-box button {
+            padding: 12px 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        .category-list { list-style: none; }
+        .category-list li { margin-bottom: 12px; }
+        .category-list a {
+            display: flex;
+            justify-content: space-between;
+            text-decoration: none;
+            color: var(--text-dark);
+            font-size: 0.9rem;
+            padding: 8px 0;
+            border-bottom: 1px solid #f3f4f6;
+            transition: var(--transition);
+        }
+        .category-list a:hover { color: var(--primary); padding-left: 5px; }
+        .category-list .count {
+            background: var(--light-bg);
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+        
+        .popular-post {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        .popular-post:last-child { border-bottom: none; }
+        .popular-post-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 10px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+        .popular-post-info h5 {
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+            line-height: 1.4;
+        }
+        .popular-post-info h5 a {
+            color: var(--text-dark);
+            text-decoration: none;
+        }
+        .popular-post-info h5 a:hover { color: var(--primary); }
+        .popular-post-info .date {
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
+        
+        .tags-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .tag {
+            padding: 6px 15px;
+            background: var(--light-bg);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--text-dark);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        .tag:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .newsletter-box {
+            background: var(--gradient-blue);
+            color: white;
+            padding: 25px;
+            border-radius: var(--radius);
+            text-align: center;
+        }
+        .newsletter-box h4 { color: white; border-bottom-color: var(--gold); }
+        .newsletter-box p { font-size: 0.85rem; margin-bottom: 15px; opacity: 0.9; }
+        .newsletter-box input {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-family: 'Poppins', sans-serif;
+        }
+        .newsletter-box button {
+            width: 100%;
+            padding: 12px;
+            background: var(--gold);
+            color: var(--primary);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 40px;
+        }
+        .pagination a {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            text-decoration: none;
+            color: var(--text-dark);
+            background: white;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+        .pagination a.active,
+        .pagination a:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        @media (max-width: 968px) {
+            .blog-layout { grid-template-columns: 1fr; }
+            .featured-image { height: 250px; }
+            .blog-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- ============ TOP BAR ============ -->
+    <div class="top-bar">
+        <div class="container">
+            <div class="top-bar-left">
+                <a href="tel:+919876543210"><i class="fas fa-phone"></i> +91 98765 43210</a>
+                <a href="mailto:info@apexhub.in"><i class="fas fa-envelope"></i> info@apexhub.in</a>
+            </div>
+            <div class="top-bar-right">
+                <a href="#" class="btn-free-demo"><i class="fas fa-play-circle"></i> Free Demo Class</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ NAVIGATION ============ -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="../index.html" class="logo">
+                <span class="logo-text">APEX<span class="logo-highlight">HUB</span></span>
+                <span class="logo-tagline">Climb to the Peak</span>
+            </a>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="../index.html">Home</a></li>
+                <li class="dropdown">
+                    <a href="courses.html">Courses <i class="fas fa-chevron-down"></i></a>
+                    <div class="dropdown-content">
+                        <a href="courses.html#cgpsc">CG PSC</a>
+                        <a href="courses.html#vyapam">CG Vyapam</a>
+                        <a href="courses.html#neet">NEET</a>
+                        <a href="courses.html#jee">JEE</a>
+                    </div>
+                </li>
+                <li><a href="courses.html#test-series">Test Series</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="blog.html" class="active">Blog</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="dashboard.html" class="btn-login"><i class="fas fa-user"></i> Student Login</a></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ============ BLOG HERO ============ -->
+    <section class="blog-hero">
+        <div class="container" data-aos="fade-up">
+            <h1><i class="fas fa-newspaper"></i> Apex Hub Blog</h1>
+            <p>Exam updates, study tips, topper interviews & preparation strategies</p>
+        </div>
+    </section>
+
+    <!-- ============ BLOG CONTENT ============ -->
+    <div class="container">
+        <div class="blog-layout">
+            
+            <!-- Main Content -->
+            <div class="blog-main">
+                
+                <!-- Featured Post -->
+                <div class="featured-post" data-aos="fade-up">
+                    <div class="featured-image">
+                        <i class="fas fa-trophy"></i>
+                        <span class="featured-category">CG PSC</span>
+                    </div>
+                    <div class="featured-content">
+                        <div class="featured-meta">
+                            <span><i class="fas fa-user"></i> Dr. Rajesh Sharma</span>
+                            <span><i class="fas fa-calendar"></i> July 20, 2025</span>
+                            <span><i class="fas fa-eye"></i> 12.5K Views</span>
+                            <span><i class="fas fa-comments"></i> 48 Comments</span>
+                        </div>
+                        <h2><a href="#">CGPSC 2025: Complete Strategy Guide for Prelims, Mains & Interview — By Rank 23 Holder</a></h2>
+                        <p>A comprehensive, step-by-step guide to crack CGPSC 2025. Learn the exact strategy, booklist, time management, and answer writing techniques that helped me secure Rank 23 in my first attempt. This guide covers everything from Chhattisgarh-specific GK to essay writing and mock interview preparation...</p>
+                        <a href="#" class="btn-read-more">Read Full Article <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+
+                <!-- Blog Grid -->
+                <div class="blog-grid">
+                    
+                    <!-- Blog Card 1 -->
+                    <div class="blog-card" data-aos="fade-up" data-aos-delay="100">
+                        <div class="blog-card-image bg1">
+                            <i class="fas fa-flask"></i>
+                            <span class="blog-card-category">NEET</span>
+                        </div>
+                        <div class="blog-card-body">
+                            <div class="meta">
+                                <span><i class="fas fa-calendar"></i> July 18, 2025</span>
+                            </div>
+                            <h3><a href="#">NEET 2026: 5 Common Mistakes Droppers Make and How to Avoid Them</a></h3>
+                            <p>Dropping a year for NEET is a big decision. Avoid these 5 critical mistakes that most droppers make unknowingly...</p>
+                            <div class="blog-card-footer">
+                                <span class="read-time"><i class="fas fa-clock"></i> 8 min read</span>
+                                <a href="#" class="read-more">Read More →</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Blog Card 2 -->
+                    <div class="blog-card" data-aos="fade-up" data-aos-delay="200">
+                        <div class="blog-card-image bg2">
+                            <i class="fas fa-calculator"></i>
+                            <span class="blog-card-category">JEE</span>
+                        </div>
+                        <div class="blog-card-body">
+                            <div class="meta">
+                                <span><i class="fas fa-calendar"></i> July 16, 2025</span>
+                            </div>
+                            <h3><a href="#">JEE Advanced 2025: Topic-Wise Weightage Analysis & High-Scoring Chapters</a></h3>
+                            <p>Detailed analysis of JEE Advanced 2024 paper to predict 2025 trends. Focus on these high-weightage topics for maximum score...</p>
+                            <div class="blog-card-footer">
+                                <span class="read-time"><i class="fas fa-clock"></i> 10 min read</span>
+                                <a href="#" class="read-more">Read More →</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Blog Card 3 -->
+                    <div class="blog-card" data-aos="fade-up" data-aos-delay="300">
+                        <div class="blog-card-image bg3">
+                            <i class="fas fa-building-columns"></i>
+                            <span class="blog-card-category">CG Vyapam</span>
+                        </div>
+                        <div class="blog-card-body">
+                            <div class="meta">
+                                <span><i class="fas fa-calendar"></i> July 14, 2025</span>
+                            </div>
+                            <h3><a href="#">CG Vyapam Patwari 2025: New Syllabus, Exam Pattern & 30-Day Study Plan</a></h3>
+                            <p>Everything about the latest CG Vyapam Patwari notification. Complete syllabus breakdown, exam pattern changes, and a proven 30-day study plan...</p>
+                            <div class="blog-card-footer">
+                                <span class="read-time"><i class="fas fa-clock"></i> 6 min read</span>
+                                <a href="#" class="read-more">Read More →</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Blog Card 4 -->
+                    <div class="blog-card" data-aos="fade-up" data-aos-delay="400">
+                        <div class="blog-card-image bg4">
+                            <i class="fas fa-brain"></i>
+                            <span class="blog-card-category">Study Tips</span>
+                        </div>
+                        <div class="blog-card-body">
+                            <div class="meta">
+                                <span><i class="fas fa-calendar"></i> July 12, 2025</span>
+                            </div>
+                            <h3><a href="#">The Pomodoro Technique for Competitive Exams: Study 10 Hours with Full Focus</a></h3>
+                            <p>How to study 10+ hours daily without burnout using the modified Pomodoro Technique specifically designed for competitive exam aspirants...</p>
+                            <div class="blog-card-footer">
+                                <span class="read-time"><i class="fas fa-clock"></i> 7 min read</span>
+                                <a href="#" class="read-more">Read More →</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Blog Card 5 -->
+                    <div class="blog-card" data-aos="fade-up" data-aos-delay="500">
+                        <div class="blog-card-image bg5">
+                            <i class="fas fa-map-marked-alt"></i>
+                            <span class="blog-card-category">CG PSC</span>
+                        </div>
+                        <div class="blog-card-body">
+                            <div class="meta">
+                                <span><i class="fas fa-calendar"></i> July 10, 2025</span>
+                            </div>
+                            <h3><a href="#">Chhattisgarh GK: 100 Most Important Questions for CGPSC & Vyapam Exams</a></h3>
+                            <p>Curated list of 100 frequently asked Chhattisgarh GK questions covering history, geography, culture, tribes, and current affairs...</p>
+                            <div class="blog-card-footer">
+                                <span class="read-time"><i class="fas fa-clock"></i> 12 min read</span>
+                                <a href="#" class="read-more">Read More →</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Blog Card 6 -->
+                    <div class="blog-card" data-aos="fade-up" data-aos-delay="600">
+                        <div class="blog-card-image bg6">
+                            <i class="fas fa-user-graduate"></i>
+                            <span class="blog-card-category">Topper Interview</span>
+                        </div>
+                        <div class="blog-card-body">
+                            <div class="meta">
+                                <span><i class="fas fa-calendar"></i> July 8, 2025</span>
+                            </div>
+                            <h3><a href="#">From Village School to AIIMS: NEET Topper Priya's Inspiring Journey (AIR 1542)</a></h3>
+                            <p>Exclusive interview with Priya Verma from a small village in Chhattisgarh who cracked NEET with AIR 1542 using only online resources...</p>
+                            <div class="blog-card-footer">
+                                <span class="read-time"><i class="fas fa-clock"></i> 5 min read</span>
+                                <a href="#" class="read-more">Read More →</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Blog Card 7 -->
+                    <div class="blog-card" data-aos="fade-up" data-aos-delay="700">
+                        <div class="blog-card-image bg7">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span class="blog-card-category">Notifications</span>
+                        </div>
+                        <div class="blog-card-body">
+                            <div class="meta">
+                                <span><i class="fas fa-calendar"></i> July 5, 2025</span>
+                            </div>
+                            <h3><a href="#">Upcoming Government Exams in Chhattisgarh: July-December 2025 Calendar</a></h3>
+                            <p>Complete calendar of all upcoming CG government job exams including CGPSC, Vyapam, and other departmental exams for the next 6 months...</p>
+                            <div class="blog-card-footer">
+                                <span class="read-time"><i class="fas fa-clock"></i> 4 min read</span>
+                                <a href="#" class="read-more">Read More →</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Blog Card 8 -->
+                    <div class="blog-card" data-aos="fade-up" data-aos-delay="800">
+                        <div class="blog-card-image bg8">
+                            <i class="fas fa-heart"></i>
+                            <span class="blog-card-category">Wellness</span>
+                        </div>
+                        <div class="blog-card-body">
+                            <div class="meta">
+                                <span><i class="fas fa-calendar"></i> July 2, 2025</span>
+                            </div>
+                            <h3><a href="#">Mental Health for Competitive Exam Aspirants: 7 Tips to Beat Anxiety & Stress</a></h3>
+                            <p>Practical mental health strategies from psychologists and successful candidates to manage exam stress, anxiety, and maintain motivation...</p>
+                            <div class="blog-card-footer">
+                                <span class="read-time"><i class="fas fa-clock"></i> 6 min read</span>
+                                <a href="#" class="read-more">Read More →</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination" data-aos="fade-up">
+                    <a href="#" class="active">1</a>
+                    <a href="#">2</a>
+                    <a href="#">3</a>
+                    <a href="#">4</a>
+                    <a href="#">5</a>
+                    <a href="#"><i class="fas fa-chevron-right"></i></a>
+                </div>
+
+            </div>
+
+            <!-- Sidebar -->
+            <aside class="blog-sidebar">
+                
+                <!-- Search -->
+                <div class="sidebar-widget" data-aos="fade-left">
+                    <h4>🔍 Search Articles</h4>
+                    <div class="search-box">
+                        <input type="text" placeholder="Search blog...">
+                        <button><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+
+                <!-- Categories -->
+                <div class="sidebar-widget" data-aos="fade-left" data-aos-delay="100">
+                    <h4>📂 Categories</h4>
+                    <ul class="category-list">
+                        <li><a href="#">CG PSC <span class="count">24</span></a></li>
+                        <li><a href="#">CG Vyapam <span class="count">18</span></a></li>
+                        <li><a href="#">NEET <span class="count">32</span></a></li>
+                        <li><a href="#">JEE <span class="count">28</span></a></li>
+                        <li><a href="#">Study Tips <span class="count">15</span></a></li>
+                        <li><a href="#">Notifications <span class="count">42</span></a></li>
+                        <li><a href="#">Topper Interviews <span class="count">9</span></a></li>
+                        <li><a href="#">Current Affairs <span class="count">20</span></a></li>
+                        <li><a href="#">Free Resources <span class="count">12</span></a></li>
+                    </ul>
+                </div>
+
+                <!-- Popular Posts -->
+                <div class="sidebar-widget" data-aos="fade-left" data-aos-delay="200">
+                    <h4>🔥 Popular Posts</h4>
+                    
+                    <div class="popular-post">
+                        <div class="popular-post-image" style="background:linear-gradient(135deg,#667eea,#764ba2);">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="popular-post-info">
+                            <h5><a href="#">CGPSC 2025 Complete Strategy Guide</a></h5>
+                            <span class="date">12.5K Views</span>
+                        </div>
+                    </div>
+                    
+                    <div class="popular-post">
+                        <div class="popular-post-image" style="background:linear-gradient(135deg,#43e97b,#38f9d7);">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="popular-post-info">
+                            <h5><a href="#">100 Most Important CG GK Questions</a></h5>
+                            <span class="date">10.2K Views</span>
+                        </div>
+                    </div>
+                    
+                    <div class="popular-post">
+                        <div class="popular-post-image" style="background:linear-gradient(135deg,#f093fb,#f5576c);">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="popular-post-info">
+                            <h5><a href="#">Last 30 Days Strategy for NEET</a></h5>
+                            <span class="date">9.8K Views</span>
+                        </div>
+                    </div>
+                    
+                    <div class="popular-post">
+                        <div class="popular-post-image" style="background:linear-gradient(135deg,#fa709a,#fee140);">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="popular-post-info">
+                            <h5><a href="#">JEE Main: 50 Most Repeated Questions</a></h5>
+                            <span class="date">8.5K Views</span>
+                        </div>
+                    </div>
+                    
+                    <div class="popular-post">
+                        <div class="popular-post-image" style="background:linear-gradient(135deg,#4facfe,#00f2fe);">
+                            <i class="fas fa-calendar"></i>
+                        </div>
+                        <div class="popular-post-info">
+                            <h5><a href="#">CG Vyapam Exam Calendar 2025</a></h5>
+                            <span class="date">7.9K Views</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tags Cloud -->
+                <div class="sidebar-widget" data-aos="fade-left" data-aos-delay="300">
+                    <h4>🏷️ Tags</h4>
+                    <div class="tags-cloud">
+                        <a href="#" class="tag">CGPSC</a>
+                        <a href="#" class="tag">NEET 2025</a>
+                        <a href="#" class="tag">JEE Advanced</a>
+                        <a href="#" class="tag">Vyapam</a>
+                        <a href="#" class="tag">Chhattisgarh GK</a>
+                        <a href="#" class="tag">Study Plan</a>
+                        <a href="#" class="tag">Previous Year Papers</a>
+                        <a href="#" class="tag">Biology</a>
+                        <a href="#" class="tag">Physics</a>
+                        <a href="#" class="tag">Chemistry</a>
+                        <a href="#" class="tag">Mathematics</a>
+                        <a href="#" class="tag">Answer Writing</a>
+                        <a href="#" class="tag">Mock Tests</a>
+                        <a href="#" class="tag">Interview Tips</a>
+                        <a href="#" class="tag">Time Management</a>
+                    </div>
+                </div>
+
+                <!-- Newsletter -->
+                <div class="newsletter-box" data-aos="fade-left" data-aos-delay="400">
+                    <h4>📧 Get Free Study Material!</h4>
+                    <p>Subscribe to our newsletter and receive weekly study tips, free PDFs, and exam updates directly in your inbox.</p>
+                    <input type="email" placeholder="Enter your email">
+                    <button onclick="subscribeNewsletter()">Subscribe Free</button>
+                </div>
+
+            </aside>
+
+        </div>
+    </div>
+
+    <!-- ============ FOOTER ============ -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col about-col">
+                    <h3>APEX<span class="text-gold">HUB</span></h3>
+                    <p>Chhattisgarh's premier online coaching institute for CG PSC, CG Vyapam, NEET, and JEE.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="courses.html">All Courses</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="blog.html">Blog</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Exam Categories</h4>
+                    <ul>
+                        <li><a href="courses.html#cgpsc">CG PSC Courses</a></li>
+                        <li><a href="courses.html#vyapam">CG Vyapam Courses</a></li>
+                        <li><a href="courses.html#neet">NEET Courses</a></li>
+                        <li><a href="courses.html#jee">JEE Courses</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact Info</h4>
+                    <ul class="contact-info">
+                        <li><i class="fas fa-map-marker-alt"></i> 2nd Floor, Apex Hub Tower, GE Road, Raipur, CG - 492001</li>
+                        <li><i class="fas fa-phone"></i> +91 98765 43210</li>
+                        <li><i class="fas fa-envelope"></i> info@apexhub.in</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Apex Hub. All rights reserved. | <a href="privacy.html">Privacy Policy</a> | <a href="privacy.html">Terms</a></p>
+                <p>Made with ❤️ in Chhattisgarh</p>
+            </div>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/919876543210" class="whatsapp-float" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="../js/main.js"></script>
+    <script>
+        function subscribeNewsletter() {
+            const email = document.querySelector('.newsletter-box input').value;
+            if (email && email.includes('@')) {
+                alert('✅ Thank you for subscribing!\n\nCheck your inbox for free study material and weekly updates.');
+                document.querySelector('.newsletter-box input').value = '';
+            } else {
+                alert('⚠️ Please enter a valid email address.');
+            }
+        }
+    </script>
+</body>
+</html>

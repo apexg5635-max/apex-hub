@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Courses - Apex Hub Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin.css">
+    <style>
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 20px;
+        }
+        .course-card {
+            background: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+        .course-card-header {
+            padding: 25px 20px;
+            color: white;
+            position: relative;
+        }
+        .course-card-header h3 {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            padding-right: 80px;
+        }
+        .course-card-header .category-label {
+            font-size: 0.75rem;
+            opacity: 0.9;
+            background: rgba(255,255,255,0.25);
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+        }
+        .course-status-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+        }
+        .course-card-body {
+            padding: 20px;
+        }
+        .course-card-body p {
+            color: var(--text-light);
+            font-size: 0.85rem;
+            margin-bottom: 12px;
+        }
+        .course-features-list {
+            list-style: none;
+            margin-bottom: 15px;
+        }
+        .course-features-list li {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            padding: 3px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .course-features-list li i {
+            color: var(--success);
+            font-size: 0.7rem;
+        }
+        .course-meta {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            font-size: 0.8rem;
+            color: var(--text-light);
+            padding: 12px 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 12px;
+        }
+        .course-meta span { display: flex; align-items: center; gap: 5px; }
+        .course-meta i { color: var(--primary); }
+        .course-pricing {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .course-pricing .original { text-decoration: line-through; color: var(--text-light); font-size: 0.85rem; }
+        .course-pricing .selling { font-size: 1.3rem; font-weight: 700; color: var(--primary); }
+        .course-pricing .discount {
+            background: #ffe0e0; color: var(--danger);
+            padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; font-weight: 600;
+        }
+        .course-card-footer {
+            display: flex;
+            gap: 8px;
+            padding: 0 20px 20px;
+        }
+        .course-card-footer button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        .btn-edit-course { background: #e0e7ff; color: #3730a3; }
+        .btn-edit-course:hover { background: #c7d2fe; }
+        .btn-delete-course { background: #fee2e2; color: #991b1b; }
+        .btn-delete-course:hover { background: #fecaca; }
+        .btn-preview-course { background: #d1fae5; color: #065f46; }
+        .btn-preview-course:hover { background: #a7f3d0; }
+        .btn-duplicate-course { background: #fef3c7; color: #92400e; }
+        .btn-duplicate-course:hover { background: #fde68a; }
+        
+        .modal textarea { min-height: 80px; }
+        .features-editor { margin-bottom: 15px; }
+        .feature-input-row {
+            display: flex; gap: 8px; margin-bottom: 8px; align-items: center;
+        }
+        .feature-input-row input { flex: 1; }
+        .feature-input-row button { flex-shrink: 0; }
+        
+        @media (max-width: 768px) {
+            .courses-grid { grid-template-columns: 1fr; }
+            .course-card-footer { flex-wrap: wrap; }
+            .course-card-footer button { flex: 1 1 45%; }
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- ============ SIDEBAR ============ -->
+    <aside class="admin-sidebar">
+        <div class="sidebar-logo">
+            <h2>APEX<span>HUB</span></h2>
+            <p class="logo-subtitle">Admin Panel</p>
+        </div>
+        <div class="sidebar-user">
+            <div class="sidebar-avatar">AD</div>
+            <div class="sidebar-user-info">
+                <h4>Admin User</h4>
+                <p>Super Admin</p>
+            </div>
+        </div>
+        <ul class="sidebar-nav">
+            <li><a href="dashboard.html"><i class="fas fa-th-large"></i> <span>Dashboard</span></a></li>
+            <p class="sidebar-section-title">Content Management</p>
+            <li><a href="edit-hero.html"><i class="fas fa-image"></i> <span>Hero Section</span></a></li>
+            <li><a href="manage-courses.html" class="active"><i class="fas fa-book"></i> <span>Courses</span></a></li>
+            <li><a href="edit-batches.html"><i class="fas fa-calendar-alt"></i> <span>Batches</span></a></li>
+            <li><a href="edit-testimonials.html"><i class="fas fa-star"></i> <span>Testimonials</span></a></li>
+            <li><a href="edit-faculty.html"><i class="fas fa-chalkboard-teacher"></i> <span>Faculty</span></a></li>
+            <li><a href="edit-blog.html"><i class="fas fa-newspaper"></i> <span>Blog Posts</span></a></li>
+            <li><a href="edit-pages.html"><i class="fas fa-file-alt"></i> <span>Pages Content</span></a></li>
+            <p class="sidebar-section-title">Live & Videos</p>
+            <li><a href="upload-video.html"><i class="fas fa-upload"></i> <span>Upload Videos</span></a></li>
+            <li><a href="schedule-live.html"><i class="fas fa-broadcast-tower"></i> <span>Live Classes</span></a></li>
+            <p class="sidebar-section-title">Settings</p>
+            <li><a href="site-settings.html"><i class="fas fa-cog"></i> <span>Site Settings</span></a></li>
+            <li><a href="#" onclick="adminLogout()"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a></li>
+        </ul>
+    </aside>
+
+    <!-- ============ MAIN CONTENT ============ -->
+    <main class="admin-main">
+        
+        <!-- Header -->
+        <div class="admin-header">
+            <div class="admin-header-left">
+                <h1>📚 Manage Courses</h1>
+                <p class="breadcrumb">Home / Content / <strong>Courses</strong></p>
+            </div>
+            <div style="display:flex;gap:10px;">
+                <button class="btn btn-outline btn-sm" onclick="exportCourses()">
+                    <i class="fas fa-download"></i> Export
+                </button>
+                <button class="btn btn-outline btn-sm" onclick="document.getElementById('importCoursesFile').click()">
+                    <i class="fas fa-upload"></i> Import
+                </button>
+                <input type="file" id="importCoursesFile" accept=".json" style="display:none;" onchange="importCourses(this.files[0])">
+                <button class="btn btn-primary" onclick="openCourseModal()">
+                    <i class="fas fa-plus"></i> Add New Course
+                </button>
+            </div>
+        </div>
+
+        <!-- Toast Notification -->
+        <div id="toast" style="display:none;position:fixed;top:20px;right:20px;z-index:9999;padding:14px 20px;border-radius:10px;color:white;font-weight:500;box-shadow:0 10px 30px rgba(0,0,0,0.2);"></div>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+            <select id="filterCategory" onchange="renderCourses()">
+                <option value="all">All Categories</option>
+                <option value="CG PSC">CG PSC</option>
+                <option value="CG Vyapam">CG Vyapam</option>
+                <option value="NEET">NEET</option>
+                <option value="JEE">JEE</option>
+            </select>
+            <select id="filterStatus" onchange="renderCourses()">
+                <option value="all">All Status</option>
+                <option value="published">Published</option>
+                <option value="draft">Draft</option>
+            </select>
+            <input type="text" id="searchCourse" placeholder="🔍 Search courses..." oninput="renderCourses()">
+        </div>
+
+        <!-- Courses Grid -->
+        <div class="courses-grid" id="coursesGrid"></div>
+
+        <!-- Empty State -->
+        <div id="emptyState" style="display:none;text-align:center;padding:60px;">
+            <i class="fas fa-book-open" style="font-size:5rem;color:#ccc;"></i>
+            <h3 style="margin-top:15px;">No Courses Found</h3>
+            <p style="color:var(--text-light);">Click "Add New Course" to create your first course.</p>
+            <button class="btn btn-primary" onclick="openCourseModal()" style="margin-top:15px;">
+                <i class="fas fa-plus"></i> Add New Course
+            </button>
+        </div>
+
+    </main>
+
+    <!-- ============ ADD/EDIT COURSE MODAL ============ -->
+    <div class="modal-overlay" id="courseModal">
+        <div class="modal" style="max-width:750px;width:95%;max-height:85vh;overflow-y:auto;">
+            <button class="modal-close" onclick="closeCourseModal()">✕</button>
+            <h3 id="modalTitle">➕ Add New Course</h3>
+            
+            <form id="courseForm" onsubmit="saveCourse(event)">
+                <input type="hidden" id="courseId">
+                
+                <!-- Basic Info -->
+                <div class="form-group">
+                    <label>Course Name <span class="required">*</span></label>
+                    <input type="text" id="courseName" placeholder="e.g., CG PSC Foundation Batch 2026" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Category <span class="required">*</span></label>
+                        <select id="courseCategory" required>
+                            <option value="">Select Category</option>
+                            <option value="CG PSC">CG PSC</option>
+                            <option value="CG Vyapam">CG Vyapam</option>
+                            <option value="NEET">NEET</option>
+                            <option value="JEE">JEE</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Course Type</label>
+                        <select id="courseType">
+                            <option value="Foundation Batch">Foundation Batch</option>
+                            <option value="Crash Course">Crash Course</option>
+                            <option value="Test Series">Test Series</option>
+                            <option value="Mains Special">Mains Special</option>
+                            <option value="Combo Pack">Combo Pack</option>
+                            <option value="Comprehensive">Comprehensive</option>
+                            <option value="Dropper Batch">Dropper Batch</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="courseDescription" rows="2" placeholder="Brief course description..."></textarea>
+                </div>
+                
+                <!-- Features -->
+                <div class="form-group">
+                    <label>Course Features</label>
+                    <div class="features-editor" id="featuresEditor"></div>
+                    <button type="button" class="btn btn-outline btn-sm" onclick="addFeature()">
+                        <i class="fas fa-plus"></i> Add Feature
+                    </button>
+                </div>
+                
+                <!-- Pricing & Details -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Original Price (₹)</label>
+                        <input type="number" id="courseOriginalPrice" min="0" value="7999" onchange="calculateDiscount()">
+                    </div>
+                    <div class="form-group">
+                        <label>Selling Price (₹) <span class="required">*</span></label>
+                        <input type="number" id="courseSellingPrice" min="0" value="4999" required onchange="calculateDiscount()">
+                    </div>
+                    <div class="form-group">
+                        <label>Discount % (Auto)</label>
+                        <input type="number" id="courseDiscount" readonly style="background:#f5f5f5;">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Duration</label>
+                        <input type="text" id="courseDuration" placeholder="e.g., 10 Months">
+                    </div>
+                    <div class="form-group">
+                        <label>Total Hours</label>
+                        <input type="text" id="courseHours" placeholder="e.g., 300+">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Students Enrolled</label>
+                        <input type="number" id="courseStudents" min="0" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Rating (1-5)</label>
+                        <input type="number" id="courseRating" min="1" max="5" step="0.1" value="4.8">
+                    </div>
+                </div>
+                
+                <!-- Appearance -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Icon (Font Awesome)</label>
+                        <select id="courseIcon">
+                            <option value="fa-landmark">🏛️ Landmark</option>
+                            <option value="fa-building-columns">🏢 Building</option>
+                            <option value="fa-stethoscope">⚕️ Stethoscope</option>
+                            <option value="fa-cogs">⚙️ Cogs</option>
+                            <option value="fa-graduation-cap">🎓 Graduation</option>
+                            <option value="fa-book">📖 Book</option>
+                            <option value="fa-laptop-code">💻 Laptop</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Card Color Theme</label>
+                        <select id="courseColor">
+                            <option value="linear-gradient(135deg, #667eea, #764ba2)">Purple Blue</option>
+                            <option value="linear-gradient(135deg, #f093fb, #f5576c)">Pink Red</option>
+                            <option value="linear-gradient(135deg, #43e97b, #38f9d7)">Green Teal</option>
+                            <option value="linear-gradient(135deg, #fa709a, #fee140)">Peach Yellow</option>
+                            <option value="linear-gradient(135deg, #4facfe, #00f2fe)">Blue Cyan</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select id="courseStatus">
+                            <option value="published">Published</option>
+                            <option value="draft">Draft</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Display Order</label>
+                        <input type="number" id="courseOrder" min="1" value="1">
+                    </div>
+                </div>
+                
+                <div class="btn-row">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> <span id="saveBtnText">Save Course</span>
+                    </button>
+                    <button type="button" class="btn btn-outline" onclick="closeCourseModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ============ DELETE CONFIRMATION MODAL ============ -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal" style="max-width:450px;text-align:center;">
+            <i class="fas fa-exclamation-triangle" style="font-size:3rem;color:var(--danger);margin-bottom:15px;"></i>
+            <h3>Delete Course?</h3>
+            <p style="color:var(--text-light);margin:10px 0;" id="deleteCourseName"></p>
+            <p style="color:var(--danger);font-size:0.85rem;font-weight:600;">
+                ⚠️ This action cannot be undone. All course data will be permanently deleted.
+            </p>
+            <div class="btn-row" style="justify-content:center;margin-top:20px;">
+                <button class="btn btn-danger" onclick="confirmDelete()">
+                    <i class="fas fa-trash"></i> Yes, Delete Course
+                </button>
+                <button class="btn btn-outline" onclick="closeDeleteModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ SCRIPTS ============ -->
+    <script src="../js/admin-editor.js"></script>
+    <script>
+        // Check authentication
+        checkAdminAuth();
+
+        let courses = [];
+        let currentFeatures = [];
+        let editingCourseId = null;
+        let deleteCourseId = null;
+
+        // ============ LOAD COURSES ============
+        function loadCourses() {
+            courses = getSection('courses') || [];
+            renderCourses();
+        }
+
+        // ============ RENDER COURSES ============
+        function renderCourses() {
+            const grid = document.getElementById('coursesGrid');
+            const empty = document.getElementById('emptyState');
+            const categoryFilter = document.getElementById('filterCategory').value;
+            const statusFilter = document.getElementById('filterStatus').value;
+            const searchTerm = document.getElementById('searchCourse').value.toLowerCase();
+            
+            let filtered = [...courses];
+            
+            if (categoryFilter !== 'all') {
+                filtered = filtered.filter(c => c.category === categoryFilter);
+            }
+            if (statusFilter !== 'all') {
+                filtered = filtered.filter(c => c.status === statusFilter);
+            }
+            if (searchTerm) {
+                filtered = filtered.filter(c => 
+                    c.name.toLowerCase().includes(searchTerm) || 
+                    c.description?.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                empty.style.display = 'block';
+                return;
+            }
+            
+            empty.style.display = 'none';
+            
+            grid.innerHTML = filtered.map(course => {
+                const discountPercent = course.originalPrice > 0 
+                    ? Math.round(((course.originalPrice - course.sellingPrice) / course.originalPrice) * 100) 
+                    : 0;
+                
+                const features = course.features || [];
+                
+                return `
+                    <div class="course-card">
+                        <div class="course-card-header" style="background:${course.color || 'linear-gradient(135deg, #667eea, #764ba2)'};">
+                            <span class="course-status-badge">
+                                <span class="status-badge ${course.status === 'published' ? 'status-published' : 'status-draft'}">
+                                    ${course.status === 'published' ? '✅ Published' : '📝 Draft'}
+                                </span>
+                            </span>
+                            <span class="category-label">${course.category}</span>
+                            <h3>${course.name}</h3>
+                        </div>
+                        
+                        <div class="course-card-body">
+                            <p>${course.description || 'No description'}</p>
+                            
+                            ${features.length > 0 ? `
+                                <ul class="course-features-list">
+                                    ${features.map(f => `<li><i class="fas fa-check-circle"></i> ${f}</li>`).join('')}
+                                </ul>
+                            ` : ''}
+                            
+                            <div class="course-meta">
+                                <span><i class="fas fa-clock"></i> ${course.duration || 'N/A'}</span>
+                                <span><i class="fas fa-video"></i> ${course.hours || 'N/A'}</span>
+                                <span><i class="fas fa-users"></i> ${(course.students || 0).toLocaleString()} Students</span>
+                                <span><i class="fas fa-star" style="color:var(--gold);"></i> ${course.rating || 'N/A'}</span>
+                            </div>
+                            
+                            <div class="course-pricing">
+                                <span class="original">₹${(course.originalPrice || 0).toLocaleString()}</span>
+                                <span class="selling">₹${(course.sellingPrice || 0).toLocaleString()}</span>
+                                ${discountPercent > 0 ? `<span class="discount">${discountPercent}% OFF</span>` : ''}
+                            </div>
+                        </div>
+                        
+                        <div class="course-card-footer">
+                            <button class="btn-edit-course" onclick="editCourse('${course.id}')">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="btn-duplicate-course" onclick="duplicateCourse('${course.id}')">
+                                <i class="fas fa-copy"></i> Duplicate
+                            </button>
+                            <button class="btn-preview-course" onclick="previewCourse('${course.id}')">
+                                <i class="fas fa-eye"></i> Preview
+                            </button>
+                            <button class="btn-delete-course" onclick="confirmDeleteCourse('${course.id}')">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ============ OPEN MODAL ============
+        function openCourseModal(courseId = null) {
+            editingCourseId = courseId;
+            currentFeatures = [];
+            document.getElementById('featuresEditor').innerHTML = '';
+            
+            if (courseId) {
+                document.getElementById('modalTitle').textContent = '✏️ Edit Course';
+                document.getElementById('saveBtnText').textContent = 'Update Course';
+                
+                const course = courses.find(c => c.id === courseId);
+                if (course) {
+                    document.getElementById('courseId').value = course.id;
+                    document.getElementById('courseName').value = course.name || '';
+                    document.getElementById('courseCategory').value = course.category || '';
+                    document.getElementById('courseType').value = course.type || 'Foundation Batch';
+                    document.getElementById('courseDescription').value = course.description || '';
+                    document.getElementById('courseOriginalPrice').value = course.originalPrice || 0;
+                    document.getElementById('courseSellingPrice').value = course.sellingPrice || 0;
+                    document.getElementById('courseDuration').value = course.duration || '';
+                    document.getElementById('courseHours').value = course.hours || '';
+                    document.getElementById('courseStudents').value = course.students || 0;
+                    document.getElementById('courseRating').value = course.rating || 4.8;
+                    document.getElementById('courseIcon').value = course.icon || 'fa-landmark';
+                    document.getElementById('courseColor').value = course.color || 'linear-gradient(135deg, #667eea, #764ba2)';
+                    document.getElementById('courseStatus').value = course.status || 'published';
+                    document.getElementById('courseOrder').value = course.order || 1;
+                    
+                    if (course.features) {
+                        course.features.forEach(f => addFeature(f));
+                    }
+                }
+            } else {
+                document.getElementById('modalTitle').textContent = '➕ Add New Course';
+                document.getElementById('saveBtnText').textContent = 'Create Course';
+                
+                // Reset form
+                document.getElementById('courseId').value = '';
+                document.getElementById('courseName').value = '';
+                document.getElementById('courseCategory').value = '';
+                document.getElementById('courseType').value = 'Foundation Batch';
+                document.getElementById('courseDescription').value = '';
+                document.getElementById('courseOriginalPrice').value = '7999';
+                document.getElementById('courseSellingPrice').value = '4999';
+                document.getElementById('courseDuration').value = '';
+                document.getElementById('courseHours').value = '';
+                document.getElementById('courseStudents').value = '0';
+                document.getElementById('courseRating').value = '4.8';
+                document.getElementById('courseIcon').value = 'fa-landmark';
+                document.getElementById('courseColor').value = 'linear-gradient(135deg, #667eea, #764ba2)';
+                document.getElementById('courseStatus').value = 'published';
+                document.getElementById('courseOrder').value = courses.length + 1;
+            }
+            
+            calculateDiscount();
+            document.getElementById('courseModal').classList.add('active');
+        }
+
+        function closeCourseModal() {
+            document.getElementById('courseModal').classList.remove('active');
+            editingCourseId = null;
+        }
+
+        // ============ FEATURES MANAGEMENT ============
+        function addFeature(value = '') {
+            const index = currentFeatures.length;
+            currentFeatures.push(value);
+            
+            const editor = document.getElementById('featuresEditor');
+            const row = document.createElement('div');
+            row.className = 'feature-input-row';
+            row.innerHTML = `
+                <input type="text" value="${value}" placeholder="e.g., Complete GS + Aptitude Coverage" onchange="updateFeature(${index}, this.value)">
+                <button type="button" class="action-btn btn-delete" onclick="removeFeature(${index}, this.parentElement)">✕</button>
+            `;
+            editor.appendChild(row);
+        }
+
+        function updateFeature(index, value) {
+            currentFeatures[index] = value;
+        }
+
+        function removeFeature(index, element) {
+            currentFeatures.splice(index, 1);
+            element.remove();
+            // Re-render features to update indices
+            document.getElementById('featuresEditor').innerHTML = '';
+            const tempFeatures = [...currentFeatures];
+            currentFeatures = [];
+            tempFeatures.forEach(f => addFeature(f));
+        }
+
+        // ============ CALCULATE DISCOUNT ============
+        function calculateDiscount() {
+            const original = parseInt(document.getElementById('courseOriginalPrice').value) || 0;
+            const selling = parseInt(document.getElementById('courseSellingPrice').value) || 0;
+            if (original > 0 && selling > 0 && selling < original) {
+                const discount = Math.round(((original - selling) / original) * 100);
+                document.getElementById('courseDiscount').value = discount;
+            } else {
+                document.getElementById('courseDiscount').value = '0';
+            }
+        }
+
+        // ============ SAVE COURSE ============
+        function saveCourse(event) {
+            event.preventDefault();
+            
+            const courseData = {
+                id: document.getElementById('courseId').value || generateId('course'),
+                name: document.getElementById('courseName').value,
+                category: document.getElementById('courseCategory').value,
+                type: document.getElementById('courseType').value,
+                description: document.getElementById('courseDescription').value,
+                features: currentFeatures.filter(f => f.trim() !== ''),
+                originalPrice: parseInt(document.getElementById('courseOriginalPrice').value) || 0,
+                sellingPrice: parseInt(document.getElementById('courseSellingPrice').value) || 0,
+                duration: document.getElementById('courseDuration').value,
+                hours: document.getElementById('courseHours').value,
+                students: parseInt(document.getElementById('courseStudents').value) || 0,
+                rating: parseFloat(document.getElementById('courseRating').value) || 4.8,
+                icon: document.getElementById('courseIcon').value,
+                color: document.getElementById('courseColor').value,
+                status: document.getElementById('courseStatus').value,
+                order: parseInt(document.getElementById('courseOrder').value) || 1
+            };
+            
+            if (editingCourseId) {
+                updateItem('courses', editingCourseId, courseData);
+                showToastMessage('✅ Course updated successfully!', 'success');
+            } else {
+                addItem('courses', courseData);
+                showToastMessage('✅ New course created successfully!', 'success');
+            }
+            
+            courses = getSection('courses');
+            renderCourses();
+            closeCourseModal();
+        }
+
+        // ============ EDIT COURSE ============
+        function editCourse(courseId) {
+            openCourseModal(courseId);
+        }
+
+        // ============ DUPLICATE COURSE ============
+        function duplicateCourse(courseId) {
+            const original = courses.find(c => c.id === courseId);
+            if (original) {
+                const copy = {
+                    ...original,
+                    id: generateId('course'),
+                    name: original.name + ' (Copy)',
+                    status: 'draft',
+                    order: courses.length + 1,
+                    students: 0
+                };
+                addItem('courses', copy);
+                courses = getSection('courses');
+                renderCourses();
+                showToastMessage('📋 Course duplicated! New copy is in Draft mode.', 'success');
+            }
+        }
+
+        // ============ DELETE COURSE ============
+        function confirmDeleteCourse(courseId) {
+            const course = courses.find(c => c.id === courseId);
+            if (course) {
+                deleteCourseId = courseId;
+                document.getElementById('deleteCourseName').textContent = 
+                    `Are you sure you want to delete "${course.name}"?`;
+                document.getElementById('deleteModal').classList.add('active');
+            }
+        }
+
+        function confirmDelete() {
+            if (deleteCourseId) {
+                deleteItem('courses', deleteCourseId);
+                courses = getSection('courses');
+                renderCourses();
+                closeDeleteModal();
+                showToastMessage('🗑️ Course permanently deleted!', 'error');
+                deleteCourseId = null;
+            }
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.remove('active');
+            deleteCourseId = null;
+        }
+
+        // ============ PREVIEW ============
+        function previewCourse(courseId) {
+            window.open(`../pages/courses.html#${courseId}`, '_blank');
+        }
+
+        // ============ EXPORT / IMPORT ============
+        function exportCourses() {
+            const blob = new Blob([JSON.stringify(courses, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'courses-backup-' + new Date().toISOString().split('T')[0] + '.json';
+            a.click();
+        }
+
+        function importCourses(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    if (!Array.isArray(importedData)) {
+                        throw new Error('Invalid format');
+                    }
+                    if (confirm(`Import ${importedData.length} courses? This will REPLACE all existing courses.`)) {
+                        const siteData = getSiteData();
+                        siteData.courses = importedData;
+                        saveSiteData(siteData);
+                        courses = importedData;
+                        renderCourses();
+                        showToastMessage(`✅ ${importedData.length} courses imported successfully!`, 'success');
+                    }
+                } catch (err) {
+                    showToastMessage('❌ Invalid file format. Please use a valid courses JSON file.', 'error');
+                }
+            };
+            reader.readAsText(file);
+            document.getElementById('importCoursesFile').value = '';
+        }
+
+        // ============ TOAST MESSAGE ============
+        function showToastMessage(message, type) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.display = 'block';
+            toast.style.background = type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#f59e0b';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+
+        // ============ MODAL CLOSE ON OUTSIDE CLICK ============
+        document.getElementById('courseModal').addEventListener('click', function(e) {
+            if (e.target === this) closeCourseModal();
+        });
+        
+        document.getElementById('deleteModal').addEventListener('click', function(e) {
+            if (e.target === this) closeDeleteModal();
+        });
+
+        // ============ INITIALIZE ============
+        loadCourses();
+    </script>
+</body>
+</html>
