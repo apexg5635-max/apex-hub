@@ -6,201 +6,281 @@
     <title>Admin Dashboard - Apex Hub</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/admin.css">
     <style>
-        .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:25px}
-        .stat{background:#fff;padding:22px;border-radius:14px;box-shadow:0 2px 8px rgba(0,0,0,.05);display:flex;align-items:center;gap:15px}
-        .stat-icon{width:50px;height:50px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;color:#fff}
-        .stat-icon.purple{background:linear-gradient(135deg,#667eea,#764ba2)}
-        .stat-icon.green{background:linear-gradient(135deg,#43e97b,#38f9d7)}
-        .stat-icon.blue{background:linear-gradient(135deg,#4facfe,#00f2fe)}
-        .stat h2{margin:0;font-size:1.6rem}.stat p{margin:0;font-size:.8rem;color:#888}
-        .btn{padding:10px 22px;border:none;border-radius:10px;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;font-size:.85rem}
-        .btn-primary{background:#1a237e;color:#fff}.btn-primary:hover{background:#283593}
-        .btn-sm{padding:6px 14px;font-size:.75rem;border-radius:8px}
-        .btn-danger{background:#ef4444;color:#fff}
+        :root{--primary:#1a237e;--gold:#f5a623;--danger:#ef4444;--success:#10b981;--bg:#f4f6f9;--card:#fff;--text:#1e293b;--light:#64748b;--border:#e2e8f0}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Poppins',sans-serif;background:var(--bg);display:flex;min-height:100vh}
+        
+        .sidebar{width:250px;background:#0a0e27;color:#fff;position:fixed;height:100vh;overflow-y:auto;z-index:100}
+        .sidebar .logo{padding:25px 20px;text-align:center;font-size:1.4rem;font-weight:800;letter-spacing:2px;border-bottom:1px solid rgba(255,255,255,.08)}
+        .sidebar .logo span{color:var(--gold)}
+        .sidebar .user{padding:18px 20px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.08)}
+        .sidebar .user .avatar{width:40px;height:40px;border-radius:10px;background:var(--gold);color:#0a0e27;display:flex;align-items:center;justify-content:center;font-weight:700}
+        .sidebar nav{padding:12px}
+        .sidebar nav a{display:flex;align-items:center;gap:10px;padding:11px 14px;color:#aaa;text-decoration:none;font-size:.88rem;border-radius:8px;transition:.3s;margin-bottom:3px}
+        .sidebar nav a:hover,.sidebar nav a.active{background:rgba(245,166,35,.15);color:var(--gold)}
+        .sidebar nav a.logout{color:#ef4444}
+        .sidebar nav a.logout:hover{background:rgba(239,68,68,.15)}
+        
+        .main{margin-left:250px;padding:25px;flex:1}
+        .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px;flex-wrap:wrap;gap:10px}
+        .header h1{font-size:1.5rem;color:var(--text)}
+        
+        .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:25px}
+        .stat{background:var(--card);padding:20px;border-radius:14px;box-shadow:0 2px 8px rgba(0,0,0,.05);display:flex;align-items:center;gap:15px}
+        .stat .icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;color:#fff}
+        .stat .icon.purple{background:linear-gradient(135deg,#667eea,#764ba2)}
+        .stat .icon.green{background:linear-gradient(135deg,#43e97b,#38f9d7)}
+        .stat .icon.blue{background:linear-gradient(135deg,#4facfe,#00f2fe)}
+        .stat h2{font-size:1.5rem;margin-bottom:2px}.stat p{font-size:.8rem;color:var(--light)}
+        
+        .card{background:var(--card);border-radius:14px;box-shadow:0 2px 8px rgba(0,0,0,.05);overflow:hidden}
+        .card-header{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+        .card-header h3{font-size:1rem}
+        
+        .btn{padding:10px 22px;border:none;border-radius:10px;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;font-size:.85rem;transition:.3s}
+        .btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:#283593}
+        .btn-sm{padding:5px 12px;font-size:.73rem;border-radius:8px;border:none;cursor:pointer;font-family:'Poppins',sans-serif}
         .btn-edit{background:#e0e7ff;color:#3730a3}
-        table{width:100%;border-collapse:collapse;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.05)}
-        th{text-align:left;padding:14px 16px;background:#f8fafc;font-size:.8rem;color:#888;font-weight:600}
+        .btn-danger{background:#fee2e2;color:#991b1b}
+        
+        table{width:100%;border-collapse:collapse}
+        th{text-align:left;padding:12px 16px;background:#f8fafc;font-size:.78rem;color:var(--light);font-weight:600;border-bottom:2px solid var(--border)}
         td{padding:12px 16px;border-bottom:1px solid #f1f5f9;font-size:.85rem}
+        tr:hover{background:#f8faff}
         .badge{padding:4px 10px;border-radius:12px;font-size:.7rem;font-weight:600}
-        .badge-admin{background:#e8eaf6;color:#1a237e}.badge-student{background:#d1fae5;color:#065f46}
+        .badge-admin{background:#e8eaf6;color:var(--primary)}
+        .badge-student{background:#d1fae5;color:#065f46}
+        
         .modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center}
-        .modal-overlay.active{display:flex}
-        .modal{background:#fff;border-radius:16px;padding:28px;max-width:480px;width:90%}
-        .modal h3{margin-bottom:18px}
-        .modal-close{float:right;background:none;border:none;font-size:1.2rem;cursor:pointer}
+        .modal-overlay.show{display:flex}
+        .modal{background:#fff;border-radius:16px;padding:25px;max-width:480px;width:90%;max-height:85vh;overflow-y:auto}
+        .modal h3{margin-bottom:16px;font-size:1.1rem}
+        .modal .close{float:right;background:none;border:none;font-size:1.2rem;cursor:pointer;color:var(--light)}
         .form-group{margin-bottom:14px}
         .form-group label{display:block;font-weight:600;margin-bottom:4px;font-size:.85rem}
-        .form-group input{width:100%;padding:11px;border:2px solid #e5e7eb;border-radius:10px;font-family:'Poppins',sans-serif;font-size:.9rem}
-        .form-group input:focus{border-color:#1a237e;outline:none}
+        .form-group input{width:100%;padding:11px;border:2px solid var(--border);border-radius:10px;font-family:'Poppins',sans-serif;font-size:.9rem}
+        .form-group input:focus{border-color:var(--primary);outline:none}
         .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+        
         .toast{display:none;position:fixed;top:20px;right:20px;padding:12px 20px;border-radius:10px;color:#fff;z-index:999;font-weight:500}
-        .toast.success{background:#10b981}.toast.error{background:#ef4444}
-        @media(max-width:768px){.stats{grid-template-columns:1fr}.form-row{grid-template-columns:1fr}}
+        .toast.success{background:var(--success)}.toast.error{background:var(--danger)}
+        
+        @media(max-width:768px){.sidebar{display:none}.main{margin-left:0;padding:15px}.stats{grid-template-columns:1fr}.form-row{grid-template-columns:1fr}}
     </style>
 </head>
 <body>
-    <aside class="admin-sidebar">
-        <div class="sidebar-logo"><h2>APEX<span>HUB</span></h2><p class="logo-subtitle">Admin</p></div>
-        <div class="sidebar-user"><div class="sidebar-avatar">AD</div><div class="sidebar-user-info"><h4>Admin</h4></div></div>
-        <ul class="sidebar-nav">
-            <li><a href="dashboard.html" class="active"><i class="fas fa-users"></i> Students</a></li>
-            <li><a href="manage-courses.html"><i class="fas fa-book"></i> Courses</a></li>
-            <li><a href="upload-youtube.html"><i class="fab fa-youtube"></i> Videos</a></li>
-            <li><a href="schedule-youtube-live.html"><i class="fas fa-broadcast-tower"></i> Live</a></li>
-            <li><a href="#" onclick="logout()" style="color:#ef4444"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-        </ul>
+    
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="logo">APEX<span>HUB</span></div>
+        <div class="user"><div class="avatar">AD</div><span style="font-size:.9rem">Admin</span></div>
+        <nav>
+            <a href="dashboard.html" class="active"><i class="fas fa-users"></i> Students</a>
+            <a href="manage-courses.html"><i class="fas fa-book"></i> Courses</a>
+            <a href="upload-youtube.html"><i class="fab fa-youtube"></i> YouTube Videos</a>
+            <a href="schedule-youtube-live.html"><i class="fas fa-broadcast-tower"></i> Live Classes</a>
+            <a href="#" class="logout" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </nav>
     </aside>
 
-    <main class="admin-main">
+    <!-- Main Content -->
+    <main class="main">
         <div class="toast" id="toast"></div>
         
-        <div class="admin-header">
-            <h1>👨‍💼 Student Management</h1>
+        <div class="header">
+            <h1>Student Management</h1>
             <button class="btn btn-primary" onclick="openModal()"><i class="fas fa-plus"></i> Add Student</button>
         </div>
 
+        <!-- Stats -->
         <div class="stats">
-            <div class="stat"><div class="stat-icon purple"><i class="fas fa-users"></i></div><div><h2 id="totalCount">0</h2><p>Total Students</p></div></div>
-            <div class="stat"><div class="stat-icon green"><i class="fas fa-user-graduate"></i></div><div><h2 id="activeCount">0</h2><p>Active</p></div></div>
-            <div class="stat"><div class="stat-icon blue"><i class="fas fa-book"></i></div><div><h2 id="courseCount">0</h2><p>Courses</p></div></div>
+            <div class="stat"><div class="icon purple"><i class="fas fa-users"></i></div><div><h2 id="totalCount">0</h2><p>Total Students</p></div></div>
+            <div class="stat"><div class="icon green"><i class="fas fa-user-check"></i></div><div><h2 id="activeCount">0</h2><p>Active Students</p></div></div>
+            <div class="stat"><div class="icon blue"><i class="fas fa-book"></i></div><div><h2 id="courseCount">0</h2><p>Courses</p></div></div>
         </div>
 
-        <table>
-            <thead><tr><th>Name</th><th>Mobile</th><th>Email</th><th>Role</th><th>Date</th><th>Actions</th></tr></thead>
-            <tbody id="tbody"><tr><td colspan="6" style="text-align:center;color:#888;padding:30px">No students yet. Click "Add Student" to begin.</td></tr></tbody>
-        </table>
+        <!-- Students Table -->
+        <div class="card">
+            <div class="card-header"><h3>All Students</h3></div>
+            <table>
+                <thead><tr><th>Name</th><th>Mobile</th><th>Email</th><th>Role</th><th>Joined</th><th></th></tr></thead>
+                <tbody id="tbody"><tr><td colspan="6" style="text-align:center;color:var(--light);padding:40px">No students yet. Click "Add Student" to begin.</td></tr></tbody>
+            </table>
+        </div>
     </main>
 
-    <!-- Add/Edit Modal -->
-    <div class="modal-overlay" id="modal">
+    <!-- Add/Edit Student Modal -->
+    <div class="modal-overlay" id="studentModal">
         <div class="modal">
-            <button class="modal-close" onclick="closeModal()">✕</button>
-            <h3 id="modalTitle">➕ Add Student</h3>
+            <button class="close" onclick="closeModal()">✕</button>
+            <h3 id="modalTitle">Add Student</h3>
             <form onsubmit="saveStudent(event)">
                 <input type="hidden" id="sid">
-                <div class="form-group"><label>Full Name *</label><input type="text" id="sname" required></div>
+                <div class="form-group"><label>Full Name *</label><input type="text" id="sname" placeholder="e.g., Rahul Sahu" required></div>
                 <div class="form-row">
-                    <div class="form-group"><label>Mobile *</label><input type="tel" id="smobile" pattern="[6-9]\d{9}" required></div>
-                    <div class="form-group"><label>Email</label><input type="email" id="semail"></div>
+                    <div class="form-group"><label>Mobile *</label><input type="tel" id="smobile" placeholder="9876543210" pattern="[6-9]\d{9}" required></div>
+                    <div class="form-group"><label>Email</label><input type="email" id="semail" placeholder="student@example.com"></div>
                 </div>
-                <div class="form-group"><label>Password *</label><input type="text" id="spass" minlength="6" required></div>
-                <button type="submit" class="btn btn-primary" style="width:100%">Save Student</button>
+                <div class="form-group"><label>Password *</label><input type="text" id="spass" placeholder="Min 6 characters" minlength="6" required></div>
+                <button type="submit" class="btn btn-primary" style="width:100%;margin-top:8px">Save Student</button>
             </form>
         </div>
     </div>
 
-    <!-- Delete Modal -->
-    <div class="modal-overlay" id="delModal">
+    <!-- Delete Confirmation -->
+    <div class="modal-overlay" id="deleteModal">
         <div class="modal" style="text-align:center;max-width:380px">
             <h3>Delete Student?</h3>
-            <p style="color:#888;margin:10px 0" id="delName"></p>
-            <div style="display:flex;gap:10px;justify-content:center">
-                <button class="btn btn-danger" onclick="confirmDelete()">Delete</button>
-                <button class="btn" style="background:#e5e7eb" onclick="closeDelModal()">Cancel</button>
+            <p style="color:var(--light);margin:10px 0" id="delName"></p>
+            <div style="display:flex;gap:10px;justify-content:center;margin-top:15px">
+                <button class="btn" style="background:var(--danger);color:#fff" onclick="confirmDelete()">Delete</button>
+                <button class="btn" style="background:#e5e7eb" onclick="closeDeleteModal()">Cancel</button>
             </div>
         </div>
     </div>
 
     <script>
-        if(localStorage.getItem('apexAdminLoggedIn')!=='true')location.href='index.html';
+        // Auth check
+        if(localStorage.getItem('apexAdminLoggedIn')!=='true'){location.href='index.html';}
         function logout(){localStorage.removeItem('apexAdminLoggedIn');location.href='index.html';}
 
+        const STORAGE='apexStudents';
         let students=[],delId=null;
-        const STORAGE_KEY='apexStudents';
 
+        // Load students
         function load(){
-            students=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');
+            students=JSON.parse(localStorage.getItem(STORAGE)||'[]');
             render();
+            updateStats();
         }
 
+        // Render table
         function render(){
             const tb=document.getElementById('tbody');
-            document.getElementById('totalCount').textContent=students.length;
-            document.getElementById('activeCount').textContent=students.filter(s=>s.role==='student').length;
-            
             if(students.length===0){
-                tb.innerHTML='<tr><td colspan="6" style="text-align:center;color:#888;padding:30px">No students yet. Click "Add Student" to begin.</td></tr>';
+                tb.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--light);padding:40px">No students yet. Click "Add Student" to begin.</td></tr>';
                 return;
             }
             tb.innerHTML=students.map(s=>`
                 <tr>
-                    <td><strong>${s.fullName}</strong></td>
-                    <td>${s.mobile}</td>
+                    <td><strong>${s.fullName||'N/A'}</strong></td>
+                    <td>${s.mobile||'N/A'}</td>
                     <td>${s.email||'-'}</td>
-                    <td><span class="badge ${s.role==='admin'?'badge-admin':'badge-student'}">${s.role}</span></td>
+                    <td><span class="badge ${s.role==='admin'?'badge-admin':'badge-student'}">${s.role||'student'}</span></td>
                     <td>${s.createdAt?new Date(s.createdAt).toLocaleDateString('en-IN'):'-'}</td>
                     <td>
-                        <button class="btn btn-sm btn-edit" onclick="editStudent('${s.id}')">✏️</button>
-                        <button class="btn btn-sm btn-danger" onclick="deleteStudent('${s.id}','${s.fullName}')">🗑</button>
+                        <button class="btn-sm btn-edit" onclick="editStudent('${s.id}')">Edit</button>
+                        <button class="btn-sm btn-danger" onclick="openDelete('${s.id}','${s.fullName}')">Delete</button>
                     </td>
                 </tr>
             `).join('');
         }
 
+        // Update stats
+        function updateStats(){
+            document.getElementById('totalCount').textContent=students.length;
+            document.getElementById('activeCount').textContent=students.filter(s=>s.role==='student').length;
+            document.getElementById('courseCount').textContent=JSON.parse(localStorage.getItem('apexYouTubeVideos')||'[]').length;
+        }
+
+        // Open add modal
         function openModal(){
-            document.getElementById('modalTitle').textContent='➕ Add Student';
+            document.getElementById('modalTitle').textContent='Add Student';
             document.getElementById('sid').value='';
             document.getElementById('sname').value='';
             document.getElementById('smobile').value='';
             document.getElementById('semail').value='';
             document.getElementById('spass').value='';
             document.getElementById('spass').required=true;
-            document.getElementById('modal').classList.add('active');
+            document.getElementById('spass').placeholder='Min 6 characters';
+            document.getElementById('studentModal').classList.add('show');
         }
 
-        function closeModal(){document.getElementById('modal').classList.remove('active');}
+        // Close modal
+        function closeModal(){document.getElementById('studentModal').classList.remove('show');}
 
+        // Edit student
         function editStudent(id){
             const s=students.find(x=>x.id===id);if(!s)return;
-            document.getElementById('modalTitle').textContent='✏️ Edit Student';
+            document.getElementById('modalTitle').textContent='Edit Student';
             document.getElementById('sid').value=s.id;
-            document.getElementById('sname').value=s.fullName;
-            document.getElementById('smobile').value=s.mobile;
+            document.getElementById('sname').value=s.fullName||'';
+            document.getElementById('smobile').value=s.mobile||'';
             document.getElementById('semail').value=s.email||'';
             document.getElementById('spass').value='';
-            document.getElementById('spass').placeholder='Leave blank to keep';
             document.getElementById('spass').required=false;
-            document.getElementById('modal').classList.add('active');
+            document.getElementById('spass').placeholder='Leave blank to keep password';
+            document.getElementById('studentModal').classList.add('show');
         }
 
+        // Save student
         function saveStudent(e){
             e.preventDefault();
             const id=document.getElementById('sid').value;
+            const pass=document.getElementById('spass').value;
+            
             const data={
                 id:id||'stu_'+Date.now(),
-                fullName:document.getElementById('sname').value,
-                mobile:document.getElementById('smobile').value,
-                email:document.getElementById('semail').value,
-                password:document.getElementById('spass').value||(id?students.find(s=>s.id===id)?.password||'':'student123'),
+                fullName:document.getElementById('sname').value.trim(),
+                mobile:document.getElementById('smobile').value.trim(),
+                email:document.getElementById('semail').value.trim(),
+                password:pass||(id?students.find(s=>s.id===id)?.password||'student123':'student123'),
                 role:'student',
-                createdAt:id?students.find(s=>s.id===id)?.createdAt:new Date().toISOString()
+                createdAt:id?(students.find(s=>s.id===id)?.createdAt):new Date().toISOString()
             };
-            if(id){const i=students.findIndex(s=>s.id===id);if(i!==-1)students[i]=data;}
-            else students.unshift(data);
-            localStorage.setItem(STORAGE_KEY,JSON.stringify(students));
-            closeModal();render();toast('✅ Student saved!');
+
+            if(id){
+                const idx=students.findIndex(s=>s.id===id);
+                if(idx!==-1)students[idx]=data;
+            }else{
+                students.unshift(data);
+            }
+
+            localStorage.setItem(STORAGE,JSON.stringify(students));
+            closeModal();
+            render();
+            updateStats();
+            showToast('Student saved successfully!');
         }
 
-        function deleteStudent(id,name){
+        // Delete
+        function openDelete(id,name){
             delId=id;
-            document.getElementById('delName').textContent='Are you sure you want to delete "'+name+'"?';
-            document.getElementById('delModal').classList.add('active');
+            document.getElementById('delName').textContent='Delete "'+name+'"? This cannot be undone.';
+            document.getElementById('deleteModal').classList.add('show');
         }
 
-        function closeDelModal(){document.getElementById('delModal').classList.remove('active');delId=null;}
+        function closeDeleteModal(){
+            document.getElementById('deleteModal').classList.remove('show');
+            delId=null;
+        }
 
         function confirmDelete(){
-            if(delId){students=students.filter(s=>s.id!==delId);localStorage.setItem(STORAGE_KEY,JSON.stringify(students));render();toast('🗑️ Deleted','error');}
-            closeDelModal();
+            if(delId){
+                students=students.filter(s=>s.id!==delId);
+                localStorage.setItem(STORAGE,JSON.stringify(students));
+                render();
+                updateStats();
+                showToast('Student deleted','error');
+            }
+            closeDeleteModal();
         }
 
-        function toast(m,t='success'){const el=document.getElementById('toast');el.textContent=m;el.className='toast '+t;el.style.display='block';setTimeout(()=>el.style.display='none',2500);}
+        // Toast
+        function showToast(msg,type){
+            const t=document.getElementById('toast');
+            t.textContent=msg;
+            t.className='toast '+(type||'success');
+            t.style.display='block';
+            setTimeout(()=>t.style.display='none',2500);
+        }
 
-        document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
-        document.getElementById('delModal').addEventListener('click',function(e){if(e.target===this)closeDelModal();});
+        // Close modals on outside click
+        document.getElementById('studentModal').addEventListener('click',function(e){if(e.target===this)closeModal();});
+        document.getElementById('deleteModal').addEventListener('click',function(e){if(e.target===this)closeDeleteModal();});
 
+        // Load on start
         load();
     </script>
 </body>
