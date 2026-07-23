@@ -4,971 +4,107 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Dashboard - Apex Hub</title>
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/style.css">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* ============ DASHBOARD LAYOUT ============ */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: #f4f6f9;
-            display: flex;
-            min-height: 100vh;
-        }
-        
-        /* ============ SIDEBAR ============ */
-        .dashboard-sidebar {
-            width: 260px;
-            background: #0a0e27;
-            color: white;
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
-            z-index: 100;
-            transition: all 0.3s;
-        }
-        
-        .sidebar-header {
-            padding: 25px 20px;
-            text-align: center;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
-        }
-        
-        .sidebar-header .logo {
-            font-size: 1.5rem;
-            font-weight: 800;
-            letter-spacing: 2px;
-            color: white;
-            text-decoration: none;
-        }
-        
-        .sidebar-header .logo span { color: #f5a623; }
-        
-        .sidebar-header .logo-subtitle {
-            font-size: 0.7rem;
-            color: #888;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            margin-top: 3px;
-        }
-        
-        .sidebar-user {
-            padding: 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .sidebar-avatar {
-            width: 45px;
-            height: 45px;
-            border-radius: 12px;
-            background: #f5a623;
-            color: #0a0e27;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 1.1rem;
-            flex-shrink: 0;
-        }
-        
-        .sidebar-user-info h4 {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: white;
-        }
-        
-        .sidebar-user-info p {
-            font-size: 0.7rem;
-            color: #888;
-        }
-        
-        .sidebar-nav {
-            list-style: none;
-            padding: 15px 12px;
-        }
-        
-        .sidebar-nav li { margin-bottom: 3px; }
-        
-        .sidebar-nav a {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 11px 15px;
-            color: #aaa;
-            border-radius: 8px;
-            transition: all 0.3s;
-            font-size: 0.88rem;
-            font-weight: 500;
-            text-decoration: none;
-        }
-        
-        .sidebar-nav a i { width: 20px; text-align: center; }
-        
-        .sidebar-nav a:hover {
-            background: rgba(245,166,35,0.1);
-            color: #f5a623;
-        }
-        
-        .sidebar-nav a.active {
-            background: rgba(245,166,35,0.15);
-            color: #f5a623;
-            font-weight: 600;
-        }
-        
-        .sidebar-nav .logout-btn {
-            color: #ef4444 !important;
-        }
-        
-        .sidebar-nav .logout-btn:hover {
-            background: rgba(239,68,68,0.15) !important;
-            color: #ef4444 !important;
-        }
-        
-        .sidebar-section-title {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #555;
-            padding: 20px 15px 8px;
-            font-weight: 600;
-        }
-        
-        /* ============ MAIN CONTENT ============ */
-        .dashboard-main {
-            margin-left: 260px;
-            padding: 25px 30px;
-            flex: 1;
-        }
-        
-        .dashboard-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-        
-        .dashboard-header h1 {
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-        
-        .dashboard-header p {
-            color: #6b7280;
-            font-size: 0.9rem;
-        }
-        
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        
-        .header-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            position: relative;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            transition: all 0.3s;
-            color: #333;
-        }
-        
-        .header-icon:hover {
-            background: #1a237e;
-            color: white;
-        }
-        
-        .notification-dot {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            width: 8px;
-            height: 8px;
-            background: #ef4444;
-            border-radius: 50%;
-        }
-        
-        .user-profile-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-        }
-        
-        .user-avatar-header {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            background: #1a237e;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-        
-        /* ============ STATS CARDS ============ */
-        .stats-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 18px;
-            margin-bottom: 25px;
-        }
-        
-        .stat-card {
-            background: white;
-            padding: 22px;
-            border-radius: 15px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-        
-        .stat-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-        
-        .stat-icon {
-            width: 55px;
-            height: 55px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4rem;
-            color: white;
-            flex-shrink: 0;
-        }
-        
-        .stat-icon.blue { background: linear-gradient(135deg, #667eea, #764ba2); }
-        .stat-icon.green { background: linear-gradient(135deg, #43e97b, #38f9d7); }
-        .stat-icon.orange { background: linear-gradient(135deg, #fa709a, #fee140); }
-        .stat-icon.purple { background: linear-gradient(135deg, #a18cd1, #fbc2eb); }
-        
-        .stat-info h3 {
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-        
-        .stat-info p {
-            font-size: 0.8rem;
-            color: #6b7280;
-        }
-        
-        /* ============ DASHBOARD GRID ============ */
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 20px;
-        }
-        
-        .dashboard-card {
-            background: white;
-            border-radius: 15px;
-            padding: 22px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-        }
-        
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 18px;
-        }
-        
-        .card-header h3 {
-            font-size: 1.05rem;
-            font-weight: 600;
-        }
-        
-        .card-header a {
-            font-size: 0.8rem;
-            color: #1a237e;
-            font-weight: 500;
-            text-decoration: none;
-        }
-        
-        /* ============ COURSE LIST ============ */
-        .course-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 14px 0;
-            border-bottom: 1px solid #f3f4f6;
-        }
-        
-        .course-item:last-child { border-bottom: none; }
-        
-        .course-item-info h4 {
-            font-size: 0.9rem;
-            margin-bottom: 3px;
-        }
-        
-        .course-item-info .meta {
-            font-size: 0.75rem;
-            color: #6b7280;
-        }
-        
-        .progress-bar {
-            width: 100%;
-            height: 6px;
-            background: #e5e7eb;
-            border-radius: 3px;
-            margin-top: 6px;
-        }
-        
-        .progress-fill {
-            height: 100%;
-            border-radius: 3px;
-            background: linear-gradient(90deg, #43e97b, #38f9d7);
-        }
-        
-        .btn-continue {
-            padding: 8px 18px;
-            background: #10b981;
-            color: white;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            font-family: 'Poppins', sans-serif;
-            font-size: 0.8rem;
-            font-weight: 500;
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-        
-        .btn-continue:hover { background: #059669; }
-        
-        /* ============ UPCOMING CLASSES ============ */
-        .upcoming-class {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px;
-            background: #f9fafb;
-            border-radius: 10px;
-            margin-bottom: 10px;
-        }
-        
-        .class-date {
-            text-align: center;
-            min-width: 50px;
-        }
-        
-        .class-date .day {
-            font-size: 0.7rem;
-            color: #6b7280;
-        }
-        
-        .class-date .date {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #1a237e;
-        }
-        
-        .class-info h4 {
-            font-size: 0.85rem;
-            margin-bottom: 2px;
-        }
-        
-        .class-info p {
-            font-size: 0.75rem;
-            color: #6b7280;
-        }
-        
-        .btn-join {
-            padding: 6px 16px;
-            background: #ef4444;
-            color: white;
-            border: none;
-            border-radius: 15px;
-            cursor: pointer;
-            font-family: 'Poppins', sans-serif;
-            font-size: 0.75rem;
-            margin-left: auto;
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.6; }
-        }
-        
-        .btn-remind {
-            padding: 6px 16px;
-            background: #e5e7eb;
-            color: #333;
-            border: none;
-            border-radius: 15px;
-            cursor: pointer;
-            font-family: 'Poppins', sans-serif;
-            font-size: 0.75rem;
-            margin-left: auto;
-        }
-        
-        /* ============ TEST PERFORMANCE TABLE ============ */
-        .test-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        
-        .test-table th {
-            text-align: left;
-            padding: 10px 12px;
-            font-size: 0.8rem;
-            color: #6b7280;
-            font-weight: 600;
-            border-bottom: 2px solid #e5e7eb;
-        }
-        
-        .test-table td {
-            padding: 12px;
-            font-size: 0.85rem;
-            border-bottom: 1px solid #f3f4f6;
-        }
-        
-        .score-good { color: #10b981; font-weight: 600; }
-        .score-average { color: #f59e0b; font-weight: 600; }
-        
-        .rank-badge {
-            background: #e8eaf6;
-            color: #1a237e;
-            padding: 3px 10px;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-        
-        /* ============ MOBILE MENU ============ */
-        .mobile-menu-btn {
-            display: none;
-            position: fixed;
-            top: 15px;
-            left: 15px;
-            z-index: 200;
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-            background: #1a237e;
-            color: white;
-            border: none;
-            font-size: 1.2rem;
-            cursor: pointer;
-        }
-        
-        /* ============ RESPONSIVE ============ */
-        @media (max-width: 968px) {
-            .dashboard-sidebar {
-                transform: translateX(-100%);
-            }
-            
-            .dashboard-sidebar.mobile-open {
-                transform: translateX(0);
-            }
-            
-            .dashboard-main {
-                margin-left: 0;
-                padding: 20px 15px;
-            }
-            
-            .mobile-menu-btn {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-            
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .stats-cards {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .stats-cards {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        /* Overlay for mobile sidebar */
-        .sidebar-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 99;
-        }
-        
-        .sidebar-overlay.active {
-            display: block;
-        }
+        :root{--primary:#1a237e;--gold:#f5a623;--bg:#f4f6f9;--card:#fff;--text:#1e293b;--light:#64748b}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Poppins',sans-serif;background:var(--bg);min-height:100vh}
+        
+        .top{background:var(--primary);color:#fff;padding:15px 20px;display:flex;justify-content:space-between;align-items:center}
+        .top h2{font-size:1.3rem;letter-spacing:2px}
+        .top h2 span{color:var(--gold)}
+        .top button{background:#ef4444;color:#fff;border:none;padding:8px 18px;border-radius:8px;cursor:pointer;font-family:'Poppins',sans-serif;font-size:.85rem}
+        
+        .container{max-width:800px;margin:0 auto;padding:20px}
+        
+        .welcome{background:linear-gradient(135deg,var(--primary),#283593);color:#fff;padding:30px;border-radius:16px;margin-bottom:20px}
+        .welcome h1{font-size:1.5rem;margin-bottom:5px}
+        .welcome p{opacity:.9;font-size:.9rem}
+        
+        .cards{display:grid;grid-template-columns:1fr;gap:12px}
+        .card{background:var(--card);border-radius:16px;padding:22px;box-shadow:0 2px 8px rgba(0,0,0,.05);display:flex;align-items:center;gap:18px;cursor:pointer;transition:.3s;text-decoration:none;color:var(--text)}
+        .card:hover{transform:translateY(-3px);box-shadow:0 8px 25px rgba(0,0,0,.1)}
+        .card-icon{width:55px;height:55px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:#fff;flex-shrink:0}
+        .card-icon.courses{background:linear-gradient(135deg,#667eea,#764ba2)}
+        .card-icon.videos{background:linear-gradient(135deg,#ef4444,#dc2626)}
+        .card-icon.live{background:linear-gradient(135deg,#10b981,#059669)}
+        .card-info h3{font-size:1rem;margin-bottom:3px}
+        .card-info p{font-size:.8rem;color:var(--light)}
+        .card-arrow{color:var(--primary);font-size:1.2rem;margin-left:auto}
+        
+        @media(max-width:480px){.container{padding:15px}.welcome{padding:20px}}
     </style>
 </head>
 <body>
     
-    <!-- ============ AUTH PROTECTION ============ -->
+    <!-- Top Bar -->
+    <div class="top">
+        <h2>APEX<span>HUB</span></h2>
+        <div>
+            <span id="topName" style="margin-right:15px;font-size:.9rem"></span>
+            <button onclick="logout()">Logout</button>
+        </div>
+    </div>
+    
+    <div class="container">
+        
+        <!-- Welcome -->
+        <div class="welcome">
+            <h1 id="welcomeMsg">Welcome back! 👋</h1>
+            <p>Continue your preparation journey</p>
+        </div>
+        
+        <!-- Quick Links -->
+        <div class="cards">
+            <a href="../student/course-content.html" class="card">
+                <div class="card-icon courses">📚</div>
+                <div class="card-info">
+                    <h3>My Courses</h3>
+                    <p>View course content & curriculum</p>
+                </div>
+                <span class="card-arrow">▶</span>
+            </a>
+            
+            <a href="../student/watch-youtube.html" class="card">
+                <div class="card-icon videos">▶</div>
+                <div class="card-info">
+                    <h3>Watch Videos</h3>
+                    <p>Recorded lectures & tutorials</p>
+                </div>
+                <span class="card-arrow">▶</span>
+            </a>
+            
+            <a href="../student/youtube-live.html" class="card">
+                <div class="card-icon live">🔴</div>
+                <div class="card-info">
+                    <h3>Live Classes</h3>
+                    <p>Join live sessions with faculty</p>
+                </div>
+                <span class="card-arrow">▶</span>
+            </a>
+        </div>
+        
+    </div>
+
     <script src="../js/auth.js"></script>
     <script>
-        // Check if student is logged in - redirect to login if not
-        if (!requireAuth()) {
-            // User is redirected to login page automatically
-        }
-    </script>
-    
-    <!-- ============ MOBILE MENU BUTTON ============ -->
-    <button class="mobile-menu-btn" onclick="toggleSidebar()">
-        <i class="fas fa-bars"></i>
-    </button>
-    
-    <!-- ============ SIDEBAR OVERLAY ============ -->
-    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
-    
-    <!-- ============ SIDEBAR ============ -->
-    <aside class="dashboard-sidebar" id="dashboardSidebar">
-        <div class="sidebar-header">
-            <a href="../index.html" class="logo">APEX<span>HUB</span></a>
-            <p class="logo-subtitle">Student Portal</p>
-        </div>
-        
-        <div class="sidebar-user">
-            <div class="sidebar-avatar" id="sidebarAvatar">ST</div>
-            <div class="sidebar-user-info">
-                <h4 id="sidebarUserName">Student</h4>
-                <p id="sidebarUserExam">CG PSC Aspirant</p>
-            </div>
-        </div>
-        
-        <ul class="sidebar-nav">
-            <li><a href="dashboard.html" class="active">
-                <i class="fas fa-th-large"></i> Dashboard
-            </a></li>
-            
-            <p class="sidebar-section-title">LEARNING</p>
-            
-            <li><a href="../student/course-content.html">
-                <i class="fas fa-book-open"></i> My Courses
-            </a></li>
-            <li><a href="../student/live-class.html">
-                <i class="fas fa-broadcast-tower"></i> Live Classes
-            </a></li>
-            <li><a href="../student/watch.html">
-                <i class="fas fa-play-circle"></i> Recorded Lectures
-            </a></li>
-            
-            <p class="sidebar-section-title">PRACTICE</p>
-            
-            <li><a href="../student/test-series.html">
-                <i class="fas fa-file-alt"></i> Test Series
-            </a></li>
-            <li><a href="#">
-                <i class="fas fa-chart-bar"></i> My Performance
-            </a></li>
-            
-            <p class="sidebar-section-title">SUPPORT</p>
-            
-            <li><a href="#">
-                <i class="fas fa-comments"></i> Doubt Forum
-            </a></li>
-            <li><a href="#">
-                <i class="fas fa-download"></i> Study Material
-            </a></li>
-            
-            <p class="sidebar-section-title">ACCOUNT</p>
-            
-            <li><a href="#">
-                <i class="fas fa-user-cog"></i> My Profile
-            </a></li>
-            <li><a href="#">
-                <i class="fas fa-cog"></i> Settings
-            </a></li>
-            <li>
-                <a href="#" class="logout-btn" onclick="handleLogout()">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </a>
-            </li>
-        </ul>
-    </aside>
-
-    <!-- ============ MAIN CONTENT ============ -->
-    <main class="dashboard-main">
-        
-        <!-- Header -->
-        <div class="dashboard-header">
-            <div>
-                <h1 id="welcomeMessage">Welcome back! 👋</h1>
-                <p>Keep up the great work. Consistency is the key to success.</p>
-            </div>
-            <div class="header-actions">
-                <div class="header-icon">
-                    <i class="fas fa-search"></i>
-                </div>
-                <div class="header-icon">
-                    <i class="fas fa-bell"></i>
-                    <span class="notification-dot"></span>
-                </div>
-                <div class="user-profile-header">
-                    <div class="user-avatar-header" id="headerAvatar">ST</div>
-                    <span id="headerUserName" style="font-weight:500;">Student</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Stats Cards -->
-        <div class="stats-cards">
-            <div class="stat-card">
-                <div class="stat-icon blue"><i class="fas fa-book"></i></div>
-                <div class="stat-info">
-                    <h3 id="enrolledCount">3</h3>
-                    <p>Enrolled Courses</p>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon green"><i class="fas fa-check-circle"></i></div>
-                <div class="stat-info">
-                    <h3 id="overallProgress">68%</h3>
-                    <p>Overall Progress</p>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon orange"><i class="fas fa-clock"></i></div>
-                <div class="stat-info">
-                    <h3 id="hoursWatched">142</h3>
-                    <p>Hours Watched</p>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon purple"><i class="fas fa-trophy"></i></div>
-                <div class="stat-info">
-                    <h3 id="testRank">Top 5%</h3>
-                    <p>Test Rank</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Dashboard Grid -->
-        <div class="dashboard-grid">
-            
-            <!-- Left Column -->
-            <div>
-                <!-- My Courses -->
-                <div class="dashboard-card" style="margin-bottom:20px;">
-                    <div class="card-header">
-                        <h3>📚 My Courses</h3>
-                        <a href="../student/course-content.html">View All →</a>
-                    </div>
-                    
-                    <div id="enrolledCoursesList">
-                        <!-- Dynamically loaded -->
-                        <div class="course-item">
-                            <div class="course-item-info">
-                                <h4>CG PSC Foundation Batch 2025</h4>
-                                <div class="meta">Dr. Rajesh Sharma • 86 Lectures</div>
-                                <div class="progress-bar">
-                                    <div class="progress-fill" style="width:75%;"></div>
-                                </div>
-                                <small style="color:#6b7280;">75% Complete</small>
-                            </div>
-                            <a href="../student/course-content.html" class="btn-continue">Continue</a>
-                        </div>
-                        
-                        <div class="course-item">
-                            <div class="course-item-info">
-                                <h4>CG Vyapam Combo Pack</h4>
-                                <div class="meta">Mrs. Anjali Sahu • 52 Lectures</div>
-                                <div class="progress-bar">
-                                    <div class="progress-fill" style="width:45%;"></div>
-                                </div>
-                                <small style="color:#6b7280;">45% Complete</small>
-                            </div>
-                            <a href="../student/course-content.html" class="btn-continue">Continue</a>
-                        </div>
-                        
-                        <div class="course-item">
-                            <div class="course-item-info">
-                                <h4>CG PSC Prelims Test Series 2025</h4>
-                                <div class="meta">30 Tests • 12 Attempted</div>
-                                <div class="progress-bar">
-                                    <div class="progress-fill" style="width:40%;"></div>
-                                </div>
-                                <small style="color:#6b7280;">12/30 Tests Done</small>
-                            </div>
-                            <a href="../student/test-series.html" class="btn-continue">Continue</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Recent Test Performance -->
-                <div class="dashboard-card">
-                    <div class="card-header">
-                        <h3>📊 Recent Test Performance</h3>
-                        <a href="#">View All →</a>
-                    </div>
-                    <div style="overflow-x:auto;">
-                        <table class="test-table">
-                            <thead>
-                                <tr>
-                                    <th>Test Name</th>
-                                    <th>Score</th>
-                                    <th>Rank</th>
-                                    <th>Date</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>CG PSC Prelims Mock #12</td>
-                                    <td class="score-good">142/200</td>
-                                    <td><span class="rank-badge">#23</span></td>
-                                    <td style="font-size:0.8rem;color:#6b7280;">15 Jul 2025</td>
-                                </tr>
-                                <tr>
-                                    <td>NEET Full Syllabus Test #5</td>
-                                    <td class="score-good">652/720</td>
-                                    <td><span class="rank-badge">#8</span></td>
-                                    <td style="font-size:0.8rem;color:#6b7280;">12 Jul 2025</td>
-                                </tr>
-                                <tr>
-                                    <td>Vyapam GK Test #8</td>
-                                    <td class="score-average">38/50</td>
-                                    <td><span class="rank-badge">#45</span></td>
-                                    <td style="font-size:0.8rem;color:#6b7280;">10 Jul 2025</td>
-                                </tr>
-                                <tr>
-                                    <td>CG PSC Mains Answer Writing</td>
-                                    <td class="score-good">85/100</td>
-                                    <td><span class="rank-badge">#12</span></td>
-                                    <td style="font-size:0.8rem;color:#6b7280;">08 Jul 2025</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Right Column -->
-            <div>
-                <!-- Upcoming Live Classes -->
-                <div class="dashboard-card" style="margin-bottom:20px;">
-                    <div class="card-header">
-                        <h3>🔴 Upcoming Live Classes</h3>
-                        <a href="../student/live-class.html">Join →</a>
-                    </div>
-                    
-                    <div class="upcoming-class">
-                        <div class="class-date">
-                            <div class="day">Today</div>
-                            <div class="date">23</div>
-                        </div>
-                        <div class="class-info">
-                            <h4>Fundamental Rights - Art 12-18</h4>
-                            <p>Dr. Rajesh Sharma • 6:00 PM</p>
-                        </div>
-                        <button class="btn-join" onclick="window.location.href='../student/live-class.html'">Join</button>
-                    </div>
-                    
-                    <div class="upcoming-class">
-                        <div class="class-date">
-                            <div class="day">Thu</div>
-                            <div class="date">24</div>
-                        </div>
-                        <div class="class-info">
-                            <h4>Human Physiology Revision</h4>
-                            <p>Dr. Priya Patel • 7:30 PM</p>
-                        </div>
-                        <button class="btn-remind">Remind</button>
-                    </div>
-                    
-                    <div class="upcoming-class">
-                        <div class="class-date">
-                            <div class="day">Fri</div>
-                            <div class="date">25</div>
-                        </div>
-                        <div class="class-info">
-                            <h4>CG Vyapam Maths Tricks</h4>
-                            <p>Er. Suresh Kumar • 5:00 PM</p>
-                        </div>
-                        <button class="btn-remind">Remind</button>
-                    </div>
-                </div>
-
-                <!-- Recent Doubts -->
-                <div class="dashboard-card" style="margin-bottom:20px;">
-                    <div class="card-header">
-                        <h3>💬 Recent Doubts</h3>
-                        <a href="#">Ask New →</a>
-                    </div>
-                    <div style="padding:10px 0;border-bottom:1px solid #f3f4f6;">
-                        <p style="font-size:0.85rem;margin-bottom:3px;"><strong>Q:</strong> Difference between Article 15 and Article 16?</p>
-                        <small style="color:#10b981;">✅ Answered by Dr. Rajesh Sharma</small>
-                    </div>
-                    <div style="padding:10px 0;border-bottom:1px solid #f3f4f6;">
-                        <p style="font-size:0.85rem;margin-bottom:3px;"><strong>Q:</strong> Projectile motion numerical approach?</p>
-                        <small style="color:#f59e0b;">⏳ Answer expected within 24 hrs</small>
-                    </div>
-                    <div style="padding:10px 0;">
-                        <p style="font-size:0.85rem;margin-bottom:3px;"><strong>Q:</strong> CG History - Kalchuri Dynasty important points?</p>
-                        <small style="color:#10b981;">✅ Answered by Mrs. Anjali Sahu</small>
-                    </div>
-                </div>
-
-                <!-- Quick Links -->
-                <div class="dashboard-card">
-                    <div class="card-header">
-                        <h3>🔗 Quick Links</h3>
-                    </div>
-                    <div style="display:flex;flex-direction:column;gap:10px;">
-                        <a href="../student/course-content.html" style="display:flex;align-items:center;gap:8px;padding:10px;background:#f9fafb;border-radius:8px;text-decoration:none;color:#333;font-size:0.85rem;">
-                            <i class="fas fa-download" style="color:#1a237e;"></i> Download Study Material
-                        </a>
-                        <a href="#" style="display:flex;align-items:center;gap:8px;padding:10px;background:#f9fafb;border-radius:8px;text-decoration:none;color:#333;font-size:0.85rem;">
-                            <i class="fas fa-question-circle" style="color:#1a237e;"></i> Ask a Doubt
-                        </a>
-                        <a href="#" style="display:flex;align-items:center;gap:8px;padding:10px;background:#f9fafb;border-radius:8px;text-decoration:none;color:#333;font-size:0.85rem;">
-                            <i class="fas fa-certificate" style="color:#1a237e;"></i> View Certificates
-                        </a>
-                        <a href="../pages/contact.html" style="display:flex;align-items:center;gap:8px;padding:10px;background:#f9fafb;border-radius:8px;text-decoration:none;color:#333;font-size:0.85rem;">
-                            <i class="fas fa-headset" style="color:#1a237e;"></i> Contact Support
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </main>
-
-    <!-- ============ SCRIPTS ============ -->
-    <script src="../js/auth.js"></script>
-    <script>
-        // ============ INITIALIZE DASHBOARD ============
-        document.addEventListener('DOMContentLoaded', function() {
-            // Get current logged-in user
-            const user = getCurrentUser();
-            
-            if (user) {
-                // Update welcome message
-                const firstName = user.fullName ? user.fullName.split(' ')[0] : 'Student';
-                document.getElementById('welcomeMessage').textContent = 'Welcome back, ' + firstName + '! 👋';
-                
-                // Update sidebar user info
-                const initials = user.fullName 
-                    ? user.fullName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() 
-                    : 'ST';
-                
-                document.getElementById('sidebarAvatar').textContent = initials;
-                document.getElementById('headerAvatar').textContent = initials;
-                document.getElementById('sidebarUserName').textContent = user.fullName || 'Student';
-                document.getElementById('headerUserName').textContent = user.fullName || 'Student';
-                
-                if (user.examPreparing) {
-                    document.getElementById('sidebarUserExam').textContent = user.examPreparing + ' Aspirant';
-                }
-                
-                // Update stats based on enrolled courses
-                if (user.enrolledCourses && user.enrolledCourses.length > 0) {
-                    document.getElementById('enrolledCount').textContent = user.enrolledCourses.length;
-                    
-                    // Calculate average progress
-                    const totalProgress = user.enrolledCourses.reduce((sum, c) => sum + (c.progress || 0), 0);
-                    const avgProgress = Math.round(totalProgress / user.enrolledCourses.length);
-                    document.getElementById('overallProgress').textContent = avgProgress + '%';
-                }
-                
-                // Render enrolled courses dynamically
-                if (user.enrolledCourses && user.enrolledCourses.length > 0) {
-                    const coursesHTML = user.enrolledCourses.map(c => `
-                        <div class="course-item">
-                            <div class="course-item-info">
-                                <h4>${c.name}</h4>
-                                <div class="meta">Enrolled: ${new Date(c.enrolledAt).toLocaleDateString('en-IN')}</div>
-                                <div class="progress-bar">
-                                    <div class="progress-fill" style="width:${c.progress || 0}%;"></div>
-                                </div>
-                                <small style="color:#6b7280;">${c.progress || 0}% Complete</small>
-                            </div>
-                            <a href="../student/course-content.html" class="btn-continue">Continue</a>
-                        </div>
-                    `).join('');
-                    
-                    document.getElementById('enrolledCoursesList').innerHTML = coursesHTML;
-                }
-                
-                // Render test series
-                if (user.testSeriesPurchased && user.testSeriesPurchased.length > 0) {
-                    const testSeriesContainer = document.getElementById('enrolledCoursesList');
-                    const testHTML = user.testSeriesPurchased.map(t => `
-                        <div class="course-item">
-                            <div class="course-item-info">
-                                <h4>${t.name}</h4>
-                                <div class="meta">Purchased: ${new Date(t.purchasedAt).toLocaleDateString('en-IN')}</div>
-                                <div class="progress-bar">
-                                    <div class="progress-fill" style="width:30%;"></div>
-                                </div>
-                                <small style="color:#6b7280;">Start Practicing</small>
-                            </div>
-                            <a href="../student/test-series.html" class="btn-continue">Start</a>
-                        </div>
-                    `).join('');
-                    
-                    document.getElementById('enrolledCoursesList').innerHTML += testHTML;
-                }
-            }
-        });
-        
-        // ============ SIDEBAR TOGGLE (MOBILE) ============
-        function toggleSidebar() {
-            const sidebar = document.getElementById('dashboardSidebar');
-            const overlay = document.getElementById('sidebarOverlay');
-            sidebar.classList.toggle('mobile-open');
-            overlay.classList.toggle('active');
+        // Check auth
+        const user=JSON.parse(localStorage.getItem('apexHubCurrentUser')||'{}');
+        if(!user.id&&localStorage.getItem('apexHubCurrentUser')){
+            // Fallback
         }
         
-        // Close sidebar when clicking a nav link on mobile
-        document.querySelectorAll('.sidebar-nav a').forEach(link => {
-            link.addEventListener('click', function() {
-                if (window.innerWidth <= 968) {
-                    toggleSidebar();
-                }
-            });
-        });
+        // Display user name
+        const name=user.fullName||localStorage.getItem('apexStudentName')||'Student';
+        document.getElementById('welcomeMsg').textContent='Welcome, '+name.split(' ')[0]+'! 👋';
+        document.getElementById('topName').textContent=name.split(' ')[0];
         
-        // ============ LOGOUT ============
-        function handleLogout() {
-            if (confirm('Are you sure you want to logout?')) {
-                // Clear current user session
-                localStorage.removeItem('apexHubCurrentUser');
-                // Redirect to login page
-                window.location.href = 'login.html';
-            }
+        function logout(){
+            localStorage.removeItem('apexHubCurrentUser');
+            localStorage.removeItem('apexStudentName');
+            window.location.href='login.html';
         }
-        
-        // Also expose to window for onclick in HTML
-        window.handleLogout = handleLogout;
-        
-        // ============ CLOSE SIDEBAR ON OUTSIDE CLICK ============
-        document.getElementById('sidebarOverlay').addEventListener('click', toggleSidebar);
     </script>
 </body>
 </html>
